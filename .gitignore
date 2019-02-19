@@ -63,3 +63,11 @@ node_modules/
 
 # dotenv environment variables file
 .env
+
+loop/node_modules/**/*
+loop/.expo/*
+loop/npm-debug.*
+loop/*.jks
+loop/*.p12
+loop/*.key
+loop/*.mobileprovision
