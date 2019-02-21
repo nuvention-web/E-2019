@@ -7,8 +7,8 @@ import LoopsViewScreen from './components/loopView';
 
 class HomeScreen extends React.Component {
   static navigationOptions = {
-    title: 'Home',
-  };
+    header: null
+  }
   render() {
     const {navigate} = this.props.navigation;
     return (

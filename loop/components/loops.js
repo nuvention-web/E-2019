@@ -3,7 +3,7 @@ import { StyleSheet, Text, View, Button } from "react-native";
 
 export default class LoopsScreen extends React.Component {
   static navigationOptions = {
-    title: "My Loops"
+    header: null
   };
   render() {
     const { navigate } = this.props.navigation;
