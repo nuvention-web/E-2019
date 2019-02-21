@@ -1,5 +1,5 @@
 import React from "react";
-import { StyleSheet, Text, View, Button } from "react-native";
+import { Container, Header, Content, Button, Text } from "native-base";
 
 export default class LoopsScreen extends React.Component {
   static navigationOptions = {
@@ -8,16 +8,16 @@ export default class LoopsScreen extends React.Component {
   render() {
     const { navigate } = this.props.navigation;
     return (
-      <View>
-        <Button
-          title="Go back to home"
-          onPress={() => navigate("Home", { name: "Jane" })}
-        />
-        <Button
-          title="Go to loop view"
-          onPress={() => navigate("LoopView", { name: "Jane" })}
-        />
-      </View>
+      <Container>
+        <Content>
+          <Button onPress={() => navigate("Home", { name: "Jane" })}>
+            <Text>Go back to home</Text>
+          </Button>
+          <Button onPress={() => navigate("LoopView", { name: "Jane" })}>
+            <Text>Go to loop view</Text>
+          </Button>
+        </Content>
+      </Container>
     );
   }
 }
