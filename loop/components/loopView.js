@@ -1,5 +1,5 @@
 import React from "react";
-import { StyleSheet, Text, View, Button } from "react-native";
+import { Container, Header, Content, Button, Text } from "native-base";
 
 export default class LoopsViewScreen extends React.Component {
   static navigationOptions = {
@@ -8,10 +8,13 @@ export default class LoopsViewScreen extends React.Component {
   render() {
     const { navigate } = this.props.navigation;
     return (
-      <Button
-        title="Go back to My Loops"
-        onPress={() => navigate("Loops", { name: "Jane" })}
-      />
+      <Container>
+        <Content>
+          <Button onPress={() => navigate("Loops", { name: "Jane" })}>
+            <Text>Go back to My Loops</Text>
+          </Button>
+        </Content>
+      </Container>
     );
   }
 }
