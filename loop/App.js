@@ -1,15 +1,23 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
-
-export default class App extends React.Component {
+import { StyleSheet, Text, View, Button } from 'react-native';
+import {createStackNavigator, createAppContainer} from 'react-navigation';
+import ExploreScreen from './components/explore.js';
+class HomeScreen extends React.Component {
+  static navigationOptions = {
+    title: 'Welcome',
+  };
   render() {
+    const {navigate} = this.props.navigation;
     return (
-      <View style={styles.container}>
-        <Text>Open up App.js to start working on your app!</Text>
-      </View>
+      <Button
+        title="Go to explore"
+        onPress={() => navigate('Explore', {name: 'Jane'})}
+      />
     );
   }
 }
+
+
 
 const styles = StyleSheet.create({
   container: {
@@ -19,3 +27,12 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
 });
+
+const MainNavigator = createStackNavigator({
+  Home: {screen: HomeScreen},
+  Explore: {screen: ExploreScreen},
+});
+
+const App = createAppContainer(MainNavigator);
+
+export default App;
