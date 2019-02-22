@@ -15,10 +15,12 @@ class HomeScreen extends React.Component {
     return (
       <Container style={styles.container}>
         <Content contentContainerStyle={styles.content}>
-          <Button onPress={() => navigate("Loops", { name: "Jane" })}>
+          <Button block bordered dark  style={styles.btn}
+            onPress={() => navigate("Loops", { name: "Jane" })}>
             <Text>My Loop</Text>
           </Button>
-          <Button onPress={() => navigate("Explore", { name: "Jane" })}>
+          <Button block bordered dark style={styles.btn}
+            onPress={() => navigate("Explore", { name: "Jane" })}>
             <Text>Explore</Text>
           </Button>
         </Content>
@@ -29,14 +31,16 @@ class HomeScreen extends React.Component {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center"
   },
   content:{
     justifyContent: 'center', 
-    flex: 1
+    flex: 1,
+    margin:30
+  },
+  btn:{
+    marginBottom:30,
+    borderRadius: 0
   }
 });
 
