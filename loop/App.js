@@ -5,23 +5,50 @@ import { createStackNavigator, createAppContainer } from "react-navigation";
 import ExploreScreen from "./components/explore";
 import LoopsScreen from "./components/loops";
 import LoopsViewScreen from "./components/loopView";
+import { Font } from "expo";
 
 class HomeScreen extends React.Component {
   static navigationOptions = {
     header: null
   };
+
+  state = {
+    fontLoaded: false
+  };
+
+  async componentWillMount() {
+    await Font.loadAsync({
+      verdana: require("./assets/fonts/Verdana.ttf")
+    });
+    this.setState({ fontLoaded: true });
+  }
+
   render() {
     const { navigate } = this.props.navigation;
     return (
       <Container style={styles.container}>
         <Content contentContainerStyle={styles.content}>
-          <Button block bordered dark  style={styles.btn}
-            onPress={() => navigate("Loops", { name: "Jane" })}>
-            <Text>My Loop</Text>
+          <Button
+            block
+            bordered
+            dark
+            style={styles.btn}
+            onPress={() => navigate("Loops", { name: "Jane" })}
+          >
+            {this.state.fontLoaded ? (
+              <Text style={styles.text}>My Loop</Text>
+            ) : null}
           </Button>
-          <Button block bordered dark style={styles.btn}
-            onPress={() => navigate("Explore", { name: "Jane" })}>
-            <Text>Explore</Text>
+          <Button
+            block
+            bordered
+            dark
+            style={styles.btn}
+            onPress={() => navigate("Explore", { name: "Jane" })}
+          >
+            {this.state.fontLoaded ? (
+              <Text style={styles.text}>Explore</Text>
+            ) : null}
           </Button>
         </Content>
       </Container>
@@ -31,16 +58,20 @@ class HomeScreen extends React.Component {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "#fff",
+    backgroundColor: "#fff"
   },
-  content:{
-    justifyContent: 'center', 
+  content: {
+    justifyContent: "center",
     flex: 1,
-    margin:30
+    margin: 30
   },
-  btn:{
-    marginBottom:30,
+  btn: {
+    marginBottom: 30,
     borderRadius: 0
+  },
+  text: {
+    fontFamily: "verdana",
+    fontSize: 20
   }
 });
 
