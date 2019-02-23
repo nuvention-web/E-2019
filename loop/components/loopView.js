@@ -18,6 +18,8 @@ import {
   ScrollableTab
 } from "native-base";
 import AllTab from "./loopViews/all";
+import theme from '../assets/styles/theme.style';
+import commonStyle from '../assets/styles/styles';
 
 export default class LoopsViewScreen extends React.Component {
   static navigationOptions = {
@@ -50,7 +52,7 @@ export default class LoopsViewScreen extends React.Component {
             tabStyle={styles.tabStyle}
             activeTabStyle={styles.activeTabStyle}
             activeTextStyle={styles.activeTab}
-            textStyle={styles.text}
+            textStyle={commonStyle.text}
           >
             <AllTab />
           </Tab>
@@ -58,42 +60,42 @@ export default class LoopsViewScreen extends React.Component {
             heading="Text"
             tabStyle={styles.tabStyle}
             activeTabStyle={styles.activeTabStyle}
-            textStyle={styles.text}
+            textStyle={commonStyle.text}
             activeTextStyle={styles.activeTab}
           />
           <Tab
             heading="Image"
             tabStyle={styles.tabStyle}
             activeTabStyle={styles.activeTabStyle}
-            textStyle={styles.text}
+            textStyle={commonStyle.text}
             activeTextStyle={styles.activeTab}
           />
           <Tab
             heading="Video"
             tabStyle={styles.tabStyle}
             activeTabStyle={styles.activeTabStyle}
-            textStyle={styles.text}
+            textStyle={commonStyle.text}
             activeTextStyle={styles.activeTab}
           />
           <Tab
             heading="News"
             tabStyle={styles.tabStyle}
             activeTabStyle={styles.activeTabStyle}
-            textStyle={styles.text}
+            textStyle={commonStyle.text}
             activeTextStyle={styles.activeTab}
           />
           <Tab
             heading="Event"
             tabStyle={styles.tabStyle}
             activeTabStyle={styles.activeTabStyle}
-            textStyle={styles.text}
+            textStyle={commonStyle.text}
             activeTextStyle={styles.activeTab}
           />
           <Tab
             heading="Star"
             tabStyle={styles.tabStyle}
             activeTabStyle={styles.activeTabStyle}
-            textStyle={styles.text}
+            textStyle={commonStyle.text}
             activeTextStyle={styles.activeTab}
           />
         </Tabs>
@@ -104,17 +106,14 @@ export default class LoopsViewScreen extends React.Component {
 
 var styles = StyleSheet.create({
   title:{
-    fontFamily: "verdana",
+    fontFamily: theme.FONT_FAMILY,
     fontSize: 20
   },
-  text: {
-    fontFamily: "verdana"
-  },
   tab: {
-    backgroundColor: "#8e07ff"
+    backgroundColor: theme.PRIMARY_COLOR
   },
   activeTab: {
-    color: "#8e07ff"
+    color: theme.PRIMARY_COLOR
   },
   tabStyle: {
     backgroundColor: "white",

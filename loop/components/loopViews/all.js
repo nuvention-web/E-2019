@@ -17,6 +17,8 @@ import VideoPlayer from "@expo/videoplayer";
 import { SearchBar } from "react-native-elements";
 import ActionSheet from "react-native-actionsheet";
 import { Ionicons } from "@expo/vector-icons";
+import theme from '../../assets/styles/theme.style';
+import commonStyle from '../../assets/styles/styles';
 
 var BUTTONS = [
   { text: "Best", icon: "american-football", iconColor: "#2c8ef4" },
@@ -89,8 +91,8 @@ export default class allTab extends React.Component {
                   }}
                 />
                 <Body>
-                  <Text style={styles.text}>meee</Text>
-                  <Text note style={styles.text}>
+                  <Text style={commonStyle.text}>meee</Text>
+                  <Text note style={commonStyle.text}>
                     NativeBase
                   </Text>
                 </Body>
@@ -104,7 +106,7 @@ export default class allTab extends React.Component {
             </CardItem>
             <CardItem>
               <Icon name="heart" style={{ color: "#ED4A6A" }} />
-              <Text style={styles.text}>22</Text>
+              <Text style={commonStyle.text}>22</Text>
             </CardItem>
           </Card>
 
@@ -118,8 +120,8 @@ export default class allTab extends React.Component {
                   }}
                 />
                 <Body>
-                  <Text style={styles.text}>meee</Text>
-                  <Text note style={styles.text}>
+                  <Text style={commonStyle.text}>meee</Text>
+                  <Text note style={commonStyle.text}>
                     NativeBase
                   </Text>
                 </Body>
@@ -139,7 +141,7 @@ export default class allTab extends React.Component {
             </CardItem>
             <CardItem>
               <Icon name="heart" style={{ color: "#ED4A6A" }} />
-              <Text style={styles.text}>22</Text>
+              <Text style={commonStyle.text}>22</Text>
             </CardItem>
           </Card>
 
@@ -153,8 +155,8 @@ export default class allTab extends React.Component {
                   }}
                 />
                 <Body>
-                  <Text style={styles.text}>meee</Text>
-                  <Text note style={styles.text}>
+                  <Text style={commonStyle.text}>meee</Text>
+                  <Text note style={commonStyle.text}>
                     NativeBase
                   </Text>
                 </Body>
@@ -179,7 +181,7 @@ export default class allTab extends React.Component {
             </CardItem>
             <CardItem>
               <Icon name="heart" style={{ color: "#ED4A6A" }} />
-              <Text style={styles.text}>22</Text>
+              <Text style={commonStyle.text}>22</Text>
             </CardItem>
           </Card>
         </View>
@@ -196,17 +198,16 @@ var styles = StyleSheet.create({
     marginTop:10
   },
   ActionFirstIcon: {
-    fontSize: 20,
-    color: "#acadb0"
+    color: "grey"
   },
   ActionSecondIcon: {
-    fontSize: 25,
-    color: "#acadb0",
+    fontSize: theme.FONT_SIZE_LARGE,
+    color: "grey",
     marginLeft: -6
   },
   ActionText: {
-    fontSize: 15,
-    color: "#9b9c9e",
+    fontSize: theme.FONT_SIZE_MEDIUM,
+    color: "grey",
     fontWeight: "bold"
   },
   cards: {
@@ -216,9 +217,9 @@ var styles = StyleSheet.create({
     marginTop: 10
   },
   textCard:{
-    fontFamily: "verdana",
+    fontFamily: theme.FONT_FAMILY,
     margin:20,
-    fontSize: 26
+    fontSize: theme.FONT_SIZE_LARGE
   },
   backgroundVideo: {
     position: "absolute",
@@ -234,11 +235,8 @@ var styles = StyleSheet.create({
     backgroundColor: "#f6f6f6"
   },
   searchBarInput: {
-    fontFamily: "verdana",
-    fontSize: 16,
+    fontFamily: theme.FONT_FAMILY,
+    fontSize: theme.FONT_SIZE_MEDIUM,
     backgroundColor: "#f6f6f6"
-  },
-  text: {
-    fontFamily: "verdana"
   }
 });

@@ -6,6 +6,7 @@ import ExploreScreen from "./components/explore";
 import LoopsScreen from "./components/loops";
 import LoopsViewScreen from "./components/loopView";
 import { Font } from "expo";
+import theme from './assets/styles/theme.style.js';
 
 class HomeScreen extends React.Component {
   static navigationOptions = {
@@ -70,8 +71,8 @@ const styles = StyleSheet.create({
     borderRadius: 0
   },
   text: {
-    fontFamily: "verdana",
-    fontSize: 20
+    fontFamily: theme.FONT_FAMILY,
+    fontSize: theme.FONT_SIZE_LARGE
   }
 });
 
