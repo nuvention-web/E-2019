@@ -1,6 +1,9 @@
 import React from "react";
 import { Container, Header, Content, List, ListItem, Thumbnail, Text, Left, Body, Right, Button,Icon,Title } from 'native-base'
 import * as data from '../assets/data.json';
+import theme from '../assets/styles/theme.style';
+import commonStyle from '../assets/styles/styles';
+
 export default class LoopsScreen extends React.Component {
 
   static navigationOptions = {
@@ -33,7 +36,7 @@ export default class LoopsScreen extends React.Component {
         <Header rounded hasTabs transparent>
         <Left>
           <Button  transparent onPress={() => navigate("Home", { name: "Jane" })}>
-          <Icon name="arrow-back" style={{ color: "#8e07ff" }} />
+          <Icon name="arrow-back" style={commonStyle.Icon} />
           </Button>
           </Left>
           <Body>
@@ -42,7 +45,7 @@ export default class LoopsScreen extends React.Component {
           <Right/>
           </Header>
           <List>
-          {this.state.myloops.map(loop=><ListItem key={loop.id} thumbnail>
+          {this.state.myloops.map(loop=><ListItem key={loop.id} thumbnail >
               <Left>
                 <Thumbnail square source={require('../assets/01.png')} />
               </Left>
@@ -51,8 +54,8 @@ export default class LoopsScreen extends React.Component {
                 <Text note numberOfLines={1}>{loop.lastMessage}</Text>
               </Body>
               <Right>
-              <Button onPress={() => navigate("LoopView", { name: "Jane",loopContent:this.state.loopContent,myloops:this.state.myloops })}>
-              <Icon name="arrow-forward" style={{ color: "#8e07ff" }} />
+              <Button transparent onPress={() => navigate("LoopView", { title: loop.title,loopContent:this.state.loopContent,loopid:loop.id })}>
+              <Icon name="arrow-forward" style={commonStyle.Icon} />
               </Button>
               </Right>
             </ListItem>)}

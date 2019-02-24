@@ -25,8 +25,19 @@ export default class LoopsViewScreen extends React.Component {
   static navigationOptions = {
     header: null
   };
+  constructor(props){
+    super(props);
+    this.state = {
+
+    }
+  }
   render() {
     const { navigate } = this.props.navigation;
+    const { navigation } = this.props;
+    const title = navigation.getParam('title', 'NO-TITLE');
+    const loopId = navigation.getParam('loopid', 'NO-ID');
+    const loopContent = navigation.getParam('loopContent','No-CONTENT');
+
     return (
       <Container>
         <Header rounded hasTabs transparent>
@@ -35,11 +46,11 @@ export default class LoopsViewScreen extends React.Component {
               transparent
               onPress={() => navigate("Loops", { name: "Jane" })}
             >
-              <Icon name="arrow-back" style={{ color: "#8e07ff" }} />
+              <Icon name="arrow-back" style={commonStyle.Icon} />
             </Button>
           </Left>
           <Body>
-            <Title style={styles.title}>Chicago Jazz</Title>
+            <Title style={styles.title}>{title}</Title>
           </Body>
           <Right />
         </Header>
