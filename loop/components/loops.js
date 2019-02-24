@@ -1,5 +1,6 @@
 import React from "react";
-import { Container, Header, Content, List, ListItem, Thumbnail, Text, Left, Body, Right, Button,Icon,Title } from 'native-base'
+import { Image, View, StyleSheet } from "react-native";
+import { Container, Header, Content, Card,CardItem,Thumbnail, Text, Left, Body, Right, Button,Icon,Title } from 'native-base'
 import * as data from '../assets/data.json';
 import theme from '../assets/styles/theme.style';
 import commonStyle from '../assets/styles/styles';
@@ -17,18 +18,6 @@ export default class LoopsScreen extends React.Component {
     loaded: false,
   };
   }
-  /*componentDidMount() {
-    import('../assets/data.json').then(json => 
-      { this.setState({myloops:json.myloops});
-      console.log(json.myloops);
-    });  
-  };
-  async componentWillMount() {
-    await import('../assets/data.json').then((json)=>{
-      this.setState({myloops:json})
-     });
-     this.setState({ loaded: true });
-  }*/
   render() {
     const { navigate } = this.props.navigation;
     return (
@@ -44,23 +33,45 @@ export default class LoopsScreen extends React.Component {
           </Body>
           <Right/>
           </Header>
-          <List>
-          {this.state.myloops.map(loop=><ListItem key={loop.id} thumbnail >
+          <Content style={styles.content}>
+          <View style={styles.cards}>
+          {this.state.myloops.map(loop=>
+          <Card style={styles.card}  key={loop.id} transparent>
+            <CardItem>
               <Left>
-                <Thumbnail square source={require('../assets/01.png')} />
+                <Thumbnail square
+                  source={{
+                    uri:
+                      "https://phadvocates.org/wp-content/themes/cardinal/images/default-thumb.png"
+                  }}
+                />
+                <Body>
+                  <Text style={commonStyle.text} numberOfLines={1}>{loop.title}</Text>
+                  <Text note style={commonStyle.text} numberOfLines={1}>Last Message</Text>
+                </Body>
               </Left>
-              <Body>
-                <Text>{loop.title}</Text>
-                <Text note numberOfLines={1}>{loop.lastMessage}</Text>
-              </Body>
               <Right>
-              <Button transparent onPress={() => navigate("LoopView", { title: loop.title,loopContent:this.state.loopContent,loopid:loop.id })}>
+               <Button transparent onPress={() => navigate("LoopView", { title: loop.title,loopContent:this.state.loopContent,loopid:loop.id })}>
               <Icon name="arrow-forward" style={commonStyle.Icon} />
               </Button>
               </Right>
-            </ListItem>)}
-          </List>
+            </CardItem>
+          </Card>)}
+          </View>
+      </Content>  
       </Container>
     );
   }
 }
+var styles = StyleSheet.create({
+  content: {
+    backgroundColor: "#eaebee"
+  },
+  cards: {
+  },
+  card: {
+    elevation: 3,
+    marginTop: 10
+  },
+
+})
