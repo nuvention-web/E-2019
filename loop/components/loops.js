@@ -20,6 +20,7 @@ export default class LoopsScreen extends React.Component {
   }
   render() {
     const { navigate } = this.props.navigation;
+    //const uri = require(`../assets/group.png`);
     return (
       <Container>
         <Header rounded hasTabs transparent>
@@ -39,11 +40,11 @@ export default class LoopsScreen extends React.Component {
           <Card style={styles.card}  key={loop.id} transparent>
             <CardItem>
               <Left>
-                <Thumbnail square
-                  source={{
-                    uri:
-                      "https://phadvocates.org/wp-content/themes/cardinal/images/default-thumb.png"
-                  }}
+                <Thumbnail 
+                  source={
+                    require('../assets/01.png')
+    
+                  }
                 />
                 <Body>
                   <Text style={commonStyle.text} numberOfLines={1}>{loop.title}</Text>
@@ -65,7 +66,7 @@ export default class LoopsScreen extends React.Component {
 }
 var styles = StyleSheet.create({
   content: {
-    backgroundColor: "#eaebee"
+    backgroundColor: "white"
   },
   cards: {
   },
