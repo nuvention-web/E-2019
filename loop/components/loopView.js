@@ -52,7 +52,10 @@ export default class LoopsViewScreen extends React.Component {
           <Body>
             <Title style={styles.title}>{title}</Title>
           </Body>
-          <Right />
+          <Right>
+          <Button transparent >
+            <Icon name="md-create" style={commonStyle.Icon}/></Button>
+          </Right>
         </Header>
         <Tabs
           tabBarUnderlineStyle={styles.tab}

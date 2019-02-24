@@ -6,6 +6,7 @@ export default StyleSheet.create({
         fontFamily: theme.FONT_FAMILY
     },
     Icon:{
-        color: theme.PRIMARY_COLOR
+        color: theme.PRIMARY_COLOR,
+        fontSize: theme.FONT_SIZE_LARGE
     }
   });
