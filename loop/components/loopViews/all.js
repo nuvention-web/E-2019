@@ -17,8 +17,8 @@ import VideoPlayer from "@expo/videoplayer";
 import { SearchBar } from "react-native-elements";
 import ActionSheet from "react-native-actionsheet";
 import { Ionicons } from "@expo/vector-icons";
-import theme from '../../assets/styles/theme.style';
-import commonStyle from '../../assets/styles/styles';
+import theme from "../../assets/styles/theme.style";
+import commonStyle from "../../assets/styles/styles";
 
 var BUTTONS = [
   { text: "Best", icon: "american-football", iconColor: "#2c8ef4" },
@@ -81,109 +81,63 @@ export default class allTab extends React.Component {
           />
         </View>
         <View style={styles.cards}>
-          <Card style={styles.card} transparent>
-            <CardItem>
-              <Left>
-                <Thumbnail
-                  source={{
-                    uri:
-                      "https://phadvocates.org/wp-content/themes/cardinal/images/default-thumb.png"
-                  }}
-                />
-                <Body>
-                  <Text style={commonStyle.text}>meee</Text>
-                  <Text note style={commonStyle.text}>
-                    NativeBase
-                  </Text>
-                </Body>
-              </Left>
-              <Right>
-                <Icon name="more"></Icon>
-              </Right>
-            </CardItem>
-            <CardItem cardBody>
-              <Text style={styles.textCard}>Your text here</Text>
-            </CardItem>
-            <CardItem>
-              <Icon name="heart" style={{ color: "#ED4A6A" }} />
-              <Text style={commonStyle.text}>22</Text>
-            </CardItem>
-          </Card>
-
-          <Card style={styles.card} transparent>
-            <CardItem>
-              <Left>
-                <Thumbnail
-                  source={{
-                    uri:
-                      "https://phadvocates.org/wp-content/themes/cardinal/images/default-thumb.png"
-                  }}
-                />
-                <Body>
-                  <Text style={commonStyle.text}>meee</Text>
-                  <Text note style={commonStyle.text}>
-                    NativeBase
-                  </Text>
-                </Body>
-              </Left>
-              <Right>
-                <Icon name="more"></Icon>
-              </Right>
-            </CardItem>
-            <CardItem cardBody>
-              <Image
-                style={{ height: 300, flex: 1 }}
-                source={{
-                  uri:
-                    "https://phadvocates.org/wp-content/themes/cardinal/images/default-thumb.png"
-                }}
-              />
-            </CardItem>
-            <CardItem>
-              <Icon name="heart" style={{ color: "#ED4A6A" }} />
-              <Text style={commonStyle.text}>22</Text>
-            </CardItem>
-          </Card>
-
-          <Card style={styles.card} transparent>
-            <CardItem>
-              <Left>
-                <Thumbnail
-                  source={{
-                    uri:
-                      "https://phadvocates.org/wp-content/themes/cardinal/images/default-thumb.png"
-                  }}
-                />
-                <Body>
-                  <Text style={commonStyle.text}>meee</Text>
-                  <Text note style={commonStyle.text}>
-                    NativeBase
-                  </Text>
-                </Body>
-              </Left>
-              <Right>
-                <Icon name="more"></Icon>
-              </Right>
-            </CardItem>
-            <CardItem cardBody>
-              <VideoPlayer
-                videoProps={{
-                  shouldPlay: true,
-                  resizeMode: Video.RESIZE_MODE_CONTAIN,
-                  source: {
-                    uri:
-                      "https://bitdash-a.akamaihd.net/content/sintel/hls/playlist.m3u8"
-                  }
-                }}
-                isPortrait={true}
-                playFromPositionMillis={0}
-              />
-            </CardItem>
-            <CardItem>
-              <Icon name="heart" style={{ color: "#ED4A6A" }} />
-              <Text style={commonStyle.text}>22</Text>
-            </CardItem>
-          </Card>
+          {this.props.loopContent.map(lc => 
+            <Card style={styles.card} transparent>
+              <CardItem>
+                <Left>
+                  <Thumbnail
+                    source={{
+                      uri:
+                        "https://phadvocates.org/wp-content/themes/cardinal/images/default-thumb.png"
+                    }}
+                  />
+                  <Body>
+                    <Text style={commonStyle.text}>
+                      {lc.actor.name}
+                    </Text>
+                    <Text note style={commonStyle.text}>
+                      A person
+                    </Text>
+                  </Body>
+                </Left>
+                <Right>
+                  <Icon name="more" />
+                </Right>
+              </CardItem>
+              <CardItem cardBody>
+                {lc.object.type == "text" ? (
+                  <Text style={styles.textCard}>{lc.object.data}</Text>
+                ) : null}
+                {lc.object.type == "image" ? (
+                  <Image
+                    style={{ height: 300, flex: 1 }}
+                    source={{
+                      uri:
+                        "https://phadvocates.org/wp-content/themes/cardinal/images/default-thumb.png"
+                    }}
+                  />
+                ) : null}
+                {lc.object.type == "video" ? (
+                  <VideoPlayer
+                    videoProps={{
+                      shouldPlay: true,
+                      resizeMode: Video.RESIZE_MODE_CONTAIN,
+                      style: { height: 300 },
+                      source: {
+                        uri:
+                          "https://bitdash-a.akamaihd.net/content/sintel/hls/playlist.m3u8"
+                      }
+                    }}
+                    isPortrait={true}
+                    playFromPositionMillis={0}
+                  />
+                ) : null}
+              </CardItem>
+              <CardItem>
+                <Icon name="heart" style={commonStyle.Icon} />
+                <Text style={commonStyle.text}>22</Text>
+              </CardItem>
+            </Card>)}
         </View>
       </Content>
     );
@@ -194,8 +148,8 @@ var styles = StyleSheet.create({
   content: {
     backgroundColor: "#eaebee"
   },
-  sortBtn:{
-    marginTop:10
+  sortBtn: {
+    marginTop: 10
   },
   ActionFirstIcon: {
     color: "grey"
@@ -210,15 +164,14 @@ var styles = StyleSheet.create({
     color: "grey",
     fontWeight: "bold"
   },
-  cards: {
-  },
+  cards: {},
   card: {
     elevation: 3,
     marginTop: 10
   },
-  textCard:{
+  textCard: {
     fontFamily: theme.FONT_FAMILY,
-    margin:20,
+    margin: 20,
     fontSize: theme.FONT_SIZE_LARGE
   },
   backgroundVideo: {
