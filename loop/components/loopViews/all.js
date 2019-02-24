@@ -82,7 +82,7 @@ export default class allTab extends React.Component {
         </View>
         <View style={styles.cards}>
           {this.props.loopContent.map(lc => 
-            <Card style={styles.card} transparent>
+            <Card style={styles.card} key={lc.id} transparent>
               <CardItem>
                 <Left>
                   <Thumbnail
@@ -122,7 +122,7 @@ export default class allTab extends React.Component {
                     videoProps={{
                       shouldPlay: true,
                       resizeMode: Video.RESIZE_MODE_CONTAIN,
-                      style: { height: 300 },
+                      style: { height: 300, width: 100 },
                       source: {
                         uri:
                           "https://bitdash-a.akamaihd.net/content/sintel/hls/playlist.m3u8"
