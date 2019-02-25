@@ -18,6 +18,9 @@ import {
   ScrollableTab
 } from "native-base";
 import AllTab from "./loopViews/all";
+import TextTab from "./loopViews/text";
+import ImageTab from "./loopViews/image";
+import VideoTab from "./loopViews/video";
 import theme from '../assets/styles/theme.style';
 import commonStyle from '../assets/styles/styles';
 
@@ -76,21 +79,27 @@ export default class LoopsViewScreen extends React.Component {
             activeTabStyle={styles.activeTabStyle}
             textStyle={commonStyle.text}
             activeTextStyle={styles.activeTab}
-          />
+          >
+          <TextTab loopContent={loopContent[loopId]} ></TextTab>
+          </Tab>
           <Tab
             heading="Image"
             tabStyle={styles.tabStyle}
             activeTabStyle={styles.activeTabStyle}
             textStyle={commonStyle.text}
             activeTextStyle={styles.activeTab}
-          />
+          >
+          <ImageTab loopContent={loopContent[loopId]} ></ImageTab>
+          </Tab>
           <Tab
             heading="Video"
             tabStyle={styles.tabStyle}
             activeTabStyle={styles.activeTabStyle}
             textStyle={commonStyle.text}
             activeTextStyle={styles.activeTab}
-          />
+          >
+          <VideoTab loopContent={loopContent[loopId]} ></VideoTab>
+          </Tab>
           <Tab
             heading="News"
             tabStyle={styles.tabStyle}

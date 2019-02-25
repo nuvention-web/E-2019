@@ -30,7 +30,7 @@ var BUTTONS = [
 var DESTRUCTIVE_INDEX = 3;
 var CANCEL_INDEX = 4;
 
-export default class textTab extends React.Component {
+export default class videoTab extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -82,7 +82,7 @@ export default class textTab extends React.Component {
         </View>
         <View style={styles.cards}>
           {this.props.loopContent.map(lc => {
-            return lc.object.type == "text" ? (
+            return lc.object.type == "video" ? (
             <Card style={styles.card} key={lc.id} transparent>
               <CardItem>
                 <Left>
@@ -106,15 +106,26 @@ export default class textTab extends React.Component {
                 </Right>
               </CardItem>
               <CardItem cardBody>
-                  <Text style={styles.textCard}>{lc.object.data}</Text>
+                  <VideoPlayer
+                    videoProps={{
+                      shouldPlay: true,
+                      resizeMode: Video.RESIZE_MODE_CONTAIN,
+                      style: { height: 300, width: 100 },
+                      source: {
+                        uri:
+                          "https://bitdash-a.akamaihd.net/content/sintel/hls/playlist.m3u8"
+                      }
+                    }}
+                    isPortrait={true}
+                    playFromPositionMillis={0}
+                  />
               </CardItem>
               <CardItem>
                 <Icon name="heart" style={commonStyle.Icon} />
                 <Text style={commonStyle.text}>22</Text>
               </CardItem>
             </Card>
-            ) : null
-            })}
+            ) : null})}
         </View>
       </Content>
     );
