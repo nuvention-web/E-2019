@@ -1,5 +1,5 @@
 import React from "react";
-import { StyleSheet } from "react-native";
+import { StyleSheet, View, Dimensions, KeyboardAvoidingView } from "react-native";
 import {
   Container,
   Header,
@@ -15,31 +15,32 @@ import {
   Tabs,
   Body,
   Title,
-  ScrollableTab
+  ScrollableTab,
+  Footer,
+  Form
 } from "native-base";
 import AllTab from "./loopViews/all";
 import TextTab from "./loopViews/text";
 import ImageTab from "./loopViews/image";
 import VideoTab from "./loopViews/video";
-import theme from '../assets/styles/theme.style';
-import commonStyle from '../assets/styles/styles';
+import theme from "../assets/styles/theme.style";
+import commonStyle from "../assets/styles/styles";
+const devicesWidth = Dimensions.get("window").width;
 
 export default class LoopsViewScreen extends React.Component {
   static navigationOptions = {
     header: null
   };
-  constructor(props){
+  constructor(props) {
     super(props);
-    this.state = {
-
-    }
+    this.state = {};
   }
   render() {
     const { navigate } = this.props.navigation;
     const { navigation } = this.props;
-    const title = navigation.getParam('title', 'NO-TITLE');
-    const loopId = navigation.getParam('loopid', 'NO-ID');
-    const loopContent = navigation.getParam('loopContent','No-CONTENT');
+    const title = navigation.getParam("title", "NO-TITLE");
+    const loopId = navigation.getParam("loopid", "NO-ID");
+    const loopContent = navigation.getParam("loopContent", "No-CONTENT");
 
     return (
       <Container>
@@ -56,13 +57,14 @@ export default class LoopsViewScreen extends React.Component {
             <Title style={styles.title}>{title}</Title>
           </Body>
           <Right>
-          <Button transparent >
-            <Icon name="md-create" style={commonStyle.Icon}/></Button>
+            {/* <Button transparent>
+              <Icon name="md-create" style={commonStyle.Icon} />
+            </Button> */}
           </Right>
         </Header>
         <Tabs
           tabBarUnderlineStyle={styles.tab}
-          renderTabBar={() => <ScrollableTab style={{ borderWidth: 0}} />}
+          renderTabBar={() => <ScrollableTab style={{ borderWidth: 0 }} />}
         >
           <Tab
             heading="All"
@@ -80,7 +82,7 @@ export default class LoopsViewScreen extends React.Component {
             textStyle={commonStyle.text}
             activeTextStyle={styles.activeTab}
           >
-          <TextTab loopContent={loopContent[loopId]} ></TextTab>
+            <TextTab loopContent={loopContent[loopId]} />
           </Tab>
           <Tab
             heading="Image"
@@ -89,7 +91,7 @@ export default class LoopsViewScreen extends React.Component {
             textStyle={commonStyle.text}
             activeTextStyle={styles.activeTab}
           >
-          <ImageTab loopContent={loopContent[loopId]} ></ImageTab>
+            <ImageTab loopContent={loopContent[loopId]} />
           </Tab>
           <Tab
             heading="Video"
@@ -98,7 +100,7 @@ export default class LoopsViewScreen extends React.Component {
             textStyle={commonStyle.text}
             activeTextStyle={styles.activeTab}
           >
-          <VideoTab loopContent={loopContent[loopId]} ></VideoTab>
+            <VideoTab loopContent={loopContent[loopId]} />
           </Tab>
           <Tab
             heading="News"
@@ -122,13 +124,30 @@ export default class LoopsViewScreen extends React.Component {
             activeTextStyle={styles.activeTab}
           />
         </Tabs>
+        
+        <KeyboardAvoidingView 
+          style={styles.messageBox}
+          behavior="position"
+        >
+        <View style={styles.mbox}>
+          <Button transparent>
+            <Icon name="md-add" style={commonStyle.Icon} />
+          </Button>
+          <Item rounded style={styles.boxInput}>
+            <Input placeholder="Type something" />
+          </Item>
+          <Button transparent>
+            <Icon name="send" style={commonStyle.Icon} />
+          </Button></View>
+          </KeyboardAvoidingView>
+        
       </Container>
     );
   }
 }
 
 var styles = StyleSheet.create({
-  title:{
+  title: {
     fontFamily: theme.FONT_FAMILY,
     fontSize: 20
   },
@@ -140,9 +159,27 @@ var styles = StyleSheet.create({
   },
   tabStyle: {
     backgroundColor: "white",
-    borderColor: 'white'
+    borderColor: "white"
   },
-  activeTabStyle:{
+  activeTabStyle: {
     backgroundColor: "white"
+  },
+  messageBox: {
+    position: "absolute",
+    left: 0,
+    right: 0,
+    bottom: 0,
+  },
+  mbox:{
+    display: "flex",
+    justifyContent: "space-around",
+    flexDirection: "row",
+    padding: 5,
+    backgroundColor: "white",
+  },
+  boxInput: {
+    backgroundColor: "#f3f3f5",
+    borderColor: "white",
+    width: devicesWidth - 100
   }
 });

@@ -134,7 +134,8 @@ export default class videoTab extends React.Component {
 
 var styles = StyleSheet.create({
   content: {
-    backgroundColor: "#eaebee"
+    backgroundColor: "#eaebee",
+    marginBottom: 60
   },
   sortBtn: {
     marginTop: 10
