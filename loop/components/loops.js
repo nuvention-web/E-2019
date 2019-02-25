@@ -31,6 +31,33 @@ export default class LoopsScreen extends React.Component {
       loaded: false
     };
   }
+
+  findLastMessage(id, lastMessage) {
+    let result;
+    let messege;
+    messege = this.state.loopContent[id].find(messege => {
+      return messege.id == lastMessage;
+    });
+    switch (messege.object.type) {
+      case "text":
+        result = messege.actor.name + ": " + messege.object.data;
+        break;
+      case "event":
+        result = messege.actor.name + " shares an event";
+        break;
+      case "image":
+        result = messege.actor.name + " posts an image";
+        break;
+      default:
+        result =
+          messege.actor.name +
+          " " +
+          messege.verb.name +
+          "s a " +
+          messege.object.type;
+    }
+    return result;
+  }
   render() {
     const { navigate } = this.props.navigation;
     //const uri = require(`../assets/group.png`);
@@ -57,12 +84,12 @@ export default class LoopsScreen extends React.Component {
                 <CardItem>
                   <Left>
                     <Thumbnail source={require("../assets/01.png")} />
-                    <Body>
+                    <Body style={styles.loopbody}>
                       <Text style={commonStyle.text} numberOfLines={1}>
                         {loop.title}
                       </Text>
-                      <Text note style={commonStyle.text} numberOfLines={1}>
-                        Last Message
+                      <Text note style={styles.noteText} numberOfLines={1}>
+                        {this.findLastMessage(loop.id, loop.lastMessage)}
                       </Text>
                     </Body>
                   </Left>
@@ -92,6 +119,9 @@ export default class LoopsScreen extends React.Component {
 var styles = StyleSheet.create({
   content: {
     backgroundColor: "white"
+  },
+  noteText: {
+    fontFamily: theme.FONT_FAMILY
   },
   cards: {},
   card: {
