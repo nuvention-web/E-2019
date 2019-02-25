@@ -1,5 +1,5 @@
 import React from "react";
-import { Image, View, StyleSheet } from "react-native";
+import { Image, View, StyleSheet,Dimensions } from "react-native";
 import {
   Container,
   Header,
@@ -18,6 +18,7 @@ import {
 import * as data from "../assets/data.json";
 import theme from "../assets/styles/theme.style";
 import commonStyle from "../assets/styles/styles";
+const devicesWidth=Dimensions.get('window').width;
 
 export default class LoopsScreen extends React.Component {
   static navigationOptions = {
@@ -121,7 +122,8 @@ var styles = StyleSheet.create({
     backgroundColor: "white"
   },
   noteText: {
-    fontFamily: theme.FONT_FAMILY
+    fontFamily: theme.FONT_FAMILY,
+    width: devicesWidth-74,
   },
   cards: {},
   card: {
