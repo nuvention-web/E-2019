@@ -82,7 +82,13 @@ export default class LoopsScreen extends React.Component {
           <View style={styles.cards}>
             {this.state.myloops.map(loop => (
               <Card style={styles.card} key={loop.id} transparent>
-                <CardItem>
+                <CardItem button onPress={() =>
+                        navigate("LoopView", {
+                          title: loop.title,
+                          loopContent: this.state.loopContent,
+                          loopid: loop.id
+                        })
+                      }>
                   <Left>
                     <Thumbnail source={require("../assets/01.png")} />
                     <Body style={styles.loopbody}>
