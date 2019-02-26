@@ -73,7 +73,7 @@ const styles = StyleSheet.create({
   },
   text: {
     fontFamily: theme.FONT_FAMILY,
-    fontSize: theme.FONT_SIZE_LARGE
+    fontSize: theme.FONT_SIZE_MEDIUM
   }
 });
 
