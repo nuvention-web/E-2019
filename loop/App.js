@@ -80,7 +80,6 @@ const styles = StyleSheet.create({
 const MainNavigator = createStackNavigator({
   Home: { screen: HomeScreen },
   Explore: { screen: ExploreScreen },
-  ExploreMap: { screen: ExploreMapScreen},
   Loops: { screen: LoopsScreen },
   LoopView: { screen: LoopsViewScreen }
 });
