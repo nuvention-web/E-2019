@@ -7,6 +7,7 @@ import theme from "../assets/styles/theme.style";
 import { SearchBar } from "react-native-elements";
 
 const devicesWidth=Dimensions.get('window').width;
+const devicesHeight=Dimensions.get('window').height;
 
 export default class ExploreScreen extends React.Component {
   static navigationOptions = {
@@ -20,40 +21,6 @@ export default class ExploreScreen extends React.Component {
     };
   }
 
-  _renderHeader(item, expanded) {
-    return (
-      <View style={{
-        flexDirection: "row",
-        padding: 10,
-        justifyContent: "space-between",
-        alignItems: "center" ,
-        backgroundColor: "white" }}>
-
-      <Thumbnail source={require("../assets/01.png")} />
-      <Text style={{textAlign:"left",width: devicesWidth - 168}}>
-          {" "}{item.title}{" "} {item.distance} mile
-        </Text>
-        {expanded
-          ? <Icon style={commonStyle.Icon} name="remove" />
-          : <Icon style={commonStyle.Icon} name="add" />}
-
-      </View>
-    );
-  }
-  _renderContent(item) {
-    return (
-
-      <Text
-        style={{
-          backgroundColor: "white",
-          padding: 10,
-          marginLeft:90,
-        }}
-      >Members: {item.metrics.member_count}{"\n"}{"\n"}{item.description}
-      </Text>
-
-    );
-  }
 
   render() {
 
@@ -70,7 +37,7 @@ export default class ExploreScreen extends React.Component {
             </Button>
           </Left>
           <Body>
-            <Title>Explore</Title>
+            <Title>Map</Title>
           </Body>
           <Right />
         </Header>
@@ -87,19 +54,13 @@ export default class ExploreScreen extends React.Component {
             inputContainerStyle={styles.searchBarInputContainer}
           /></View>
           <View style={{paddingTop: 8}}>
-          <Button transparent onPress={()=> navigate("ExploreMap")}>
-          <Icon name="map" style={commonStyle.Icon} /></Button>
+          <Button transparent onPress={()=> navigate("Explore")}>
+          <Icon name="list" style={commonStyle.Icon} /></Button>
           </View>
         </View>
         <Content padder style={{ backgroundColor: "white" }}>
-          <Accordion
-            dataArray={this.state.nearbyLoops}
-            animation={true}
-            expanded={true}
-            renderHeader={this._renderHeader}
-            renderContent={this._renderContent}
-            headerStyle={{ backgroundColor: '#40e0d0'}}
-          />
+        <Image source={require("../assets/map.png")} style={{flex:1, width: devicesWidth,
+            height: devicesHeight}}></Image>
         </Content>
 
       </Container>

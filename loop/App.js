@@ -2,6 +2,7 @@ import React from "react";
 import { StyleSheet } from "react-native";
 import { Container, Header, Content, Button, Text } from "native-base";
 import { createStackNavigator, createAppContainer } from "react-navigation";
+import ExploreMapScreen from "./components/explore-map";
 import ExploreScreen from "./components/explore";
 import LoopsScreen from "./components/loops";
 import LoopsViewScreen from "./components/loopView";
@@ -79,6 +80,7 @@ const styles = StyleSheet.create({
 const MainNavigator = createStackNavigator({
   Home: { screen: HomeScreen },
   Explore: { screen: ExploreScreen },
+  ExploreMap: { screen: ExploreMapScreen},
   Loops: { screen: LoopsScreen },
   LoopView: { screen: LoopsViewScreen }
 });
