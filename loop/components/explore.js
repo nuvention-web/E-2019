@@ -60,22 +60,25 @@ export default class ExploreScreen extends React.Component {
     const { navigate } = this.props.navigation;
     return (
       <Container>
-        <Header rounded hasTabs transparent>
-          <Left>
-            <Button
+        <Header searchBar rounded>
+        <Button
               transparent
               onPress={() => navigate("Home", { name: "Jane" })}
             >
               <Icon name="arrow-back" style={commonStyle.Icon} />
             </Button>
-          </Left>
-          <Body>
-            <Title>Explore</Title>
-          </Body>
-          <Right />
+          <Item style={styles.searchBarInput}>
+            <Icon name="ios-search"  />
+            <Input  placeholder="Search" />
+            <Icon name="ios-people" />
+          </Item>
+          <Button transparent onPress={()=> navigate("ExploreMap")}>
+          <Icon name="map" style={commonStyle.Icon} /></Button>
+         
         </Header>
+      
 
-        <View style={styles.searchArea}>
+        {/*<View style={styles.searchArea}>
         <View style={{ width: devicesWidth - 60}}>
         <SearchBar
             placeholder="Type Here..."
@@ -90,7 +93,7 @@ export default class ExploreScreen extends React.Component {
           <Button transparent onPress={()=> navigate("ExploreMap")}>
           <Icon name="map" style={commonStyle.Icon} /></Button>
           </View>
-        </View>
+    </View>*/}
         <Content padder style={{ backgroundColor: "white" }}>
           <Accordion
             dataArray={this.state.nearbyLoops}
@@ -124,7 +127,11 @@ var styles = StyleSheet.create({
     backgroundColor: "white"
   },
   searchBarInputContainer: {
-    backgroundColor: "#f6f6f6"
+    backgroundColor: "white",
+    fontFamily: theme.FONT_FAMILY,
+    fontSize: theme.FONT_SIZE_MEDIUM,
+    borderColor:"black",
+ 
   },
   searchBarInput: {
     fontFamily: theme.FONT_FAMILY,
