@@ -1,0 +1,31 @@
+{
+   "markers": [
+    {
+      "key": "1",
+      "coordinate": {
+        "latitude": 42.053472,
+        "longitude": -87.672652
+      },
+      "title": "Group A",
+      "description": "Norris"
+    },
+    {
+      "key": "2",
+      "coordinate": {
+        "latitude": 42.057846,
+        "longitude": -87.675031
+      },
+      "title": "Group B",
+      "description": "Tech"
+    },
+    {
+      "key": "3",
+      "coordinate": {
+        "latitude": 42.048462,
+        "longitude": -87.683292
+      },
+      "title": "Group C",
+      "description": "Evanston Downtown"
+    }
+  ]
+}
