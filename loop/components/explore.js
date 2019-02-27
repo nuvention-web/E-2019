@@ -81,7 +81,7 @@ export default class ExploreScreen extends React.Component {
             <Icon name="md-close-circle" />
           </Item>
           <Button transparent onPress={this.switchToMap.bind(this)}>
-          {this.state.showMap ? (<Icon name="map" style={commonStyle.Icon} />):(<Icon name="list" style={commonStyle.Icon} />)}
+          {!this.state.showMap ? (<Icon name="map" style={commonStyle.Icon} />):(<Icon name="list" style={commonStyle.Icon} />)}
           </Button>
          
         </Header>
