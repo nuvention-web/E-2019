@@ -4,10 +4,20 @@ var format = require('string-template');
 module.exports = function (app) {
 
   return new express.Router()
-  .get('/hello', helloApi);
+  .get('/user/{userid}/loops', userLoops)
+  .get('/loop/{loopid}/contents', loopContents)
+  .get('/loops/nearly', getNearByLoops);
 
-  function helloApi(req, res, next) {
-    req.log.info('Inside helloApi route');
-    res.send({message: 'Hello, Thanks for reaching out!'});
+  function userLoops(req, res, next) {
+
   }
+
+  function loopContents(req, res, next) {
+
+  }
+
+  function getNearByLoops(req, res, next) {
+
+  }
+
 };
