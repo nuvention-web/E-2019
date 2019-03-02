@@ -110,7 +110,6 @@ export default class videoTab extends React.Component {
               <CardItem cardBody>
               <View style={styles.messages}>
               <View style={styles.vidbubble}>
-                  <ScrollView style={styles.vidcontainer}>
                   <VideoPlayer
                     videoProps={{
                       shouldPlay: true,
@@ -122,7 +121,8 @@ export default class videoTab extends React.Component {
                     }}
                     isPortrait={true}
                     playFromPositionMillis={0}
-                  /></ScrollView></View>
+                    videoWidth={devicesWidth-140}
+                  /></View>
                   <Button iconRight transparent style={styles.Iconbtn}> 
                   <Icon name="heart" style={commonStyle.Icon} />
                   </Button>

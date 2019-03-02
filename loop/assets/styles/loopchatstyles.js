@@ -34,6 +34,7 @@ export default styles = StyleSheet.create({
     backgroundColor: theme.PRIMARY_COLOR,
     borderRadius: 50,
     marginLeft:40,
+    maxWidth: devicesWidth -100,
   },
   imgbubble:{
     backgroundColor: theme.PRIMARY_COLOR,
@@ -47,7 +48,7 @@ export default styles = StyleSheet.create({
     borderRadius: 20,
     marginLeft:40,
     width: devicesWidth -100,
-    padding: 20
+    padding: 20,
   },
   img:{
     flex: 1,

@@ -12,8 +12,8 @@ import {
   Left,
   Right
 } from "native-base";
-//import { Video } from "expo";
-//import VideoPlayer from "@expo/videoplayer";
+import { Video } from "expo";
+import VideoPlayer from "@expo/videoplayer";
 import { SearchBar } from "react-native-elements";
 import ActionSheet from "react-native-actionsheet";
 import { Ionicons } from "@expo/vector-icons";
@@ -21,7 +21,6 @@ import theme from "../../assets/styles/theme.style";
 import commonStyle from "../../assets/styles/styles";
 const devicesWidth = Dimensions.get("window").width;
 import styles from "../../assets/styles/loopchatstyles";
-import Video from 'react-native-video';
 
 var BUTTONS = [
   { text: "Best", icon: "american-football", iconColor: "#2c8ef4" },
@@ -124,8 +123,7 @@ export default class allTab extends React.Component {
                 ) : null}
                 {lc.object.type == "video" ? (
                   <View style={styles.vidbubble}>
-                  {/*<ScrollView style={styles.vidcontainer}>*/}
-                  {/*<VideoPlayer
+                  <VideoPlayer
                     videoProps={{
                       shouldPlay: true,
                       resizeMode: Video.RESIZE_MODE_COVER,
@@ -136,38 +134,9 @@ export default class allTab extends React.Component {
                     }}
                     isPortrait={true}
                     playFromPositionMillis={0}
-                  />*/}
-                  {/*<Video source={{uri: 'http://d23dyxeqlo5psv.cloudfront.net/big_buck_bunny.mp4'}}   // Can be a URL or a local file.
-                          ref={(ref) => {
-                            this.player = ref
-                          }}
-                          resizeMode="cover"                                      // Store reference
-                          onBuffer={this.onBuffer}                // Callback when remote video is buffering
-                          onError={this.videoError}               // Callback when video cannot be loaded
-                        style={style.backgroundVideo} />*/}
-                        <Video source={{uri: "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4"}}   // Can be a URL or a local file.
-                                ref={(ref) => {
-                                  this.player = ref
-                                }}                                      // Store reference
-                                rate={1.0}                              // 0 is paused, 1 is normal.
-                                volume={1.0}                            // 0 is muted, 1 is normal.
-                                muted={false}                           // Mutes the audio entirely.
-                                paused={false}                          // Pauses playback entirely.
-                                resizeMode="cover"                      // Fill the whole screen at aspect ratio.*
-                                repeat={true}                           // Repeat forever.
-                                playInBackground={false}                // Audio continues to play when app entering background.
-                                playWhenInactive={false}                // [iOS] Video continues to play when control or notification center are shown.
-                                ignoreSilentSwitch={"ignore"}           // [iOS] ignore | obey - When 'ignore', audio will still play with the iOS hard silent switch set to silent. When 'obey', audio will toggle with the switch. When not specified, will inherit audio settings as usual.
-                                progressUpdateInterval={250.0}          // [iOS] Interval to fire onProgress (default to ~250ms)
-                                onLoadStart={(el)=>console.log("video is being loaded",el)}            // Callback when video starts to load
-                                onLoad={()=>console.log("video loading")}               // Callback when video loads
-                                onProgress={()=>console.log("video loading is in progress")}               // Callback every ~250ms with currentTime
-                                onEnd={()=>console.log("video is now loaded")}                      // Callback when playback finishes
-                                onError={()=>console.log("video can not be loaded")}               // Callback when video cannot be loaded
-                                onBuffer={()=>console.log("buffer stage")}                // Callback when remote video is buffering
-                                onTimedMetadata={()=>console.log("metadata received")}  // Callback when the stream receive some metadata
-                                style={style.backgroundVideo} />
-                {/*</ScrollView>*/}</View>
+                    videoWidth={devicesWidth-140}
+                  />
+                  </View>
                 ) : null}
                 <Button iconRight transparent style={styles.Iconbtn}> 
                   <Icon name="heart" style={commonStyle.Icon} />
