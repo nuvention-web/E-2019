@@ -21,6 +21,10 @@ import theme from "../../assets/styles/theme.style";
 import commonStyle from "../../assets/styles/styles";
 const devicesWidth = Dimensions.get("window").width;
 import styles from "../../assets/styles/loopchatstyles";
+import { ChatManager, TokenProvider } from '@pusher/chatkit-client';
+
+const CHATKIT_TOKEN_PROVIDER_ENDPOINT = 'https://us1.pusherplatform.io/services/chatkit_token_provider/v1/835e33ae-9e51-4675-ad93-1a329c66ba54/token';
+const CHATKIT_INSTANCE_LOCATOR = 'v1:us1:835e33ae-9e51-4675-ad93-1a329c66ba54';
 
 var BUTTONS = [
   { text: "Best", icon: "american-football", iconColor: "#2c8ef4" },
@@ -38,7 +42,8 @@ export default class allTab extends React.Component {
     this.state = {
       search: "",
       upVote: false,
-      like:false
+      like:false,
+      messages:[]
     };
   }
 
@@ -57,6 +62,63 @@ export default class allTab extends React.Component {
   showActionSheet = () => {
     this.ActionSheet.show();
   };
+
+  onReceive = data => {
+    const { id, sender, text, createdAt } = data;
+    var date = new Date(createdAt)
+    const incomingMessage = {
+      id: id,
+      object: {
+        type: 'text',
+        data: text
+      },
+      timestamp: date.toDateString(),
+      actor: {
+        uuid: sender.id,
+        name: sender.name,
+        avatar:
+          'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQmXGGuS_PrRhQt73sGzdZvnkQrPXvtA-9cjcPxJLhLo8rW-sVA',
+      },
+    };
+    allmessages = this.state.messages;
+    allmessages.push(incomingMessage);
+    this.setState({messages: allmessages})
+  };
+
+
+
+  componentDidMount() {
+    const { loopContent} = this.props;
+    this.setState({ messages: loopContent });
+
+    const tokenProvider = new TokenProvider({
+      url: CHATKIT_TOKEN_PROVIDER_ENDPOINT,
+    });
+
+    const chatManager = new ChatManager({
+      instanceLocator: CHATKIT_INSTANCE_LOCATOR,
+      userId: '123',
+      tokenProvider: tokenProvider,
+    });
+    //const CHATKIT_ROOM_ID = this.props.loopId;
+    
+    chatManager
+      .connect()
+      .then(currentUser => {
+        this.currentUser = currentUser;
+        this.currentUser.subscribeToRoom({
+          roomId: "19410041",
+          hooks: {
+            onMessage: this.onReceive,
+          },
+        });
+      })
+      .catch(err => {
+        console.log(err);
+      });
+
+  }
+
 
   render() {
     return (
@@ -93,7 +155,7 @@ export default class allTab extends React.Component {
           />
         </View> */}
         <View style={styles.cards}>
-          {this.props.loopContent.map(lc => 
+          {this.state.messages.map(lc => 
             <Card style={styles.card} key={lc.id} transparent>
               <CardItem>
                 <Left>
@@ -109,7 +171,7 @@ export default class allTab extends React.Component {
                       {lc.actor.name}
                     </Text>
                     <Text note style={commonStyle.text}>
-                      March, 1st
+                      {lc.timestamp}
                     </Text>
                   </Body>
                 </Left>

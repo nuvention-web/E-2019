@@ -35,6 +35,7 @@ export default class LoopsViewScreen extends React.Component {
     super(props);
     this.state = {};
   }
+ 
   render() {
     const { navigate } = this.props.navigation;
     const { navigation } = this.props;
@@ -73,7 +74,7 @@ export default class LoopsViewScreen extends React.Component {
             activeTextStyle={styles.activeTab}
             textStyle={commonStyle.text}
           >
-            <AllTab loopContent={loopContent[loopId]} />
+            <AllTab loopContent={loopContent[loopId]} loopId={loopId} />
           </Tab>
           <Tab
             heading="Top"
