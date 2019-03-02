@@ -1,5 +1,5 @@
 import React from "react";
-import { Image, View, StyleSheet } from "react-native";
+import { Image, View, ScrollView } from "react-native";
 import {
   Content,
   Button,
@@ -19,6 +19,8 @@ import ActionSheet from "react-native-actionsheet";
 import { Ionicons } from "@expo/vector-icons";
 import theme from "../../assets/styles/theme.style";
 import commonStyle from "../../assets/styles/styles";
+
+import styles from "../../assets/styles/loopchatstyles";
 
 var BUTTONS = [
   { text: "Best", icon: "american-football", iconColor: "#2c8ef4" },
@@ -60,7 +62,7 @@ export default class allTab extends React.Component {
             inputContainerStyle={styles.searchBarInputContainer}
           />
         </View>
-        <View style={styles.sortBtn}>
+        {/* <View style={styles.sortBtn}>
           <Button transparent iconLeft onPress={this.showActionSheet}>
             <Icon name="rocket" style={styles.ActionFirstIcon} />
             <Text style={styles.ActionText}>BEST POSTS</Text>
@@ -79,7 +81,7 @@ export default class allTab extends React.Component {
               this.setState({ clicked: BUTTONS[index] });
             }}
           />
-        </View>
+        </View> */}
         <View style={styles.cards}>
           {this.props.loopContent.map(lc => 
             <Card style={styles.card} key={lc.id} transparent>
@@ -90,39 +92,42 @@ export default class allTab extends React.Component {
                       uri:
                         "https://phadvocates.org/wp-content/themes/cardinal/images/default-thumb.png"
                     }}
+                    small
                   />
                   <Body>
                     <Text style={commonStyle.text}>
                       {lc.actor.name}
                     </Text>
                     <Text note style={commonStyle.text}>
-                      A person
+                      March, 1st
                     </Text>
                   </Body>
                 </Left>
-                <Right>
-                  <Icon name="more" />
-                </Right>
               </CardItem>
               <CardItem cardBody>
+              <View style={styles.messages}>
                 {lc.object.type == "text" ? (
+                  <View style={styles.bubble}>
                   <Text style={styles.textCard}>{lc.object.data}</Text>
+                  </View>
                 ) : null}
                 {lc.object.type == "image" ? (
+                  <View style={styles.imgbubble}>
                   <Image
-                    style={{ height: 300, flex: 1 }}
+                    style={styles.img}
                     source={{
                       uri:
                         "https://phadvocates.org/wp-content/themes/cardinal/images/default-thumb.png"
                     }}
-                  />
+                  /></View>
                 ) : null}
                 {lc.object.type == "video" ? (
+                  <View style={styles.vidbubble}>
+                  <ScrollView style={styles.vidcontainer}>
                   <VideoPlayer
                     videoProps={{
                       shouldPlay: true,
-                      resizeMode: Video.RESIZE_MODE_CONTAIN,
-                      style: { height: 300, width: 100 },
+                      resizeMode: Video.RESIZE_MODE_COVER,
                       source: {
                         uri:
                           "https://bitdash-a.akamaihd.net/content/sintel/hls/playlist.m3u8"
@@ -130,12 +135,12 @@ export default class allTab extends React.Component {
                     }}
                     isPortrait={true}
                     playFromPositionMillis={0}
-                  />
+                  /></ScrollView></View>
                 ) : null}
-              </CardItem>
-              <CardItem>
-                <Icon name="heart" style={commonStyle.Icon} />
-                <Text style={commonStyle.text}>22</Text>
+                <Button iconRight transparent style={styles.Iconbtn}> 
+                  <Icon name="heart" style={commonStyle.Icon} />
+                  </Button>
+                </View>
               </CardItem>
             </Card>)}
         </View>
@@ -143,54 +148,3 @@ export default class allTab extends React.Component {
     );
   }
 }
-
-var styles = StyleSheet.create({
-  content: {
-    backgroundColor: "#eaebee",
-    marginBottom: 60
-  },
-  sortBtn: {
-    marginTop: 10
-  },
-  ActionFirstIcon: {
-    color: "grey"
-  },
-  ActionSecondIcon: {
-    fontSize: theme.FONT_SIZE_LARGE,
-    color: "grey",
-    marginLeft: -6
-  },
-  ActionText: {
-    fontSize: theme.FONT_SIZE_MEDIUM,
-    color: "grey",
-    fontWeight: "bold"
-  },
-  cards: {},
-  card: {
-    elevation: 3,
-    marginTop: 10
-  },
-  textCard: {
-    fontFamily: theme.FONT_FAMILY,
-    margin: 20,
-    fontSize: theme.FONT_SIZE_LARGE
-  },
-  backgroundVideo: {
-    position: "absolute",
-    top: 0,
-    left: 0,
-    bottom: 0,
-    right: 0
-  },
-  searchBarContainer: {
-    backgroundColor: "white"
-  },
-  searchBarInputContainer: {
-    backgroundColor: "#f6f6f6"
-  },
-  searchBarInput: {
-    fontFamily: theme.FONT_FAMILY,
-    fontSize: theme.FONT_SIZE_MEDIUM,
-    backgroundColor: "#f6f6f6"
-  }
-});
