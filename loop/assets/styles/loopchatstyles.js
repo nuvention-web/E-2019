@@ -59,7 +59,14 @@ export default styles = StyleSheet.create({
     flex:1,
   },
   Iconbtn:{
-    marginLeft: 5
+    marginLeft: 5,
+    display: 'flex',
+    flexDirection: 'row',
+    flex:1,
+  },
+  Iconbtnforiv:{
+    marginLeft: 5,
+    flex:1,
   },
   textCard: {
     fontFamily: theme.FONT_FAMILY,

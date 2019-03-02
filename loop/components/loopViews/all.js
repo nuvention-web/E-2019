@@ -16,7 +16,7 @@ import { Video } from "expo";
 import VideoPlayer from "@expo/videoplayer";
 import { SearchBar } from "react-native-elements";
 import ActionSheet from "react-native-actionsheet";
-import { Ionicons } from "@expo/vector-icons";
+import { Entypo } from "@expo/vector-icons";
 import theme from "../../assets/styles/theme.style";
 import commonStyle from "../../assets/styles/styles";
 const devicesWidth = Dimensions.get("window").width;
@@ -138,9 +138,14 @@ export default class allTab extends React.Component {
                   />
                   </View>
                 ) : null}
-                <Button iconRight transparent style={styles.Iconbtn}> 
+                <View style={lc.object.type == "video" || lc.object.type == "image" ? styles.Iconbtnforiv:styles.Iconbtn}>
+                <Button iconRight transparent > 
                   <Icon name="heart" style={commonStyle.Icon} />
                   </Button>
+                  <Button iconRight transparent > 
+                  <Entypo name="arrow-bold-up" style={commonStyle.Icon} />
+                  </Button>
+                </View>
                 </View>
               </CardItem>
             </Card>)}
@@ -149,14 +154,4 @@ export default class allTab extends React.Component {
     );
   }
 }
-var style = StyleSheet.create({
-  backgroundVideo: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    bottom: 0,
-    right: 0,
-    width: devicesWidth -100,
-    height:200,
-  },
-});
+
