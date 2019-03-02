@@ -90,7 +90,7 @@ export default class LoopsViewScreen extends React.Component {
             textStyle={commonStyle.text}
             activeTextStyle={styles.activeTab}
           >
-            <TextTab loopContent={loopContent[loopId]} />
+            <TextTab loopContent={loopContent[loopId]} loopId={loopId}/>
           </Tab>
           <Tab
             heading="Image"

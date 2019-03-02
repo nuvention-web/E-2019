@@ -80,6 +80,7 @@ export default class allTab extends React.Component {
       },
     };
     allmessages = this.state.messages;
+    if (allmessages.some((m)=> m.id === id)) return;
     allmessages.push(incomingMessage);
     this.setState({messages: allmessages})
   };
