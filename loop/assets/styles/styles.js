@@ -7,6 +7,10 @@ export default StyleSheet.create({
     },
     Icon:{
         color: theme.PRIMARY_COLOR,
-        fontSize: theme.FONT_SIZE_LARGE
+        fontSize: theme.ICON_SIZE_LARGE
+    },
+    ActionIcon:{
+        color: theme.PRIMARY_COLOR,
+        fontSize: theme.ICON_SIZE_MEDIUM
     }
   });

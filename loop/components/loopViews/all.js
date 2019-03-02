@@ -16,7 +16,7 @@ import { Video } from "expo";
 import VideoPlayer from "@expo/videoplayer";
 import { SearchBar } from "react-native-elements";
 import ActionSheet from "react-native-actionsheet";
-import { Entypo } from "@expo/vector-icons";
+import { AntDesign } from "@expo/vector-icons";
 import theme from "../../assets/styles/theme.style";
 import commonStyle from "../../assets/styles/styles";
 const devicesWidth = Dimensions.get("window").width;
@@ -36,13 +36,23 @@ export default class allTab extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      search: ""
+      search: "",
+      upVote: false,
+      like:false
     };
   }
 
   updateSearch = search => {
     this.setState({ search });
   };
+
+  updateUpVote = () =>{
+    this.setState({upVote: !this.state.upVote})
+  }
+
+  updateLike = () =>{
+    this.setState({like: !this.state.like})
+  }
 
   showActionSheet = () => {
     this.ActionSheet.show();
@@ -139,11 +149,14 @@ export default class allTab extends React.Component {
                   </View>
                 ) : null}
                 <View style={lc.object.type == "video" || lc.object.type == "image" ? styles.Iconbtnforiv:styles.Iconbtn}>
-                <Button iconRight transparent > 
-                  <Icon name="heart" style={commonStyle.Icon} />
+                  <Button iconRight  transparent style={styles.actionbtn}> 
+                  <AntDesign name={this.state.like? "heart" : "hearto"} style={commonStyle.ActionIcon} />
                   </Button>
-                  <Button iconRight transparent > 
-                  <Entypo name="arrow-bold-up" style={commonStyle.Icon} />
+                  <Button iconRight  transparent style={styles.actionbtn}> 
+                  <AntDesign name={this.state.upVote? "upsquare" : "up-square-o"} style={commonStyle.ActionIcon} />
+                  </Button>
+                  <Button iconRight transparent style={styles.actionbtn}> 
+                  <AntDesign name="warning" style={commonStyle.ActionIcon} />
                   </Button>
                 </View>
                 </View>

@@ -16,7 +16,7 @@ import { Video } from "expo";
 import VideoPlayer from "@expo/videoplayer";
 import { SearchBar } from "react-native-elements";
 import ActionSheet from "react-native-actionsheet";
-import { Ionicons } from "@expo/vector-icons";
+import { AntDesign } from "@expo/vector-icons";
 import theme from "../../assets/styles/theme.style";
 import commonStyle from "../../assets/styles/styles";
 import styles from "../../assets/styles/loopchatstyles";
@@ -123,9 +123,18 @@ export default class videoTab extends React.Component {
                     playFromPositionMillis={0}
                     videoWidth={devicesWidth-140}
                   /></View>
-                  <Button iconRight transparent style={styles.Iconbtn}> 
-                  <Icon name="heart" style={commonStyle.Icon} />
+                  <View style={styles.Iconbtnforiv}>
+                  <Button iconRight  transparent style={styles.actionbtn}> 
+                  <AntDesign name="hearto" style={commonStyle.ActionIcon} />
+                  {/* <AntDesign name="heart" style={commonStyle.ActionIcon} /> */}
                   </Button>
+                  <Button iconRight  transparent style={styles.actionbtn}> 
+                  <AntDesign name="up-square-o" style={commonStyle.ActionIcon} />
+                  </Button>
+                  <Button iconRight transparent style={styles.actionbtn}> 
+                  <AntDesign name="warning" style={commonStyle.ActionIcon} />
+                  </Button>
+                </View>
                   </View>
               </CardItem>
             </Card>
