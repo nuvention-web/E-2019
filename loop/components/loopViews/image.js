@@ -20,6 +20,8 @@ import { AntDesign } from "@expo/vector-icons";
 import theme from "../../assets/styles/theme.style";
 import commonStyle from "../../assets/styles/styles";
 import styles from "../../assets/styles/loopchatstyles";
+import { ChatManager, TokenProvider } from '@pusher/chatkit-client';
+import {CHATKIT_TOKEN_PROVIDER_ENDPOINT, CHATKIT_INSTANCE_LOCATOR} from "../../assets/config"
 
 var BUTTONS = [
   { text: "Best", icon: "american-football", iconColor: "#2c8ef4" },
@@ -35,7 +37,8 @@ export default class imageTab extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      search: ""
+      search: "",
+      messages:[],
     };
   }
 
@@ -46,6 +49,66 @@ export default class imageTab extends React.Component {
   showActionSheet = () => {
     this.ActionSheet.show();
   };
+
+  checkImageURL(url) {
+    return(url.match(/\.(jpeg|jpg|gif|png)$/) != null);
+  }
+
+  onReceive = data => {
+    const { id, sender, text, createdAt } = data;
+    if (!this.checkImageURL(text)) return;
+    var date = new Date(createdAt)
+    const incomingMessage = {
+      id: id,
+      object: {
+        type: 'image',
+        data: text
+      },
+      timestamp: date.toDateString(),
+      actor: {
+        uuid: sender.id,
+        name: sender.name,
+        avatar:
+          'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQmXGGuS_PrRhQt73sGzdZvnkQrPXvtA-9cjcPxJLhLo8rW-sVA',
+      },
+    };
+    allmessages = this.state.messages;
+    if (allmessages.some((m)=> m.id === id)) return;
+    allmessages.push(incomingMessage);
+    this.setState({messages: allmessages})
+  };
+
+  componentDidMount() {
+    const { loopContent} = this.props;
+    this.setState({ messages: loopContent });
+
+    const tokenProvider = new TokenProvider({
+      url: CHATKIT_TOKEN_PROVIDER_ENDPOINT,
+    });
+
+    const chatManager = new ChatManager({
+      instanceLocator: CHATKIT_INSTANCE_LOCATOR,
+      userId: '123',
+      tokenProvider: tokenProvider,
+    });
+    const CHATKIT_ROOM_ID = this.props.loopId;
+    
+    chatManager
+      .connect()
+      .then(currentUser => {
+        this.currentUser = currentUser;
+        this.currentUser.subscribeToRoom({
+          roomId: CHATKIT_ROOM_ID,
+          hooks: {
+            onMessage: this.onReceive,
+          },
+        });
+      })
+      .catch(err => {
+        console.log(err);
+      });
+
+  }
 
   render() {
     return (
@@ -82,7 +145,7 @@ export default class imageTab extends React.Component {
           />
         </View> */}
         <View style={styles.cards}>
-          {this.props.loopContent.map(lc => {
+          {this.state.messages.map(lc => {
           return lc.object.type == "image" ? (
             <Card style={styles.card} key={lc.id} transparent>
               <CardItem>
@@ -99,7 +162,7 @@ export default class imageTab extends React.Component {
                       {lc.actor.name}
                     </Text>
                     <Text note style={commonStyle.text}>
-                    March, 1st
+                    {lc.timestamp}
                     </Text>
                   </Body>
                 </Left>
@@ -111,7 +174,7 @@ export default class imageTab extends React.Component {
                     style={styles.img}
                     source={{
                       uri:
-                        "https://phadvocates.org/wp-content/themes/cardinal/images/default-thumb.png"
+                        lc.object.data == "" ? "https://phadvocates.org/wp-content/themes/cardinal/images/default-thumb.png" : lc.object.data
                     }}
                   /></View>
                   <View style={styles.Iconbtnforiv}>

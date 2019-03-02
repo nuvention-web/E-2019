@@ -61,17 +61,29 @@ export default class allTab extends React.Component {
   showActionSheet = () => {
     this.ActionSheet.show();
   };
+  checkVideoURL(url){
+    return(url.match(/\.(mp4|m3u8)$/) != null);
+  }
+  checkImageURL(url) {
+    return(url.match(/\.(jpeg|jpg|gif|png)$/) != null);
+  }
 
   onReceive = data => {
     const { id, sender, text, createdAt } = data;
+    var type;
+    if (this.checkImageURL(text)) type = "image"
+    else if (this.checkVideoURL(text)) type = "video"
+    else type = "text"
     var date = new Date(createdAt)
+    var dateString = date.toDateString();
+    var timeString = date.toTimeString();
     const incomingMessage = {
       id: id,
       object: {
-        type: 'text',
+        type: type,
         data: text
       },
-      timestamp: date.toDateString(),
+      timestamp: dateString.substring(0,11) + timeString.substring(0,5),
       actor: {
         uuid: sender.id,
         name: sender.name,
@@ -189,7 +201,7 @@ export default class allTab extends React.Component {
                     style={styles.img}
                     source={{
                       uri:
-                        "https://phadvocates.org/wp-content/themes/cardinal/images/default-thumb.png"
+                        lc.object.data == "" ? "https://phadvocates.org/wp-content/themes/cardinal/images/default-thumb.png" : lc.object.data
                     }}
                   /></View>
                 ) : null}
