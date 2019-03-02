@@ -17,7 +17,7 @@ export default class ExploreScreen extends React.Component {
     this.state = {
       nearbyLoops: data.nearbyLoops,
       loaded: false,
-      showMap: false
+      showMap: true
     };
   }
 
