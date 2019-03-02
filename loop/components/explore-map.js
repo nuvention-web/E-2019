@@ -6,7 +6,7 @@ import { MapView } from "expo";
 import * as data from "../assets/marker.json";
 import { Card, CardItem, Text, Icon, Right, Left, Body } from "native-base";
 const devicesWidth=Dimensions.get('window').width;
-import markerImg from '../assets/03.png'
+import markerImg from '../assets/groupview.png'
 export default class LoopMap extends React.Component {
   static navigationOptions = {
     header: null
