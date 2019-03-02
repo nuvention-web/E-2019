@@ -22,9 +22,8 @@ import commonStyle from "../../assets/styles/styles";
 const devicesWidth = Dimensions.get("window").width;
 import styles from "../../assets/styles/loopchatstyles";
 import { ChatManager, TokenProvider } from '@pusher/chatkit-client';
+import {CHATKIT_TOKEN_PROVIDER_ENDPOINT, CHATKIT_INSTANCE_LOCATOR} from "../../assets/config"
 
-const CHATKIT_TOKEN_PROVIDER_ENDPOINT = 'https://us1.pusherplatform.io/services/chatkit_token_provider/v1/835e33ae-9e51-4675-ad93-1a329c66ba54/token';
-const CHATKIT_INSTANCE_LOCATOR = 'v1:us1:835e33ae-9e51-4675-ad93-1a329c66ba54';
 
 var BUTTONS = [
   { text: "Best", icon: "american-football", iconColor: "#2c8ef4" },
@@ -100,14 +99,14 @@ export default class allTab extends React.Component {
       userId: '123',
       tokenProvider: tokenProvider,
     });
-    //const CHATKIT_ROOM_ID = this.props.loopId;
+    const CHATKIT_ROOM_ID = this.props.loopId;
     
     chatManager
       .connect()
       .then(currentUser => {
         this.currentUser = currentUser;
         this.currentUser.subscribeToRoom({
-          roomId: "19410041",
+          roomId: CHATKIT_ROOM_ID,
           hooks: {
             onMessage: this.onReceive,
           },
