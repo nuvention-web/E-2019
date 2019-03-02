@@ -76,6 +76,13 @@ export default class LoopsViewScreen extends React.Component {
             <AllTab loopContent={loopContent[loopId]} />
           </Tab>
           <Tab
+            heading="Top"
+            tabStyle={styles.tabStyle}
+            activeTabStyle={styles.activeTabStyle}
+            textStyle={commonStyle.text}
+            activeTextStyle={styles.activeTab}
+          />
+          <Tab
             heading="Text"
             tabStyle={styles.tabStyle}
             activeTabStyle={styles.activeTabStyle}
@@ -111,13 +118,6 @@ export default class LoopsViewScreen extends React.Component {
           />
           <Tab
             heading="Event"
-            tabStyle={styles.tabStyle}
-            activeTabStyle={styles.activeTabStyle}
-            textStyle={commonStyle.text}
-            activeTextStyle={styles.activeTab}
-          />
-          <Tab
-            heading="Star"
             tabStyle={styles.tabStyle}
             activeTabStyle={styles.activeTabStyle}
             textStyle={commonStyle.text}
