@@ -6,7 +6,7 @@ module.exports = function (app) {
   return new express.Router()
   .get('/user/:userId/loops', userLoops)
   .get('/loop/:loopid/contents', loopContents)
-  .get('/loops/nearly', getNearByLoops);
+  .get('/loops/nearby', getNearByLoops);
 
   function userLoops(req, res, next) {
     req.log.info('Inside userLoops functions');
