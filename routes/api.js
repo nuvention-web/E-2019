@@ -37,7 +37,7 @@ module.exports = function (app) {
     if(lat && long) {
       var acceptedValues = ['m', 'mi', 'km', 'ft'];
       var radius = req.query.rad || 1;
-      var unit = req.query.unit.toLowerCase() || 'mi';
+      var unit = req.query.unit ? req.query.unit.toLowerCase() : 'mi';
       if(acceptedValues.indexOf(unit) > -1) {
         app.dataRedis.georadius('maps:nearby:places', long, lat, radius, unit, 'WITHCOORD', 'WITHDIST', function(err, data) {
           if(err) {
