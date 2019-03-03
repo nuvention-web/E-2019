@@ -1,5 +1,5 @@
 import React from "react";
-import { Image, View, StyleSheet } from "react-native";
+import { Image, View, StyleSheet,ScrollView } from "react-native";
 import {
   Content,
   Button,
@@ -139,6 +139,13 @@ export default class textTab extends React.Component {
           />
         </View> */}
         <View style={styles.cards}>
+        <ScrollView
+          ref={ref => this.scrollView = ref}
+          onContentSizeChange={(contentWidth, contentHeight)=>{        
+              this.scrollView.scrollToEnd({animated: true});
+          }}
+          contentContainerStyle={{ flexGrow: 1 }}
+          >
           {this.state.messages.map(lc => {
             return lc.object.type == "text" ? (
             <Card style={styles.card} key={lc.id} transparent>
@@ -156,10 +163,15 @@ export default class textTab extends React.Component {
                       {lc.actor.name}
                     </Text>
                     <Text note style={commonStyle.text}>
-                    {lc.timestamp}
+                    Top Poster
                     </Text>
                   </Body>
                 </Left>
+                <Right>
+                <Text note style={commonStyle.text}>
+                      {lc.timestamp}
+                    </Text>
+                </Right>
               </CardItem>
               <CardItem cardBody>
               <View style={styles.messages}>
@@ -183,6 +195,7 @@ export default class textTab extends React.Component {
             </Card>
             ) : null
             })}
+            </ScrollView>
         </View>
       </Content>
     );

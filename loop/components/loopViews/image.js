@@ -162,10 +162,15 @@ export default class imageTab extends React.Component {
                       {lc.actor.name}
                     </Text>
                     <Text note style={commonStyle.text}>
-                    {lc.timestamp}
+                    Top Poster
                     </Text>
                   </Body>
                 </Left>
+                <Right>
+                <Text note style={commonStyle.text}>
+                      {lc.timestamp}
+                    </Text>
+                </Right>
               </CardItem>
               <CardItem cardBody>
               <View style={styles.messages}>
