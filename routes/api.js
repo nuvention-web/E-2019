@@ -31,36 +31,43 @@ module.exports = function (app) {
 
   function getNearByLoops(req, res, next) {
     req.log.info('Inside getNearByLoops functions');
+    var err;
     var lat = req.query.lat;
     var long = req.query.long;
     if(lat && long) {
+      var acceptedValues = ['m', 'mi', 'km', 'ft'];
       var radius = req.query.rad || 1;
-      var unit = req.query.unit || 'mi';
-      app.dataRedis.georadius('maps:nearby:places', long, lat, radius, unit, 'WITHCOORD', 'WITHDIST', function(err, data) {
-        if(err) {
-          next(err);
-        } else {
-          var entities = [];
-          for(var i in data) {
-            entities[i] = {};
-            entities[i].title =  data[i][0];
-            entities[i].distance =  data[i][1];
-            entities[i].location =  {
-              "long": data[i][2][0],
-              "lat": data[i][2][1]
-            };
+      var unit = req.query.unit.toLowerCase() || 'mi';
+      if(acceptedValues.indexOf(unit) > -1) {
+        app.dataRedis.georadius('maps:nearby:places', long, lat, radius, unit, 'WITHCOORD', 'WITHDIST', function(err, data) {
+          if(err) {
+            next(err);
+          } else {
+            var entities = [];
+            for(var i in data) {
+              entities[i] = JSON.parse(data[i][0]);
+              entities[i].distance =  data[i][1];
+              entities[i].location =  {
+                "long": data[i][2][0],
+                "lat": data[i][2][1]
+              };
+            }
+            var resObj = { entities: entities };
+            resObj.count = entities.count;
+            res.send(resObj);
           }
-          var resObj = { entities: entities };
-          resObj.count = entities.count;
-          res.send(resObj);
+        });
+      } else {
+        err = {
+          statusCode: 400, message: 'Bad Request! Unit: ' + unit + ' is not supported.'
+        };
+        next(err);
         }
-      });
     } else {
-      var err = {
+      err = {
         statusCode: 400, message: 'Bad Request! Query params lat and long and not defined'
-      }
+      };
       next(err);
     }
   }
-
 };
