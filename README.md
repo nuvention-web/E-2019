@@ -1,19 +1,19 @@
-#NUvention Team E
+# NUvention Team E
 
 
-##install expo:
+## install expo:
 ```
 npm install expo-cli --global
 ```
-##enter project folder
+## enter project folder
 ```
 cd loop 
 ```
-##install dependencies:
+## install dependencies:
 ```
 npm install
 ```
-##start
+## start
 ```
 expo start
 ```
