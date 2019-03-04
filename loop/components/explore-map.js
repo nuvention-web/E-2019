@@ -15,11 +15,54 @@ export default class LoopMap extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      markers: data.markers
+      markers: data.markers,
+      isLoading: true,
+      latitude: null,
+      longitude: null,
+      error: null,
+      loaded: false
     };
   }
 
+  componentDidMount(){
+    this.watchId = navigator.geolocation.watchPosition(
+      (position) => {
+        this.setState({
+          latitude: position.coords.latitude,
+          longitude: position.coords.longitude,
+          error: null,
+          loaded: true
+        });
+      },
+      (error) => this.setState({ error: error.message }),
+      { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000, distanceFilter: 10 },
+    );
+  }
+
+  componentWillUnmount() {
+    navigator.geolocation.clearWatch(this.watchId);
+  }
+
   render() {
+    if (this.state.loaded & this.state.isLoading){
+      fetch(`https://loop-core.herokuapp.com/api/loops/nearby?lat=${encodeURIComponent(this.state.latitude)}&long=${encodeURIComponent(this.state.longitude)}`, {
+        method: "GET",
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        }, 
+      }).then((response) => response.json())
+      .then((responseJson) => {
+        this.setState({
+          isLoading: false,
+          dataSource: responseJson.entities,
+        });
+
+      })
+      .catch((error) =>{
+        console.error(error);
+      });
+    }
     return (
       
         <MapView
@@ -44,7 +87,7 @@ export default class LoopMap extends React.Component {
                     Loop: {marker.title}
                     {"\n"}
                     {marker.distance}miles{"\n"}
-                    Members: {marker.metrics.member_count} {marker.type}
+                    Members: {marker.metrics.member_count}
                     {"\n"}
                     {marker.description}
                   </Text>
