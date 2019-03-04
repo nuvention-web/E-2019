@@ -22,7 +22,6 @@ export default styles = StyleSheet.create({
     color: "grey",
     fontWeight: "bold"
   },
-  cards: {},
   card: {
     elevation: 3,
     marginTop: 10
@@ -30,28 +29,22 @@ export default styles = StyleSheet.create({
   messages:{
     display: 'flex',
     flexDirection: 'row',
-    width:devicesWidth
+    width:devicesWidth,
+    justifyContent: 'space-between'
   },
   
   Iconbtn:{
-    marginLeft: 10,
-    display: 'flex',
-    flexDirection: 'row',
-    flex:1,
+    // marginLeft: 10,
+     display: 'flex',
+     flexDirection: 'column',
+    // flex:1,
   },
-  Iconbtnforiv:{
-    marginLeft: 10,
-    flex:1,
+  Icontext:{
+    fontSize: theme.FONT_SIZE_SMALL,
+    color: 'black'
   },
   actionbtn:{
     width:40
-  },
-  backgroundVideo: {
-    position: "absolute",
-    top: 0,
-    left: 0,
-    bottom: 0,
-    right: 0
   },
   searchBarContainer: {
     backgroundColor: "white"

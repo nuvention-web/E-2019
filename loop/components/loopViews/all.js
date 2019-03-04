@@ -167,26 +167,6 @@ export default class allTab extends React.Component {
               flexDirection: "column"
             }}
           >
-            <Button rounded style={styles.actionbtnLik}>
-              <AntDesign name="up-square-o" style={styles.ActionIconLik} />
-            </Button>
-          </View>
-        ),
-        backgroundColor: "white",
-        onPress: () => {
-          console.log("Delete Item");
-        }
-      },
-      {
-        component: (
-          <View
-            style={{
-              flex: 1,
-              alignItems: "center",
-              justifyContent: "center",
-              flexDirection: "column"
-            }}
-          >
             <Button rounded style={styles.actionbtnUr}>
               <AntDesign name="warning" style={styles.ActionIconUr} />
             </Button>
@@ -275,17 +255,18 @@ export default class allTab extends React.Component {
                 {lc.object.type == "video" ? (
                   <LoopVideoMessage />
                 ) : null}
-                {/* <View style={lc.object.type == "video" || lc.object.type == "image" ? styles.Iconbtnforiv:styles.Iconbtn}>
-                  <Button iconRight  transparent style={styles.actionbtn}> 
+                <View >
+                  {/* <Button iconRight  transparent style={styles.actionbtn}> 
                   <AntDesign name={this.state.like? "heart" : "hearto"} style={commonStyle.ActionIcon} />
-                  </Button>
-                  <Button iconRight  transparent style={styles.actionbtn}> 
+                  </Button> */}
+                  <Button transparent style={styles.Iconbtn}> 
                   <AntDesign name={this.state.upVote? "upsquare" : "up-square-o"} style={commonStyle.ActionIcon} />
+                  <Text style={styles.Icontext}>100</Text>
                   </Button>
-                  <Button iconRight transparent style={styles.actionbtn}> 
+                  {/* <Button iconRight transparent style={styles.actionbtn}> 
                   <AntDesign name="warning" style={commonStyle.ActionIcon} />
-                  </Button>
-                </View> */}
+                  </Button> */}
+                </View>
                 </View></Swipeout>
               </CardItem>
             </Card>)}
