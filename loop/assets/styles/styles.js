@@ -12,5 +12,9 @@ export default StyleSheet.create({
     ActionIcon:{
         color: theme.PRIMARY_COLOR,
         fontSize: theme.ICON_SIZE_MEDIUM
+    },
+    BottomIcon:{
+        color: theme.PRIMARY_COLOR,
+        fontSize: theme.ICON_SIZE_LARGER
     }
   });

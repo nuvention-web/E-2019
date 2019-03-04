@@ -19,8 +19,11 @@ import * as data from "../assets/data.json";
 import theme from "../assets/styles/theme.style";
 import commonStyle from "../assets/styles/styles";
 const devicesWidth=Dimensions.get('window').width;
+import Swipeout from 'react-native-swipeout';
+import { AntDesign } from "@expo/vector-icons";
 
-export default class LoopsScreen extends React.Component {
+
+export default class Loops extends React.Component {
   static navigationOptions = {
     header: null
   };
@@ -60,28 +63,56 @@ export default class LoopsScreen extends React.Component {
     return result;
   }
   render() {
+    const swipeBtns = [
+      {
+        component: (
+          <View
+              style={{
+                flex: 1,
+                alignItems: 'center',
+                justifyContent: 'center',
+                flexDirection: 'column',
+                marginRight:-20
+              }}
+          >
+          <Button rounded style={styles.actionbtn}>
+          <AntDesign name="totop" style={styles.ActionIcon}/></Button>
+          </View>
+        ),
+        backgroundColor: 'white',
+        onPress: () => {
+          console.log("Delete Item");
+        },
+      },
+      {
+        component: (
+          <View
+              style={{
+                flex: 1,
+                alignItems: 'center',
+                justifyContent: 'center',
+                flexDirection: 'column',
+              }}
+          >
+          <Button rounded style={styles.actionbtnDel}>
+          <AntDesign name="delete" style={styles.ActionIconDel} /></Button>
+          </View>
+        ),
+        backgroundColor: 'white',
+        onPress: () => {
+          console.log("Delete Item");
+        },
+      },
+    ];
     const { navigate } = this.props.navigation;
     //const uri = require(`../assets/group.png`);
     return (
-      <Container>
-        <Header rounded hasTabs transparent>
-          <Left>
-            <Button
-              transparent
-              onPress={() => navigate("Home", { name: "Jane" })}
-            >
-              <Icon name="arrow-back" style={commonStyle.Icon} />
-            </Button>
-          </Left>
-          <Body>
-            <Title>My Loops</Title>
-          </Body>
-          <Right />
-        </Header>
         <Content style={styles.content}>
           <View style={styles.cards}>
             {this.state.myloops.map(loop => (
-              <Card style={styles.card} key={loop.id} transparent>
+              <Swipeout key={loop.id} right={swipeBtns} backgroundColor='#fff' buttonWidth={60}>
+              <View>
+              <Card style={styles.card}  transparent>
                 <CardItem button onPress={() =>
                         navigate("LoopView", {
                           title: loop.title,
@@ -101,25 +132,15 @@ export default class LoopsScreen extends React.Component {
                     </Body>
                   </Left>
                   <Right>
-                    <Button
-                      transparent
-                      onPress={() =>
-                        navigate("LoopView", {
-                          title: loop.title,
-                          loopContent: this.state.loopContent,
-                          loopid: loop.id
-                        })
-                      }
-                    >
-                      <Icon name="arrow-forward" style={commonStyle.Icon} />
-                    </Button>
+                    <Text style={styles.urgentMess}>(100)</Text>
+                    <AntDesign name="notification" style={commonStyle.ActionIcon}></AntDesign>
                   </Right>
                 </CardItem>
               </Card>
+              </View></Swipeout>
             ))}
           </View>
         </Content>
-      </Container>
     );
   }
 }
@@ -134,5 +155,28 @@ var styles = StyleSheet.create({
   cards: {},
   card: {
     elevation: 3
+  },
+  actionbtn:{
+    backgroundColor: '#F0F0F0',
+    width: 50,
+    height:50,
+    justifyContent: 'center'
+  },
+  actionbtnDel:{
+    backgroundColor: 'red',
+    width: 50,
+    height:50,
+    justifyContent: 'center'
+  },
+  ActionIcon:{
+    fontSize: theme.ICON_SIZE_LARGE,
+    color: theme.PRIMARY_COLOR
+  },
+  ActionIconDel:{
+    fontSize: theme.ICON_SIZE_LARGE,
+    color: 'white'
+  },
+  urgentMess:{
+    color: '#AEAEAE'
   }
 });

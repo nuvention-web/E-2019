@@ -1,6 +1,7 @@
 import { StyleSheet,Dimensions } from 'react-native';
 import theme from './theme.style.js';
 const devicesWidth = Dimensions.get("window").width;
+
 export default styles = StyleSheet.create({
   content: {
     marginBottom: 60
@@ -28,36 +29,10 @@ export default styles = StyleSheet.create({
   },
   messages:{
     display: 'flex',
-    flexDirection: 'row'
+    flexDirection: 'row',
+    width:devicesWidth
   },
-  bubble:{
-    backgroundColor: theme.PRIMARY_COLOR,
-    borderRadius: 50,
-    marginLeft:40,
-    maxWidth: devicesWidth -100,
-  },
-  imgbubble:{
-    backgroundColor: theme.PRIMARY_COLOR,
-    borderRadius: 20,
-    marginLeft:40,
-    width: devicesWidth -100,
-    padding: 20,
-  },
-  vidbubble:{
-    backgroundColor: theme.PRIMARY_COLOR,
-    borderRadius: 20,
-    marginLeft:40,
-    width: devicesWidth -100,
-    padding: 20,
-  },
-  img:{
-    flex: 1,
-    height:200,
-    resizeMode: 'contain'
-  },
-  vidcontainer:{
-    flex:1,
-  },
+  
   Iconbtn:{
     marginLeft: 10,
     display: 'flex',
@@ -70,15 +45,6 @@ export default styles = StyleSheet.create({
   },
   actionbtn:{
     width:40
-  },
-  textCard: {
-    fontFamily: theme.FONT_FAMILY,
-    fontSize: theme.FONT_SIZE_MEDIUM,
-    color: 'white',
-    paddingLeft: 20,
-    paddingRight: 20,
-    paddingTop: 8,
-    paddingBottom: 12
   },
   backgroundVideo: {
     position: "absolute",
@@ -97,5 +63,25 @@ export default styles = StyleSheet.create({
     fontFamily: theme.FONT_FAMILY,
     fontSize: theme.FONT_SIZE_MEDIUM,
     backgroundColor: "#f6f6f6"
-  }
+  },
+  actionbtnLik:{
+    backgroundColor: '#F0F0F0',
+    width: 40,
+    height:40,
+    justifyContent: 'center'
+  },
+  actionbtnUr:{
+    backgroundColor: 'red',
+    width: 40,
+    height:40,
+    justifyContent: 'center'
+  },
+  ActionIconLik:{
+    fontSize: theme.ICON_SIZE_MEDIUM,
+    color: theme.PRIMARY_COLOR
+  },
+  ActionIconUr:{
+    fontSize: theme.ICON_SIZE_MEDIUM,
+    color: 'white'
+  },
 });

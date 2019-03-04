@@ -12,8 +12,6 @@ import {
   Left,
   Right
 } from "native-base";
-import { Video } from "expo";
-import VideoPlayer from "@expo/videoplayer";
 import { SearchBar } from "react-native-elements";
 import ActionSheet from "react-native-actionsheet";
 import { AntDesign } from "@expo/vector-icons";
@@ -23,7 +21,10 @@ const devicesWidth = Dimensions.get("window").width;
 import styles from "../../assets/styles/loopchatstyles";
 import { ChatManager, TokenProvider } from '@pusher/chatkit-client';
 import {CHATKIT_TOKEN_PROVIDER_ENDPOINT, CHATKIT_INSTANCE_LOCATOR} from "../../assets/config"
-
+import Swipeout from "react-native-swipeout";
+import LoopTextMessage from './messages/text';
+import LoopImageMessage from './messages/image';
+import LoopVideoMessage from './messages/video';
 
 var BUTTONS = [
   { text: "Best", icon: "american-football", iconColor: "#2c8ef4" },
@@ -94,6 +95,7 @@ export default class allTab extends React.Component {
     allmessages = this.state.messages;
     if (allmessages.some((m)=> m.id === id)) return;
     allmessages.push(incomingMessage);
+   
     this.setState({messages: allmessages})
   };
 
@@ -133,6 +135,69 @@ export default class allTab extends React.Component {
 
 
   render() {
+    const swipeBtns = [
+      {
+        component: (
+          <View
+            style={{
+              flex: 1,
+              alignItems: "center",
+              justifyContent: "center",
+              flexDirection: "column",
+              marginRight: -20
+            }}
+          >
+            <Button rounded style={styles.actionbtnLik}>
+              <AntDesign name="hearto" style={styles.ActionIconLik} />
+            </Button>
+          </View>
+        ),
+        backgroundColor: "white",
+        onPress: () => {
+          console.log("Delete Item");
+        }
+      },
+      {
+        component: (
+          <View
+            style={{
+              flex: 1,
+              alignItems: "center",
+              justifyContent: "center",
+              flexDirection: "column"
+            }}
+          >
+            <Button rounded style={styles.actionbtnLik}>
+              <AntDesign name="up-square-o" style={styles.ActionIconLik} />
+            </Button>
+          </View>
+        ),
+        backgroundColor: "white",
+        onPress: () => {
+          console.log("Delete Item");
+        }
+      },
+      {
+        component: (
+          <View
+            style={{
+              flex: 1,
+              alignItems: "center",
+              justifyContent: "center",
+              flexDirection: "column"
+            }}
+          >
+            <Button rounded style={styles.actionbtnUr}>
+              <AntDesign name="warning" style={styles.ActionIconUr} />
+            </Button>
+          </View>
+        ),
+        backgroundColor: "white",
+        onPress: () => {
+          console.log("Delete Item");
+        }
+      }
+    ];
     return (
       <Content style={styles.content}>
         <View>
@@ -194,40 +259,23 @@ export default class allTab extends React.Component {
                 </Right>
               </CardItem>
               <CardItem cardBody>
+              <Swipeout
+                  key={lc.id}
+                  right={swipeBtns}
+                  backgroundColor="#fff"
+                  buttonWidth={60}
+                >
               <View style={styles.messages}>
                 {lc.object.type == "text" ? (
-                  <View style={styles.bubble}>
-                  <Text style={styles.textCard}>{lc.object.data}</Text>
-                  </View>
+                  <LoopTextMessage type="others" data={lc.object.data}/>
                 ) : null}
                 {lc.object.type == "image" ? (
-                  <View style={styles.imgbubble}>
-                  <Image
-                    style={styles.img}
-                    source={{
-                      uri:
-                        lc.object.data == "" ? "https://phadvocates.org/wp-content/themes/cardinal/images/default-thumb.png" : lc.object.data
-                    }}
-                  /></View>
+                  <LoopImageMessage data={lc.object.data}/>
                 ) : null}
                 {lc.object.type == "video" ? (
-                  <View style={styles.vidbubble}>
-                  <VideoPlayer
-                    videoProps={{
-                      shouldPlay: true,
-                      resizeMode: Video.RESIZE_MODE_COVER,
-                      source: {
-                        uri:
-                          "https://bitdash-a.akamaihd.net/content/sintel/hls/playlist.m3u8"
-                      }
-                    }}
-                    isPortrait={true}
-                    playFromPositionMillis={0}
-                    videoWidth={devicesWidth-140}
-                  />
-                  </View>
+                  <LoopVideoMessage />
                 ) : null}
-                <View style={lc.object.type == "video" || lc.object.type == "image" ? styles.Iconbtnforiv:styles.Iconbtn}>
+                {/* <View style={lc.object.type == "video" || lc.object.type == "image" ? styles.Iconbtnforiv:styles.Iconbtn}>
                   <Button iconRight  transparent style={styles.actionbtn}> 
                   <AntDesign name={this.state.like? "heart" : "hearto"} style={commonStyle.ActionIcon} />
                   </Button>
@@ -237,8 +285,8 @@ export default class allTab extends React.Component {
                   <Button iconRight transparent style={styles.actionbtn}> 
                   <AntDesign name="warning" style={commonStyle.ActionIcon} />
                   </Button>
-                </View>
-                </View>
+                </View> */}
+                </View></Swipeout>
               </CardItem>
             </Card>)}
         </View>

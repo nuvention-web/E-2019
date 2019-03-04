@@ -87,7 +87,7 @@ export default class ExploreScreen extends React.Component {
         </Header>
       {this.state.showMap? 
         (<Container>
-        <View style={{maxHeight:70,flex:'2', flexDirection:'row', justifyContent: 'space-around',}}>
+        <View style={{maxHeight:70,flex:'2', flexDirection:'row', justifyContent: 'space-around', backgroundColor: 'transparent'}}>
         <Thumbnail source={require("../assets/01.png")} />
         <Thumbnail source={require("../assets/01.png")} />
         <Thumbnail source={require("../assets/01.png")} />

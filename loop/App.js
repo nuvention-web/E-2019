@@ -1,17 +1,32 @@
 import React from "react";
-import { StyleSheet,Dimensions, View, TouchableOpacity,} from "react-native";
-import { Container, Content, Button, Text,Footer,FooterTab,Icon,Left,Right,Body,Segment,Thumbnail} from "native-base";
+import { StyleSheet, Dimensions, View, TouchableOpacity } from "react-native";
+import {
+  Container,
+  Content,
+  Button,
+  Text,
+  Footer,
+  FooterTab,
+  Icon,
+  Left,
+  Right,
+  Body,
+  Segment,
+  Thumbnail
+} from "native-base";
 import { createStackNavigator, createAppContainer } from "react-navigation";
 import ExploreMapScreen from "./components/explore-map";
 import ExploreScreen from "./components/explore";
-import LoopsScreen from "./components/loops";
+import Loops from "./components/loops";
 import LoopsViewScreen from "./components/loopView";
 import { Font } from "expo";
-import theme from './assets/styles/theme.style.js';
+import theme from "./assets/styles/theme.style.js";
 import commonStyle from "./assets/styles/styles";
-import { SearchBar,Header } from "react-native-elements";
-import  LeftHeader from "./components/leftHeader";
-const devicesWidth=Dimensions.get('window').width;
+import { SearchBar, Header } from "react-native-elements";
+import LeftHeader from "./components/leftHeader";
+const devicesWidth = Dimensions.get("window").width;
+import { AntDesign } from "@expo/vector-icons";
+
 class HomeScreen extends React.Component {
   static navigationOptions = {
     header: null
@@ -19,8 +34,7 @@ class HomeScreen extends React.Component {
 
   state = {
     fontLoaded: false,
-    seg:1,
-
+    seg: 1
   };
 
   async componentWillMount() {
@@ -29,114 +43,117 @@ class HomeScreen extends React.Component {
     });
     this.setState({ fontLoaded: true });
   }
-  
-  changePage = () => {
-    this.setState({page: !this.state.page});
 
-  }
+  changePage = () => {
+    this.setState({ page: !this.state.page });
+  };
   render() {
     const { navigate } = this.props.navigation;
     return (
       <Container>
-      {/*<Header hasTabs>
-        <Left>
-                    <Thumbnail small source={require("./assets/01.png")} />
-                    </Left>
-                    <Body>
-{this.state.fontLoaded ? (<Text style={commonStyle.text} numberOfLines={1}>Home</Text>):null}
-                    </Body>
-                  <Right>
-                    <Button
-                      transparent
-                    >
-                      <Icon name="arrow-plus" style={commonStyle.Icon} />
-                    </Button>
-                  </Right>
-      </Header>
-      <Header
-  statusBarProps={{ barStyle: 'light-content' }}
-  barStyle="light-content" // or directly
-  leftComponent={ <LeftHeader/>}
-  rightComponent={{ icon: 'add', style: { color: '#fff' } }}
-  containerStyle={{
-    backgroundColor: '#3D6DCC',
-    justifyContent: 'space-around',
-  }}
-/>*/}
-<Header
-leftComponent={ <LeftHeader/>}
-rightComponent={{ icon: 'add', style: { color: '#fff' } }}
-containerStyle={{
-    backgroundColor: 'white',
-    justifyContent: 'space-around',
-    height:100,
-  }}>
-  
-</Header>
+        <Header
+        placement="left"
+          leftComponent={<LeftHeader />}
+          rightComponent={<Button iconRight transparent><AntDesign name="plus" style={commonStyle.BottomIcon}/></Button>}
+          containerStyle={{
+            backgroundColor: "white",
+            justifyContent: "space-around",
+            height: 100
+          }}
+        />
 
-      <View >
-      {this.state.fontLoaded ?<SearchBar
-            placeholder="Type Here..."
-            onChangeText={this.updateSearch}
-            value={this.state.search}
-            platform="ios"
-            containerStyle={styles.searchBarContainer}
-            inputStyle={styles.searchBarInput}
-            inputContainerStyle={styles.searchBarInputContainer}
-          />:null}
+        <View>
+          {this.state.fontLoaded ? (
+            <SearchBar
+              placeholder="Type Here..."
+              onChangeText={this.updateSearch}
+              value={this.state.search}
+              platform="ios"
+              containerStyle={styles.searchBarContainer}
+              inputStyle={styles.searchBarInput}
+              inputContainerStyle={styles.searchBarInputContainer}
+            />
+          ) : null}
         </View>
-      <Segment style={{backgroundColor:'white'}}>
-      {/*<TouchableOpacity style={styles.periodButton} onPress={() => this.changePage()}>
-                <Text style={styles.periodName}> My Loops</Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.periodButton} onPress={() => this.changePage()}>
-                <Text style={styles.periodName} >LoopBook</Text>
-</TouchableOpacity>*/}
-        <Button
-								style={{
-									backgroundColor: this.state.seg === 1 ? "gray" : undefined,
-									borderColor: "gray",
-								}}
-								first
-								active={this.state.seg === 1 ? true : false}
-								onPress={() => this.setState({ seg: 1 })}
-							>
-								<Text style={{ color: this.state.seg === 1 ? "#FFF" : "gray" }}>My Loops</Text>
-							</Button>
-							<Button
-								last
-								style={{
-									backgroundColor: this.state.seg === 2 ? "gray" : undefined,
-									borderColor: "gray",
-								}}
-								active={this.state.seg === 2 ? true : false}
-								onPress={() => this.setState({ seg: 2 })}
-							>
-								<Text style={{ color: this.state.seg === 2 ? "#FFF" : "gray" }}>LoopBook</Text>
-							</Button>
-        </Segment>
-        <Content padder>
-         {this.state.seg==1?<Text>My Loops</Text>:
-          <Text>LoopBook</Text>
-         }
-        </Content>
-        <Footer>
-          <FooterTab>
-            <Button vertical active>
-              <Icon name="home" />
-              <Text>Home</Text>
+        {this.state.fontLoaded ? (
+          <Segment style={{ backgroundColor: "white" }} >
+            <Button
+              style={{
+                backgroundColor: this.state.seg === 1 ? "#F0F0F0" : undefined,
+                borderColor: "white",
+                borderRadius: 4,
+                width: devicesWidth / 2 - 20,
+                height: 40,
+                justifyContent: "center"
+              }}
+              first
+              active={this.state.seg === 1 ? true : false}
+              onPress={() => this.setState({ seg: 1 })}
+            >
+              <Text
+                style={{
+                  color: "black",
+                  fontFamily: theme.FONT_FAMILY,
+                  fontSize: theme.FONT_SIZE_MEDIUM,
+                  paddingTop: 5,
+                  paddingBottom: 5
+                }}
+              >
+                My Loops
+              </Text>
             </Button>
-            <Button vertical onPress={() => navigate("Explore", { name: "Jane" })}>
-              <Icon name="explore" />
-              <Text>explore</Text>
+            <Button
+              last
+              style={{
+                backgroundColor: this.state.seg === 2 ? "#F0F0F0" : undefined,
+                borderColor: "white",
+                borderRadius: 4,
+                width: devicesWidth / 2 - 20,
+                height: 40,
+                justifyContent: "center"
+              }}
+              active={this.state.seg === 2 ? true : false}
+              onPress={() => this.setState({ seg: 2 })}
+            >
+              <Text
+                style={{
+                  color: "black",
+                  fontFamily: theme.FONT_FAMILY,
+                  fontSize: theme.FONT_SIZE_MEDIUM,
+                  paddingTop: 5,
+                  paddingBottom: 5
+                }}
+              >
+                LoopBook
+              </Text>
+            </Button>
+          </Segment>
+        ) : null}
+        {this.state.fontLoaded ? (
+          <Content padder>
+            {this.state.seg == 1 ? (
+              <Loops navigation={this.props.navigation} />
+            ) : (
+              <Text>LoopBook</Text>
+            )}
+          </Content>
+        ) : null}
+        <Footer style={styles.footer}>
+          <FooterTab>
+            <Button vertical transparent>
+              <AntDesign name="home" style={commonStyle.BottomIcon} />
+            </Button>
+            <Button
+              vertical
+              onPress={() => navigate("Explore", { name: "Jane" })}
+            >
+              <AntDesign name="find" style={commonStyle.BottomIcon} />
             </Button>
             <Button vertical>
-              <Icon name="settings" />
-              <Text>Settings</Text>
+              <AntDesign name="setting" style={commonStyle.BottomIcon} />
             </Button>
           </FooterTab>
         </Footer>
-
       </Container>
     );
   }
@@ -169,14 +186,18 @@ const styles = StyleSheet.create({
     fontFamily: theme.FONT_FAMILY,
     fontSize: theme.FONT_SIZE_MEDIUM,
     backgroundColor: "#f6f6f6"
+  },
+  footer: {
+    backgroundColor: "white",
+    borderColor: "white",
+    paddingLeft: 20,
+    paddingRight: 20
   }
-
 });
 
 const MainNavigator = createStackNavigator({
   Home: { screen: HomeScreen },
   Explore: { screen: ExploreScreen },
-  Loops: { screen: LoopsScreen },
   LoopView: { screen: LoopsViewScreen }
 });
 

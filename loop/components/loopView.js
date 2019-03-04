@@ -33,7 +33,9 @@ export default class LoopsViewScreen extends React.Component {
   };
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      message: ""
+    };
   }
  
   render() {
@@ -49,7 +51,7 @@ export default class LoopsViewScreen extends React.Component {
           <Left>
             <Button
               transparent
-              onPress={() => navigate("Loops", { name: "Jane" })}
+              onPress={() => navigate("Home", { name: "Jane" })}
             >
               <Icon name="arrow-back" style={commonStyle.Icon} />
             </Button>
@@ -65,7 +67,8 @@ export default class LoopsViewScreen extends React.Component {
         </Header>
         <Tabs
           tabBarUnderlineStyle={styles.tab}
-          renderTabBar={() => <ScrollableTab style={{ borderWidth: 0 }} />}
+          locked={true}
+          renderTabBar={() => <ScrollableTab scrollEnabled={false} style={{ borderWidth: 0 }} />}
         >
           <Tab
             heading="All"
@@ -135,9 +138,9 @@ export default class LoopsViewScreen extends React.Component {
             <Icon name="md-add" style={commonStyle.Icon} />
           </Button>
           <Item rounded style={styles.boxInput}>
-            <Input placeholder="Type something" />
+            <Input placeholder="Type something" onChangeText={(text) => this.setState({ message: text })} />
           </Item>
-          <Button transparent>
+          <Button transparent >
             <Icon name="send" style={commonStyle.Icon} />
           </Button></View>
           </KeyboardAvoidingView>
