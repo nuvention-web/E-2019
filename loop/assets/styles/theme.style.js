@@ -4,6 +4,7 @@ export default {
     ICON_SIZE_MEDIUM: 20,
     ICON_SIZE_LARGE: 25,
     ICON_SIZE_LARGER: 28,
+    FONT_SIZE_VENTI: 22,
     FONT_SIZE_LARGE: 26,
     PRIMARY_COLOR: "#8e07ff",
     GREY: "#F0F0F0",

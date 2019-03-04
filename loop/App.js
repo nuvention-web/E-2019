@@ -17,7 +17,7 @@ import {
 import { createStackNavigator, createAppContainer } from "react-navigation";
 import ExploreMapScreen from "./components/explore-map";
 import ExploreScreen from "./components/explore";
-import Loops from "./components/loops";
+import Loop from "./components/loop/loop";
 import LoopsViewScreen from "./components/loopView";
 import { Font } from "expo";
 import theme from "./assets/styles/theme.style.js";
@@ -61,82 +61,8 @@ class HomeScreen extends React.Component {
             height: 100
           }}
         />
-
-        <View>
-          {this.state.fontLoaded ? (
-            <SearchBar
-              placeholder="Type Here..."
-              onChangeText={this.updateSearch}
-              value={this.state.search}
-              platform="ios"
-              containerStyle={styles.searchBarContainer}
-              inputStyle={styles.searchBarInput}
-              inputContainerStyle={styles.searchBarInputContainer}
-            />
-          ) : null}
-        </View>
         {this.state.fontLoaded ? (
-          <Segment style={{ backgroundColor: "white" }} >
-            <Button
-              style={{
-                backgroundColor: this.state.seg === 1 ? "#F0F0F0" : undefined,
-                borderColor: "white",
-                borderRadius: 4,
-                width: devicesWidth / 2 - 20,
-                height: 40,
-                justifyContent: "center"
-              }}
-              first
-              active={this.state.seg === 1 ? true : false}
-              onPress={() => this.setState({ seg: 1 })}
-            >
-              <Text
-                style={{
-                  color: "black",
-                  fontFamily: theme.FONT_FAMILY,
-                  fontSize: theme.FONT_SIZE_MEDIUM,
-                  paddingTop: 5,
-                  paddingBottom: 5
-                }}
-              >
-                My Loops
-              </Text>
-            </Button>
-            <Button
-              last
-              style={{
-                backgroundColor: this.state.seg === 2 ? "#F0F0F0" : undefined,
-                borderColor: "white",
-                borderRadius: 4,
-                width: devicesWidth / 2 - 20,
-                height: 40,
-                justifyContent: "center"
-              }}
-              active={this.state.seg === 2 ? true : false}
-              onPress={() => this.setState({ seg: 2 })}
-            >
-              <Text
-                style={{
-                  color: "black",
-                  fontFamily: theme.FONT_FAMILY,
-                  fontSize: theme.FONT_SIZE_MEDIUM,
-                  paddingTop: 5,
-                  paddingBottom: 5
-                }}
-              >
-                LoopBook
-              </Text>
-            </Button>
-          </Segment>
-        ) : null}
-        {this.state.fontLoaded ? (
-          <Content padder>
-            {this.state.seg == 1 ? (
-              <Loops navigation={this.props.navigation} />
-            ) : (
-              <Text>LoopBook</Text>
-            )}
-          </Content>
+          <Loop navigation={this.props.navigation}/>
         ) : null}
         <Footer style={styles.footer}>
           <FooterTab>
