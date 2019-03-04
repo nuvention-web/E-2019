@@ -85,7 +85,19 @@ export default class ExploreScreen extends React.Component {
           </Button>
          
         </Header>
-      {this.state.showMap? (<LoopMap />): 
+      {this.state.showMap? 
+        (<Container>
+        <View style={{maxHeight:70,flex:'2', flexDirection:'row', justifyContent: 'space-around',}}>
+        <Thumbnail source={require("../assets/01.png")} />
+        <Thumbnail source={require("../assets/01.png")} />
+        <Thumbnail source={require("../assets/01.png")} />
+        <Thumbnail source={require("../assets/01.png")} />
+        <Thumbnail source={require("../assets/01.png")} />
+
+          </View>
+        <LoopMap />
+        </Container>
+        ): 
       (<Content padder style={{ backgroundColor: "white" }}>
         <Accordion
           dataArray={this.state.nearbyLoops}
