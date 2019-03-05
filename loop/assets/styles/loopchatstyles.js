@@ -50,9 +50,15 @@ export default styles = StyleSheet.create({
     textAlign: 'right'
   },
   Iconbtn:{
-    // marginLeft: 10,
-     display: 'flex',
-     flexDirection: 'column',
+    marginRight: 10,
+    display: 'flex',
+    flexDirection: 'column',
+    // flex:1,
+  },
+  reverseIconbtn:{
+    marginLeft: 10,
+    display: 'flex',
+    flexDirection: 'column',
     // flex:1,
   },
   Icontext:{

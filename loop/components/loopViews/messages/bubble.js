@@ -26,7 +26,7 @@ export default class Bubble extends React.Component {
         ) : null}
         {this.props.lc.object.type == "video" ? <LoopVideoMessage /> : null}
         <View>
-          <Button transparent style={styles.Iconbtn}>
+          <Button transparent style={this.props.lc.id == "111" ?styles.reverseIconbtn : styles.Iconbtn}>
             <AntDesign
               name="up-square-o"
               style={commonStyle.ActionIcon}
