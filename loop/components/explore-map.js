@@ -4,7 +4,7 @@ import theme from "../assets/styles/theme.style";
 import commonStyle from "../assets/styles/styles";
 import { MapView } from "expo";
 import * as data from "../assets/marker.json";
-import { Card, CardItem, Text, Icon, Right, Left, Body,Thumbnail,Button,Content} from "native-base";
+import { Card, CardItem, Text, Icon, Right, Left, Body,Thumbnail,Button,Content,Image} from "native-base";
 const devicesWidth=Dimensions.get('window').width;
 import markerImg from '../assets/groupview.png'
 
@@ -63,8 +63,8 @@ export default class LoopMap extends React.Component {
         console.error(error);
       });
     }
+    const { navigate } = this.props.navigation;
     return (
-      
         <MapView
         style={{ flex: 1 }}
         initialRegion={{
@@ -77,10 +77,10 @@ export default class LoopMap extends React.Component {
       >
         {this.state.markers.map(marker => (
           <MapView.Marker key={marker.key} coordinate={marker.coordinate} image={markerImg} style={{height:3}}>
-            <MapView.Callout>
+            <MapView.Callout onPress={() =>navigate("Preview")}>
               <CardItem>
                 <Left>
-                <Thumbnail source={require("../assets/01.png")} />
+                <Thumbnail large source={require("../assets/logo.png")} />
                 
                 <Body style={{maxWidth:devicesWidth-200}}>
                   <Text style={styles.text} >
@@ -94,10 +94,14 @@ export default class LoopMap extends React.Component {
                 </Body>
                 </Left>
                 <Right>
-                  <Icon
-                    style={[commonStyle.Icon, { fontSize: 40, marginLeft: 15 }]}
-                    name="add"
-                  />
+                 
+                {/*<TouchableOpacity  onPress={() => navigate("Preview", { name: "Jane" })}>
+                <Thumbnail small source={require("../assets/view.png")}/>
+        </TouchableOpacity>*/}
+        <Button bordered onPress={() =>navigate("Preview", { name: "Jane" })}>
+            <Text>View</Text>
+          </Button>
+              
                 </Right>
               </CardItem>
             </MapView.Callout>

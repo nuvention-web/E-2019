@@ -9,7 +9,8 @@ import {
   FooterTab
 } from "native-base";
 import { createStackNavigator, createAppContainer } from "react-navigation";
-import ExploreMapScreen from "./components/explore-map";
+import { createMaterialBottomTabNavigator } from 'react-navigation-material-bottom-tabs';
+import PreviewScreen from "./components/preview";
 import ExploreScreen from "./components/explore";
 import Loop from "./components/loop/loop";
 import LoopsViewScreen from "./components/loopView";
@@ -25,6 +26,7 @@ import { AntDesign } from "@expo/vector-icons";
 import NavigationService from "./services/NavigationService";
 const devicesWidth = Dimensions.get("window").width;
 const store = configureStore();
+import Icon from 'react-native-vector-icons/Ionicons';
 
 class HomeScreen extends React.Component {
   static navigationOptions = {
@@ -124,13 +126,41 @@ const styles = StyleSheet.create({
   }
 });
 
+const HomeStack = createStackNavigator({
+  Home: HomeScreen,
+  LoopView: LoopsViewScreen,
+});
+
+const ExploreStack = createStackNavigator({
+  Explore: ExploreScreen,
+  LoopsView: LoopsViewScreen,
+  Preview: PreviewScreen,
+});
+
+const TabNavigator=createMaterialBottomTabNavigator(
+  {
+    Home: HomeStack,
+    Explore: ExploreStack,
+  },
+  {
+    initialRouteName: 'Home',
+    activeColor: '#f0edf6',
+    inactiveColor: '#3e2465',
+    barStyle: { backgroundColor: '#694fad' },
+
+  }
+);
+
 const MainNavigator = createStackNavigator({
   Home: { screen: HomeScreen },
   Explore: { screen: ExploreScreen },
-  LoopView: { screen: LoopsViewScreen }
+  LoopView: { screen: LoopsViewScreen },
+  Preview:{screen:PreviewScreen},
 });
 
-const AppContainer = createAppContainer(MainNavigator);
+
+
+const AppContainer = createAppContainer(TabNavigator);
 
 class App extends PureComponent {
   render() {

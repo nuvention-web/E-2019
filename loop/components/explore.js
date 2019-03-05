@@ -95,7 +95,7 @@ export default class ExploreScreen extends React.Component {
         <Thumbnail source={require("../assets/01.png")} />
 
           </View>
-        <LoopMap />
+        <LoopMap navigation={this.props.navigation}/>
         </Container>
         ): 
       (<Content padder style={{ backgroundColor: "white" }}>
