@@ -71,3 +71,4 @@ loop/*.jks
 loop/*.p12
 loop/*.key
 loop/*.mobileprovision
+package-lock.json
