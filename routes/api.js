@@ -24,9 +24,11 @@ module.exports = function (app) {
       }
     });
   }
-
+// Returns the top contents from an associated loop
   function loopContents(req, res, next) {
-
+    req.log.info('Inside loopContents function');
+    var loopId = req.params.loopid;
+    console.log(loopId);
   }
 
   function getNearByLoops(req, res, next) {
@@ -48,8 +50,8 @@ module.exports = function (app) {
               entities[i] = JSON.parse(data[i][0]);
               entities[i].distance =  data[i][1];
               entities[i].location =  {
-                "long": data[i][2][0],
-                "lat": data[i][2][1]
+                "longitude": data[i][2][0],
+                "latitude": data[i][2][1]
               };
             }
             var resObj = { entities: entities };
