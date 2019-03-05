@@ -95,7 +95,7 @@ export default class PreviewScreen extends React.Component {
         userId: "123",
         tokenProvider: tokenProvider
       });
-      const CHATKIT_ROOM_ID = 19410041;
+      const CHATKIT_ROOM_ID = "19410041";
   
       chatManager
         .connect()
@@ -130,7 +130,7 @@ export default class PreviewScreen extends React.Component {
             </Header>
             <View style={styles.cards}>
           {this.state.messages.map(lc => 
-            (<Content><Card style={styles.card} key={lc.id} transparent>
+            (<Card style={styles.card} key={lc.id} transparent>
                 <CardItem>
                   <Left>
                     <Thumbnail
@@ -156,7 +156,7 @@ export default class PreviewScreen extends React.Component {
                 <CardItem cardBody>
                     <Bubble lc={lc} />
                 </CardItem>
-                </Card></Content>)
+                </Card>)
           )}
         </View>
             </ScrollView>
