@@ -75,8 +75,8 @@ export default class LoopMap extends React.Component {
         }}
         showsUserLocation={true}
       >
-        {this.state.markers.map(marker => (
-          <MapView.Marker key={marker.key} coordinate={marker.coordinate} image={markerImg} style={{height:3}}>
+        {this.state.dataSource!= undefined? this.state.dataSource.map(marker => (
+          <MapView.Marker key={marker.id} coordinate={marker.location} image={markerImg} style={{height:3}}>
             <MapView.Callout onPress={() =>navigate("Preview")}>
               <CardItem>
                 <Left>
@@ -106,7 +106,7 @@ export default class LoopMap extends React.Component {
               </CardItem>
             </MapView.Callout>
           </MapView.Marker>
-        ))}
+        )) : null}
       </MapView>
     
     );
