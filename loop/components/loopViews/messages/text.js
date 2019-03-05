@@ -23,13 +23,13 @@ export default class LoopTextMessage extends React.Component {
 var styles = StyleSheet.create({
   bubble: {
     backgroundColor: theme.GREY,
-    borderRadius: 50,
+    borderRadius: 40,
     marginLeft: 40,
     maxWidth: devicesWidth - 100
   },
   myBubble: {
     backgroundColor: theme.PRIMARY_COLOR,
-    borderRadius: 50,
+    borderRadius: 40,
     marginRight: 40,
     maxWidth: devicesWidth - 100
   },

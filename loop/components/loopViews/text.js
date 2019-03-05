@@ -41,10 +41,14 @@ export default class textTab extends React.Component {
   showActionSheet = () => {
     this.ActionSheet.show();
   };
+  is_url(url) {
+    return url.match(/^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$/) != null;
+  }
 
   onReceive = data => {
     const { id, sender, text, createdAt } = data;
     var date = new Date(createdAt);
+    if (this.is_url(text)) return;
     const incomingMessage = {
       id: id,
       object: {
@@ -66,8 +70,8 @@ export default class textTab extends React.Component {
   };
 
   componentDidMount() {
-    const { loopContent } = this.props;
-    this.setState({ messages: loopContent });
+    // const { loopContent } = this.props;
+    // this.setState({ messages: loopContent });
 
     const tokenProvider = new TokenProvider({
       url: CHATKIT_TOKEN_PROVIDER_ENDPOINT

@@ -3,6 +3,7 @@ import { Image, View, ScrollView, StyleSheet, Dimensions } from "react-native";
 import LoopTextMessage from "./text";
 import LoopImageMessage from "./image";
 import LoopVideoMessage from "./video";
+import LoopLinkMessage from "./link";
 import commonStyle from "../../../assets/styles/styles";
 import styles from "../../../assets/styles/loopchatstyles";
 import { AntDesign } from "@expo/vector-icons";
@@ -20,6 +21,9 @@ export default class Bubble extends React.Component {
             type={this.props.lc.id == "111" ? "mine" : "others"}
             data={this.props.lc.object.data}
           />
+        ) : null}
+        {this.props.lc.object.type == "link" ? (
+          <LoopLinkMessage url={this.props.lc.object.data} />
         ) : null}
         {this.props.lc.object.type == "image" ? (
           <LoopImageMessage data={this.props.lc.object.data} />

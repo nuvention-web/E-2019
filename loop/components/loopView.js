@@ -23,6 +23,7 @@ import AllTab from "./loopViews/all";
 import TextTab from "./loopViews/text";
 import ImageTab from "./loopViews/image";
 import VideoTab from "./loopViews/video";
+import LinkTab from "./loopViews/link";
 import theme from "../assets/styles/theme.style";
 import commonStyle from "../assets/styles/styles";
 const devicesWidth = Dimensions.get("window").width;
@@ -37,7 +38,8 @@ class LoopsViewScreen extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      message: ""
+      message: "",
+      goBack: false
     };
   }
 
@@ -53,7 +55,7 @@ class LoopsViewScreen extends React.Component {
     const { navigation } = this.props;
     const title = navigation.getParam("title", "NO-TITLE");
     const loopId = navigation.getParam("loopid", "NO-ID");
-    const loopContent = navigation.getParam("loopContent", "No-CONTENT");
+    //const loopContent = navigation.getParam("loopContent", "No-CONTENT");
 
     return (
       <Container>
@@ -61,7 +63,10 @@ class LoopsViewScreen extends React.Component {
           <Left>
             <Button
               transparent
-              onPress={() => navigate("Home", { name: "Jane" })}
+              onPress={() => {
+                this.setState({ goBack: true})
+                navigate("Home", { name: "Jane" })}
+              }
             >
               <Icon name="arrow-back" style={commonStyle.Icon} />
             </Button>
@@ -87,7 +92,7 @@ class LoopsViewScreen extends React.Component {
             activeTextStyle={styles.activeTab}
             textStyle={commonStyle.text}
           >
-            <AllTab loopContent={loopContent[loopId]} loopId={loopId} />
+            <AllTab loopId={loopId} goBack={this.state.goBack}/>
           </Tab>
           <Tab
             heading="Top"
@@ -103,7 +108,7 @@ class LoopsViewScreen extends React.Component {
             textStyle={commonStyle.text}
             activeTextStyle={styles.activeTab}
           >
-            <TextTab loopContent={loopContent[loopId]} loopId={loopId}/>
+            <TextTab loopId={loopId}/>
           </Tab>
           <Tab
             heading="Image"
@@ -112,7 +117,7 @@ class LoopsViewScreen extends React.Component {
             textStyle={commonStyle.text}
             activeTextStyle={styles.activeTab}
           >
-            <ImageTab loopContent={loopContent[loopId]} loopId={loopId}/>
+            <ImageTab loopId={loopId}/>
           </Tab>
           <Tab
             heading="Video"
@@ -121,15 +126,15 @@ class LoopsViewScreen extends React.Component {
             textStyle={commonStyle.text}
             activeTextStyle={styles.activeTab}
           >
-            <VideoTab loopContent={loopContent[loopId]} loopId={loopId}/>
+            <VideoTab loopId={loopId}/>
           </Tab>
           <Tab
-            heading="News"
+            heading="Link"
             tabStyle={styles.tabStyle}
             activeTabStyle={styles.activeTabStyle}
             textStyle={commonStyle.text}
             activeTextStyle={styles.activeTab}
-          />
+          ><LinkTab loopId={loopId}/></Tab>
           <Tab
             heading="Event"
             tabStyle={styles.tabStyle}

@@ -46,7 +46,7 @@ class allTab extends React.Component {
       upVote: false,
       like: false,
       messages: [],
-      loaded: false
+      loaded: false,
     };
   }
 
@@ -69,7 +69,11 @@ class allTab extends React.Component {
     return url.match(/\.(mp4|m3u8)$/) != null;
   }
   checkImageURL(url) {
-    return url.match(/\.(jpeg|jpg|gif|png)$/) != null;
+    return url.match(/\.(jpeg|JPG|jpg|gif|png)$/) != null;
+  }
+
+  is_url(url) {
+    return url.match(/^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$/) != null;
   }
 
   onReceive = data => {
@@ -77,6 +81,7 @@ class allTab extends React.Component {
     var type;
     if (this.checkImageURL(text)) type = "image";
     else if (this.checkVideoURL(text)) type = "video";
+    else if (this.is_url(text)) type = "link";
     else type = "text";
     var date = new Date(createdAt);
     var dateString = date.toDateString();
@@ -98,14 +103,13 @@ class allTab extends React.Component {
     allmessages = this.state.messages;
     if (allmessages.some(m => m.id === id)) return;
     allmessages.push(incomingMessage);
-
-    this.setState({ messages: allmessages });
+    this.setState({ messages: allmessages});
   };
 
   componentDidMount() {
-    const { loopContent } = this.props;
-    this.setState({ messages: loopContent });
-
+    // const { loopContent } = this.props;
+    this.setState({ messagesLoaded: false });
+    
     const tokenProvider = new TokenProvider({
       url: CHATKIT_TOKEN_PROVIDER_ENDPOINT
     });
@@ -127,6 +131,9 @@ class allTab extends React.Component {
             onMessage: this.onReceive
           }
         });
+      })
+      .then(()=>{
+        this.setState({messagesLoaded: true})
       })
       .catch(err => {
         console.log(err);
@@ -153,9 +160,13 @@ class allTab extends React.Component {
         }
       };
       let all = this.state.messages;
-      all.push(mymessage);
-
-      this.setState({ messages: all, loaded: true });
+      let sig = [];
+      sig.push(mymessage);
+      console.log(all.length,this.state.len)
+      if(all.length!=0){
+        all = all.concat(sig);
+        this.setState({ messages: all, loaded: true });
+      }
     }
     const swipeBtns = [
       {
@@ -201,10 +212,13 @@ class allTab extends React.Component {
       }
     ];
     return (
-      <ScrollView style={styles.content} ref={ref => this.scrollView = ref}
-      onContentSizeChange={(contentWidth, contentHeight)=>{        
-          this.scrollView.scrollToEnd({animated: true});
-      }}>
+      <ScrollView
+        style={styles.content}
+        ref={ref => (this.scrollView = ref)}
+        onContentSizeChange={(contentWidth, contentHeight) => {
+          this.scrollView.scrollToEnd({ animated: true });
+        }}
+      >
         <View>
           <SearchBar
             placeholder="Type Here..."

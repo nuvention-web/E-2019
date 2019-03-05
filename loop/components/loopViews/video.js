@@ -72,8 +72,8 @@ export default class videoTab extends React.Component {
   };
 
   componentDidMount() {
-    const { loopContent } = this.props;
-    this.setState({ messages: loopContent });
+    // const { loopContent } = this.props;
+    // this.setState({ messages: loopContent });
 
     const tokenProvider = new TokenProvider({
       url: CHATKIT_TOKEN_PROVIDER_ENDPOINT

@@ -14,7 +14,7 @@ import {
   Segment,
   Thumbnail
 } from "native-base";
-import Loops from "../loops";
+import Loops from "./loops";
 import theme from "../../assets/styles/theme.style";
 import { SearchBar, Header } from "react-native-elements";
 const devicesWidth = Dimensions.get("window").width;
@@ -27,7 +27,7 @@ export default class PrivateLoop extends React.Component {
             <View>
                 <View><Text style={styles.LoopHeader}>Private</Text></View>
                 <View>
-                    <Loops navigation={this.props.navigation} />
+                    <Loops navigation={this.props.navigation} loops={this.props.loops}/>
                 </View>
             </View>
         );

@@ -1,5 +1,6 @@
 export default {
     FONT_SIZE_SMALL: 12,
+    FONT_SIZE_GRANDE: 15,
     FONT_SIZE_MEDIUM: 18,
     ICON_SIZE_MEDIUM: 20,
     ICON_SIZE_LARGE: 25,

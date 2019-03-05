@@ -15,9 +15,8 @@ import {
   Icon,
   Title
 } from "native-base";
-import * as data from "../assets/data.json";
-import theme from "../assets/styles/theme.style";
-import commonStyle from "../assets/styles/styles";
+import theme from "../../assets/styles/theme.style";
+import commonStyle from "../../assets/styles/styles";
 const devicesWidth=Dimensions.get('window').width;
 import Swipeout from 'react-native-swipeout';
 import { AntDesign } from "@expo/vector-icons";
@@ -30,9 +29,7 @@ export default class Loops extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      myloops: data.myloops,
-      loopContent: data.loopContent,
-      loaded: false
+      loaded: false,
     };
   }
 
@@ -62,6 +59,11 @@ export default class Loops extends React.Component {
     }
     return result;
   }
+
+  componentDidMount() {
+
+  }
+
   render() {
     const swipeBtns = [
       {
@@ -109,26 +111,25 @@ export default class Loops extends React.Component {
     return (
         <Content style={styles.content}>
           <View style={styles.cards}>
-            {this.state.myloops.map(loop => (
+            {this.props.loops.map(loop => (
               <Swipeout key={loop.id} right={swipeBtns} backgroundColor='#fff' buttonWidth={60}>
               <View>
               <Card style={styles.card}  transparent>
                 <CardItem button onPress={() =>
                         navigate("LoopView", {
-                          title: loop.title,
-                          loopContent: this.state.loopContent,
+                          title: loop.name,
                           loopid: loop.id
                         })
                       }>
                   <Left>
-                    <Thumbnail source={require("../assets/01.png")} />
+                    <Thumbnail source={require("../../assets/01.png")} />
                     <Body style={styles.loopbody}>
                       <Text style={commonStyle.text} numberOfLines={1}>
-                        {loop.title}
+                        {loop.name}
                       </Text>
-                      <Text note style={styles.noteText} numberOfLines={1}>
+                      {/* <Text note style={styles.noteText} numberOfLines={1}>
                         {this.findLastMessage(loop.id, loop.lastMessage)}
-                      </Text>
+                      </Text> */}
                     </Body>
                   </Left>
                   <Right>

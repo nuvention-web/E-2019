@@ -21,7 +21,7 @@ export default class LoopVideoMessage extends React.Component {
           }}
           isPortrait={true}
           playFromPositionMillis={0}
-          videoWidth={devicesWidth - 100}
+          videoWidth={devicesWidth - 120}
         />
       </View>
     );
@@ -31,7 +31,6 @@ export default class LoopVideoMessage extends React.Component {
 var styles = StyleSheet.create({
   vidbubble: {
     marginLeft: 40,
-    padding: 20
   },
   vidcontainer: {
     flex: 1
