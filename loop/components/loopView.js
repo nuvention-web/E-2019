@@ -26,8 +26,11 @@ import VideoTab from "./loopViews/video";
 import theme from "../assets/styles/theme.style";
 import commonStyle from "../assets/styles/styles";
 const devicesWidth = Dimensions.get("window").width;
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import addMessage from '../services/actions/messageActions';
 
-export default class LoopsViewScreen extends React.Component {
+class LoopsViewScreen extends React.Component {
   static navigationOptions = {
     header: null
   };
@@ -36,6 +39,13 @@ export default class LoopsViewScreen extends React.Component {
     this.state = {
       message: ""
     };
+  }
+
+  sendMessage = () =>{
+    let message = this.state.message;
+    this.props.addMessage(message);
+    //this.forceUpdate();
+    this.setState({ message: ""})
   }
  
   render() {
@@ -138,9 +148,9 @@ export default class LoopsViewScreen extends React.Component {
             <Icon name="md-add" style={commonStyle.Icon} />
           </Button>
           <Item rounded style={styles.boxInput}>
-            <Input placeholder="Type something" onChangeText={(text) => this.setState({ message: text })} />
+            <Input placeholder="Type something" onChangeText={(text) => this.setState({ message: text })} value={this.state.message}/>
           </Item>
-          <Button transparent >
+          <Button transparent onPress={this.sendMessage.bind(this)}>
             <Icon name="send" style={commonStyle.Icon} />
           </Button></View>
           </KeyboardAvoidingView>
@@ -187,3 +197,15 @@ var styles = StyleSheet.create({
     width: devicesWidth - 100
   }
 });
+
+const mapStateToProps = (state) => {
+  return { message: state.messageReducer.message}
+};
+
+const mapDispatchToProps = dispatch => {
+  return {
+    addMessage:(m) => dispatch(addMessage(m))
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(LoopsViewScreen);

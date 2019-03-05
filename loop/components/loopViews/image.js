@@ -1,5 +1,5 @@
 import React from "react";
-import { Image, View, StyleSheet } from "react-native";
+import { Image, View, StyleSheet,ScrollView} from "react-native";
 import {
   Content,
   Button,
@@ -103,7 +103,13 @@ export default class imageTab extends React.Component {
 
   render() {
     return (
-      <Content style={styles.content}>
+      <ScrollView
+        style={styles.content}
+        ref={ref => (this.scrollView = ref)}
+        onContentSizeChange={(contentWidth, contentHeight) => {
+          this.scrollView.scrollToEnd({ animated: true });
+        }}
+      >
         <View>
           <SearchBar
             placeholder="Type Here..."
@@ -144,13 +150,22 @@ export default class imageTab extends React.Component {
                 <CardItem cardBody>
                   <View style={styles.messages}>
                     <LoopImageMessage data={lc.object.data} />
+                    <View>
+                      <Button transparent style={styles.Iconbtn}>
+                        <AntDesign
+                          name="up-square-o"
+                          style={commonStyle.ActionIcon}
+                        />
+                        <Text style={styles.Icontext}>0</Text>
+                      </Button>
+                    </View>
                   </View>
                 </CardItem>
               </Card>
             ) : null;
           })}
         </View>
-      </Content>
+      </ScrollView>
     );
   }
 }

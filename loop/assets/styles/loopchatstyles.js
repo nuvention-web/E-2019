@@ -32,11 +32,33 @@ export default styles = StyleSheet.create({
     width:devicesWidth,
     justifyContent: 'space-between'
   },
-  
+  reverseMessages:{
+    display: 'flex',
+    flexDirection: 'row-reverse',
+    width:devicesWidth,
+    justifyContent: 'space-between'
+  },
+  usrRight:{
+    display: 'flex', 
+    flexDirection:'row',
+  },
+  usrTitle:{
+    marginRight:12
+  },
+  userText:{
+    fontFamily: theme.FONT_FAMILY, 
+    textAlign: 'right'
+  },
   Iconbtn:{
-    // marginLeft: 10,
-     display: 'flex',
-     flexDirection: 'column',
+    marginRight: 10,
+    display: 'flex',
+    flexDirection: 'column',
+    // flex:1,
+  },
+  reverseIconbtn:{
+    marginLeft: 10,
+    display: 'flex',
+    flexDirection: 'column',
     // flex:1,
   },
   Icontext:{

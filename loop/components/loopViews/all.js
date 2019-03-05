@@ -1,5 +1,5 @@
 import React from "react";
-import { Image, View, ScrollView,StyleSheet,Dimensions } from "react-native";
+import { Image, View, ScrollView, StyleSheet, Dimensions } from "react-native";
 import {
   Content,
   Button,
@@ -19,12 +19,14 @@ import theme from "../../assets/styles/theme.style";
 import commonStyle from "../../assets/styles/styles";
 const devicesWidth = Dimensions.get("window").width;
 import styles from "../../assets/styles/loopchatstyles";
-import { ChatManager, TokenProvider } from '@pusher/chatkit-client';
-import {CHATKIT_TOKEN_PROVIDER_ENDPOINT, CHATKIT_INSTANCE_LOCATOR} from "../../assets/config"
+import { ChatManager, TokenProvider } from "@pusher/chatkit-client";
+import {
+  CHATKIT_TOKEN_PROVIDER_ENDPOINT,
+  CHATKIT_INSTANCE_LOCATOR
+} from "../../assets/config";
 import Swipeout from "react-native-swipeout";
-import LoopTextMessage from './messages/text';
-import LoopImageMessage from './messages/image';
-import LoopVideoMessage from './messages/video';
+import Bubble from "./messages/bubble";
+import { connect } from "react-redux";
 
 var BUTTONS = [
   { text: "Best", icon: "american-football", iconColor: "#2c8ef4" },
@@ -36,14 +38,15 @@ var BUTTONS = [
 var DESTRUCTIVE_INDEX = 3;
 var CANCEL_INDEX = 4;
 
-export default class allTab extends React.Component {
+class allTab extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       search: "",
       upVote: false,
-      like:false,
-      messages:[]
+      like: false,
+      messages: [],
+      loaded: false
     };
   }
 
@@ -51,31 +54,31 @@ export default class allTab extends React.Component {
     this.setState({ search });
   };
 
-  updateUpVote = () =>{
-    this.setState({upVote: !this.state.upVote})
-  }
+  updateUpVote = () => {
+    this.setState({ upVote: !this.state.upVote });
+  };
 
-  updateLike = () =>{
-    this.setState({like: !this.state.like})
-  }
+  updateLike = () => {
+    this.setState({ like: !this.state.like });
+  };
 
   showActionSheet = () => {
     this.ActionSheet.show();
   };
-  checkVideoURL(url){
-    return(url.match(/\.(mp4|m3u8)$/) != null);
+  checkVideoURL(url) {
+    return url.match(/\.(mp4|m3u8)$/) != null;
   }
   checkImageURL(url) {
-    return(url.match(/\.(jpeg|jpg|gif|png)$/) != null);
+    return url.match(/\.(jpeg|jpg|gif|png)$/) != null;
   }
 
   onReceive = data => {
     const { id, sender, text, createdAt } = data;
     var type;
-    if (this.checkImageURL(text)) type = "image"
-    else if (this.checkVideoURL(text)) type = "video"
-    else type = "text"
-    var date = new Date(createdAt)
+    if (this.checkImageURL(text)) type = "image";
+    else if (this.checkVideoURL(text)) type = "video";
+    else type = "text";
+    var date = new Date(createdAt);
     var dateString = date.toDateString();
     var timeString = date.toTimeString();
     const incomingMessage = {
@@ -84,38 +87,36 @@ export default class allTab extends React.Component {
         type: type,
         data: text
       },
-      timestamp: dateString.substring(0,11) + timeString.substring(0,5),
+      timestamp: dateString.substring(0, 11) + timeString.substring(0, 5),
       actor: {
         uuid: sender.id,
         name: sender.name,
         avatar:
-          'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQmXGGuS_PrRhQt73sGzdZvnkQrPXvtA-9cjcPxJLhLo8rW-sVA',
-      },
+          "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQmXGGuS_PrRhQt73sGzdZvnkQrPXvtA-9cjcPxJLhLo8rW-sVA"
+      }
     };
     allmessages = this.state.messages;
-    if (allmessages.some((m)=> m.id === id)) return;
+    if (allmessages.some(m => m.id === id)) return;
     allmessages.push(incomingMessage);
-   
-    this.setState({messages: allmessages})
+
+    this.setState({ messages: allmessages });
   };
 
-
-
   componentDidMount() {
-    const { loopContent} = this.props;
+    const { loopContent } = this.props;
     this.setState({ messages: loopContent });
 
     const tokenProvider = new TokenProvider({
-      url: CHATKIT_TOKEN_PROVIDER_ENDPOINT,
+      url: CHATKIT_TOKEN_PROVIDER_ENDPOINT
     });
 
     const chatManager = new ChatManager({
       instanceLocator: CHATKIT_INSTANCE_LOCATOR,
-      userId: '123',
-      tokenProvider: tokenProvider,
+      userId: "123",
+      tokenProvider: tokenProvider
     });
     const CHATKIT_ROOM_ID = this.props.loopId;
-    
+
     chatManager
       .connect()
       .then(currentUser => {
@@ -123,18 +124,39 @@ export default class allTab extends React.Component {
         this.currentUser.subscribeToRoom({
           roomId: CHATKIT_ROOM_ID,
           hooks: {
-            onMessage: this.onReceive,
-          },
+            onMessage: this.onReceive
+          }
         });
       })
       .catch(err => {
         console.log(err);
       });
-
   }
 
-
   render() {
+    if (this.props.message != "" && !this.state.loaded) {
+      let createAt = new Date();
+      let dateString = createAt.toDateString();
+      let timeString = createAt.toTimeString();
+      var mymessage = {
+        id: "111",
+        object: {
+          type: "text",
+          data: this.props.message
+        },
+        timestamp: dateString.substring(0, 11) + timeString.substring(0, 5),
+        actor: {
+          uuid: "123",
+          name: "admin",
+          avatar:
+            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQmXGGuS_PrRhQt73sGzdZvnkQrPXvtA-9cjcPxJLhLo8rW-sVA"
+        }
+      };
+      let all = this.state.messages;
+      all.push(mymessage);
+
+      this.setState({ messages: all, loaded: true });
+    }
     const swipeBtns = [
       {
         component: (
@@ -179,7 +201,10 @@ export default class allTab extends React.Component {
       }
     ];
     return (
-      <Content style={styles.content}>
+      <ScrollView style={styles.content} ref={ref => this.scrollView = ref}
+      onContentSizeChange={(contentWidth, contentHeight)=>{        
+          this.scrollView.scrollToEnd({animated: true});
+      }}>
         <View>
           <SearchBar
             placeholder="Type Here..."
@@ -212,67 +237,92 @@ export default class allTab extends React.Component {
           />
         </View> */}
         <View style={styles.cards}>
-          {this.state.messages.map(lc => 
+          {this.state.messages.map(lc => (
             <Card style={styles.card} key={lc.id} transparent>
-              <CardItem>
-                <Left>
-                  <Thumbnail
-                    source={{
-                      uri:
-                        "https://phadvocates.org/wp-content/themes/cardinal/images/default-thumb.png"
-                    }}
-                    small
-                  />
-                  <Body>
-                    <Text style={commonStyle.text}>
-                      {lc.actor.name}
-                    </Text>
+              {lc.id == "111" ? (
+                <CardItem>
+                  <Left>
                     <Text note style={commonStyle.text}>
-                      Top Poster
-                    </Text>
-                  </Body>
-                </Left>
-                <Right>
-                <Text note style={commonStyle.text}>
                       {lc.timestamp}
                     </Text>
-                </Right>
-              </CardItem>
+                  </Left>
+                  <Right>
+                    <View style={styles.usrRight}>
+                      <View style={styles.usrTitle}>
+                        <Text style={styles.userText}>{lc.actor.name}</Text>
+                        <Text note style={styles.userText}>
+                          Top Poster
+                        </Text>
+                      </View>
+
+                      <Thumbnail
+                        source={{
+                          uri:
+                            "https://phadvocates.org/wp-content/themes/cardinal/images/default-thumb.png"
+                        }}
+                        small
+                      />
+                    </View>
+                  </Right>
+                </CardItem>
+              ) : (
+                <CardItem>
+                  <Left>
+                    <Thumbnail
+                      source={{
+                        uri:
+                          "https://phadvocates.org/wp-content/themes/cardinal/images/default-thumb.png"
+                      }}
+                      small
+                    />
+                    <Body>
+                      <Text style={commonStyle.text}>{lc.actor.name}</Text>
+                      <Text note style={commonStyle.text}>
+                        Top Poster
+                      </Text>
+                    </Body>
+                  </Left>
+                  <Right>
+                    <Text note style={commonStyle.text}>
+                      {lc.timestamp}
+                    </Text>
+                  </Right>
+                </CardItem>
+              )}
               <CardItem cardBody>
-              <Swipeout
-                  key={lc.id}
-                  right={swipeBtns}
-                  backgroundColor="#fff"
-                  buttonWidth={60}
-                >
-              <View style={styles.messages}>
-                {lc.object.type == "text" ? (
-                  <LoopTextMessage type="others" data={lc.object.data}/>
-                ) : null}
-                {lc.object.type == "image" ? (
-                  <LoopImageMessage data={lc.object.data}/>
-                ) : null}
-                {lc.object.type == "video" ? (
-                  <LoopVideoMessage />
-                ) : null}
-                <View >
-                  {/* <Button iconRight  transparent style={styles.actionbtn}> 
-                  <AntDesign name={this.state.like? "heart" : "hearto"} style={commonStyle.ActionIcon} />
-                  </Button> */}
-                  <Button transparent style={styles.Iconbtn}> 
-                  <AntDesign name={this.state.upVote? "upsquare" : "up-square-o"} style={commonStyle.ActionIcon} />
-                  <Text style={styles.Icontext}>100</Text>
-                  </Button>
-                  {/* <Button iconRight transparent style={styles.actionbtn}> 
-                  <AntDesign name="warning" style={commonStyle.ActionIcon} />
-                  </Button> */}
-                </View>
-                </View></Swipeout>
+                {lc.id === "111" ? (
+                  <Swipeout
+                    key={lc.id}
+                    left={swipeBtns}
+                    backgroundColor="#fff"
+                    buttonWidth={60}
+                  >
+                    <Bubble lc={lc} />
+                  </Swipeout>
+                ) : (
+                  <Swipeout
+                    key={lc.id}
+                    right={swipeBtns}
+                    backgroundColor="#fff"
+                    buttonWidth={60}
+                  >
+                    <Bubble lc={lc} />
+                  </Swipeout>
+                )}
               </CardItem>
-            </Card>)}
+            </Card>
+          ))}
         </View>
-      </Content>
+      </ScrollView>
     );
   }
 }
 
+const mapStateToProps = state => {
+  return { message: state.messageReducer.message };
+};
+
+export default connect(
+  mapStateToProps,
+  null
+)(allTab);

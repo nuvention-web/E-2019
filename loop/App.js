@@ -1,4 +1,4 @@
-import React from "react";
+import React, {PureComponent} from "react";
 import { StyleSheet, Dimensions, View, TouchableOpacity } from "react-native";
 import {
   Container,
@@ -6,13 +6,7 @@ import {
   Button,
   Text,
   Footer,
-  FooterTab,
-  Icon,
-  Left,
-  Right,
-  Body,
-  Segment,
-  Thumbnail
+  FooterTab
 } from "native-base";
 import { createStackNavigator, createAppContainer } from "react-navigation";
 import ExploreMapScreen from "./components/explore-map";
@@ -24,8 +18,13 @@ import theme from "./assets/styles/theme.style.js";
 import commonStyle from "./assets/styles/styles";
 import { SearchBar, Header } from "react-native-elements";
 import LeftHeader from "./components/leftHeader";
-const devicesWidth = Dimensions.get("window").width;
+import { Provider } from "react-redux";
+import { createStore } from "redux";
+import configureStore from "./services/reducers/store";
 import { AntDesign } from "@expo/vector-icons";
+import NavigationService from "./services/NavigationService";
+const devicesWidth = Dimensions.get("window").width;
+const store = configureStore();
 
 class HomeScreen extends React.Component {
   static navigationOptions = {
@@ -50,37 +49,41 @@ class HomeScreen extends React.Component {
   render() {
     const { navigate } = this.props.navigation;
     return (
-      <Container>
-        <Header
-        placement="left"
-          leftComponent={<LeftHeader />}
-          rightComponent={<Button iconRight transparent><AntDesign name="plus" style={commonStyle.BottomIcon}/></Button>}
-          containerStyle={{
-            backgroundColor: "white",
-            justifyContent: "space-around",
-            height: 100
-          }}
-        />
-        {this.state.fontLoaded ? (
-          <Loop navigation={this.props.navigation}/>
-        ) : null}
-        <Footer style={styles.footer}>
-          <FooterTab>
-            <Button vertical transparent>
-              <AntDesign name="home" style={commonStyle.BottomIcon} />
-            </Button>
-            <Button
-              vertical
-              onPress={() => navigate("Explore", { name: "Jane" })}
-            >
-              <AntDesign name="find" style={commonStyle.BottomIcon} />
-            </Button>
-            <Button vertical>
-              <AntDesign name="setting" style={commonStyle.BottomIcon} />
-            </Button>
-          </FooterTab>
-        </Footer>
-      </Container>
+        <Container>
+          <Header
+            placement="left"
+            leftComponent={<LeftHeader />}
+            rightComponent={
+              <Button iconRight transparent>
+                <AntDesign name="plus" style={commonStyle.BottomIcon} />
+              </Button>
+            }
+            containerStyle={{
+              backgroundColor: "white",
+              justifyContent: "space-around",
+              height: 100
+            }}
+          />
+          {this.state.fontLoaded ? (
+            <Loop navigation={this.props.navigation} />
+          ) : null}
+          <Footer style={styles.footer}>
+            <FooterTab>
+              <Button vertical transparent>
+                <AntDesign name="home" style={commonStyle.BottomIcon} />
+              </Button>
+              <Button
+                vertical
+                onPress={() => navigate("Explore", { name: "Jane" })}
+              >
+                <AntDesign name="find" style={commonStyle.BottomIcon} />
+              </Button>
+              <Button vertical>
+                <AntDesign name="setting" style={commonStyle.BottomIcon} />
+              </Button>
+            </FooterTab>
+          </Footer>
+        </Container>
     );
   }
 }
@@ -127,6 +130,18 @@ const MainNavigator = createStackNavigator({
   LoopView: { screen: LoopsViewScreen }
 });
 
-const App = createAppContainer(MainNavigator);
+const AppContainer = createAppContainer(MainNavigator);
 
+class App extends PureComponent {
+  render() {
+    return (
+    <Provider store={store}>
+      <AppContainer
+        ref={navigatorRef => {
+          NavigationService.setTopLevelNavigator(navigatorRef);
+        }}
+      /></Provider>
+    );
+  }
+}
 export default App;

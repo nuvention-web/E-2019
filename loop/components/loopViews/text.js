@@ -24,7 +24,6 @@ import {
 } from "../../assets/config";
 import LoopTextMessage from "./messages/text";
 
-
 export default class textTab extends React.Component {
   constructor(props) {
     super(props);
@@ -98,7 +97,13 @@ export default class textTab extends React.Component {
   }
   render() {
     return (
-      <Content style={styles.content}>
+      <ScrollView
+        style={styles.content}
+        ref={ref => (this.scrollView = ref)}
+        onContentSizeChange={(contentWidth, contentHeight) => {
+          this.scrollView.scrollToEnd({ animated: true });
+        }}
+      >
         <View>
           <SearchBar
             placeholder="Type Here..."
@@ -111,49 +116,50 @@ export default class textTab extends React.Component {
           />
         </View>
         <View style={styles.cards}>
-          <ScrollView
-            ref={ref => (this.scrollView = ref)}
-            onContentSizeChange={(contentWidth, contentHeight) => {
-              this.scrollView.scrollToEnd({ animated: true });
-            }}
-            contentContainerStyle={{ flexGrow: 1 }}
-          >
-            {this.state.messages.map(lc => {
-              return lc.object.type == "text" ? (
-                <Card style={styles.card} key={lc.id} transparent>
-                  <CardItem>
-                    <Left>
-                      <Thumbnail
-                        source={{
-                          uri:
-                            "https://phadvocates.org/wp-content/themes/cardinal/images/default-thumb.png"
-                        }}
-                        small
-                      />
-                      <Body>
-                        <Text style={commonStyle.text}>{lc.actor.name}</Text>
-                        <Text note style={commonStyle.text}>
-                          Top Poster
-                        </Text>
-                      </Body>
-                    </Left>
-                    <Right>
+          {this.state.messages.map(lc => {
+            return lc.object.type == "text" ? (
+              <Card style={styles.card} key={lc.id} transparent>
+                <CardItem>
+                  <Left>
+                    <Thumbnail
+                      source={{
+                        uri:
+                          "https://phadvocates.org/wp-content/themes/cardinal/images/default-thumb.png"
+                      }}
+                      small
+                    />
+                    <Body>
+                      <Text style={commonStyle.text}>{lc.actor.name}</Text>
                       <Text note style={commonStyle.text}>
-                        {lc.timestamp}
+                        Top Poster
                       </Text>
-                    </Right>
-                  </CardItem>
-                  <CardItem cardBody>
-                    <View style={styles.messages}>
-                      <LoopTextMessage type="others" data={lc.object.data} />
+                    </Body>
+                  </Left>
+                  <Right>
+                    <Text note style={commonStyle.text}>
+                      {lc.timestamp}
+                    </Text>
+                  </Right>
+                </CardItem>
+                <CardItem cardBody>
+                  <View style={styles.messages}>
+                    <LoopTextMessage type="others" data={lc.object.data} />
+                    <View>
+                      <Button transparent style={styles.Iconbtn}>
+                        <AntDesign
+                          name="up-square-o"
+                          style={commonStyle.ActionIcon}
+                        />
+                        <Text style={styles.Icontext}>0</Text>
+                      </Button>
                     </View>
-                  </CardItem>
-                </Card>
-              ) : null;
-            })}
-          </ScrollView>
+                  </View>
+                </CardItem>
+              </Card>
+            ) : null;
+          })}
         </View>
-      </Content>
+      </ScrollView>
     );
   }
 }
