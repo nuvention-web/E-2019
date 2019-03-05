@@ -7,7 +7,7 @@ import { Button, Footer, FooterTab } from "native-base";
 import { StyleSheet } from "react-native";
 import HomeScreen from "./home";
 import ExploreScreen from "./explore"
-export default (MainScreenNavigator = createBottomTabNavigator(
+const MainScreenNavigator = createBottomTabNavigator(
   {
     Home: { screen: props => <HomeScreen {...props} /> },
     Explore: { screen: props => <ExploreScreen {...props} /> }
@@ -39,7 +39,14 @@ export default (MainScreenNavigator = createBottomTabNavigator(
       );
     }
   }
-));
+);
+
+MainScreenNavigator.navigationOptions = ({ navigation }) => {
+    let { routeName } = navigation.state.routes[navigation.state.index];
+    let navigationOptions = {};
+    navigationOptions.header = null;
+    return navigationOptions;
+  };
 
 const styles = StyleSheet.create({
   footer: {
@@ -49,3 +56,6 @@ const styles = StyleSheet.create({
     paddingRight: 20
   }
 });
+
+
+export default MainScreenNavigator;
