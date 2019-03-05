@@ -30,7 +30,7 @@ var styles = StyleSheet.create({
   myBubble: {
     backgroundColor: theme.PRIMARY_COLOR,
     borderRadius: 50,
-    marginLeft: 40,
+    marginRight: 40,
     maxWidth: devicesWidth - 100
   },
   textCard: {
