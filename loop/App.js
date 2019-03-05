@@ -126,30 +126,7 @@ const styles = StyleSheet.create({
   }
 });
 
-const HomeStack = createStackNavigator({
-  Home: HomeScreen,
-  LoopView: LoopsViewScreen,
-});
 
-const ExploreStack = createStackNavigator({
-  Explore: ExploreScreen,
-  LoopsView: LoopsViewScreen,
-  Preview: PreviewScreen,
-});
-
-const TabNavigator=createMaterialBottomTabNavigator(
-  {
-    Home: HomeStack,
-    Explore: ExploreStack,
-  },
-  {
-    initialRouteName: 'Home',
-    activeColor: '#f0edf6',
-    inactiveColor: '#3e2465',
-    barStyle: { backgroundColor: '#694fad' },
-
-  }
-);
 
 const MainNavigator = createStackNavigator({
   Home: { screen: HomeScreen },
@@ -160,7 +137,7 @@ const MainNavigator = createStackNavigator({
 
 
 
-const AppContainer = createAppContainer(TabNavigator);
+const AppContainer = createAppContainer(MainNavigator);
 
 class App extends PureComponent {
   render() {
