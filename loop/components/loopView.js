@@ -64,7 +64,7 @@ class LoopsViewScreen extends React.Component {
             <Button
               transparent
               onPress={() => {
-                this.setState({ goBack: true})
+                this.props.addMessage("");
                 navigate("Home", { name: "Jane" })}
               }
             >
@@ -168,7 +168,8 @@ class LoopsViewScreen extends React.Component {
 var styles = StyleSheet.create({
   title: {
     fontFamily: theme.FONT_FAMILY,
-    fontSize: 20
+    fontSize: 20,
+    width: devicesWidth - 80
   },
   tab: {
     backgroundColor: theme.PRIMARY_COLOR

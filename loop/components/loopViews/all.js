@@ -162,7 +162,6 @@ class allTab extends React.Component {
       let all = this.state.messages;
       let sig = [];
       sig.push(mymessage);
-      console.log(all.length,this.state.len)
       if(all.length!=0){
         all = all.concat(sig);
         this.setState({ messages: all, loaded: true });
@@ -253,7 +252,7 @@ class allTab extends React.Component {
         <View style={styles.cards}>
           {this.state.messages.map(lc => (
             <Card style={styles.card} key={lc.id} transparent>
-              {lc.id == "111" ? (
+              {lc.actor.uuid == "123" ? (
                 <CardItem>
                   <Left>
                     <Text note style={commonStyle.text}>
@@ -304,7 +303,7 @@ class allTab extends React.Component {
                 </CardItem>
               )}
               <CardItem cardBody>
-                {lc.id === "111" ? (
+                {lc.actor.uuid === "123" ? (
                   <Swipeout
                     key={lc.id}
                     left={swipeBtns}

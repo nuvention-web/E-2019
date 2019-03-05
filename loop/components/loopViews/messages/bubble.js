@@ -13,12 +13,12 @@ export default class Bubble extends React.Component {
     return (
       <View
         style={
-          this.props.lc.id == "111" ? styles.reverseMessages : styles.messages
+          this.props.lc.actor.uuid === "123" ? styles.reverseMessages : styles.messages
         }
       >
         {this.props.lc.object.type == "text" ? (
           <LoopTextMessage
-            type={this.props.lc.id == "111" ? "mine" : "others"}
+            type={this.props.lc.actor.uuid === "123" ? "mine" : "others"}
             data={this.props.lc.object.data}
           />
         ) : null}
@@ -30,7 +30,7 @@ export default class Bubble extends React.Component {
         ) : null}
         {this.props.lc.object.type == "video" ? <LoopVideoMessage /> : null}
         <View>
-          <Button transparent style={this.props.lc.id == "111" ?styles.reverseIconbtn : styles.Iconbtn}>
+          <Button transparent style={this.props.lc.actor.uuid === "123" ?styles.reverseIconbtn : styles.Iconbtn}>
             <AntDesign
               name="up-square-o"
               style={commonStyle.ActionIcon}

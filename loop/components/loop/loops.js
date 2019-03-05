@@ -124,7 +124,7 @@ export default class Loops extends React.Component {
                   <Left>
                     <Thumbnail source={require("../../assets/01.png")} />
                     <Body style={styles.loopbody}>
-                      <Text style={commonStyle.text} numberOfLines={1}>
+                      <Text style={styles.looptext} numberOfLines={1}>
                         {loop.name}
                       </Text>
                       {/* <Text note style={styles.noteText} numberOfLines={1}>
@@ -148,6 +148,11 @@ export default class Loops extends React.Component {
 var styles = StyleSheet.create({
   content: {
     backgroundColor: "white"
+  },
+  looptext:{
+    width: devicesWidth-74,
+    fontFamily: theme.FONT_FAMILY,
+    fontSize: theme.FONT_SIZE_MEDIUM
   },
   noteText: {
     fontFamily: theme.FONT_FAMILY,
