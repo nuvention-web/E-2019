@@ -1,5 +1,5 @@
 import React from "react";
-import { Image, View, StyleSheet, ScrollView } from "react-native";
+import { Image, View, StyleSheet, ScrollView, Dimensions } from "react-native";
 import {
   Content,
   Button,
@@ -13,48 +13,48 @@ import {
   Right
 } from "native-base";
 import { SearchBar } from "react-native-elements";
+import ActionSheet from "react-native-actionsheet";
 import { AntDesign } from "@expo/vector-icons";
-import theme from "../../assets/styles/theme.style";
-import commonStyle from "../../assets/styles/styles";
-import styles from "../../assets/styles/loopchatstyles";
+import theme from "../../../assets/styles/theme.style";
+import commonStyle from "../../../assets/styles/styles";
+import styles from "../../../assets/styles/loopchatstyles";
 import { ChatManager, TokenProvider } from "@pusher/chatkit-client";
 import {
   CHATKIT_TOKEN_PROVIDER_ENDPOINT,
   CHATKIT_INSTANCE_LOCATOR
-} from "../../assets/config";
-import LoopLinkMessage from "./messages/link";
+} from "../../../assets/config";
+const devicesWidth = Dimensions.get("window").width;
+import LoopVideoMessage from "../messages/video";
 
-export default class linkTab extends React.Component {
+export default class videoTab extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       search: "",
-      like: false,
       messages: []
     };
   }
 
+  updateSearch = search => {
+    this.setState({ search });
+  };
 
+  showActionSheet = () => {
+    this.ActionSheet.show();
+  };
 
   checkVideoURL(url) {
     return url.match(/\.(mp4|m3u8)$/) != null;
   }
-  checkImageURL(url) {
-    return url.match(/\.(jpeg|JPG|jpg|gif|png)$/) != null;
-  }
-
-  is_url(url) {
-    return url.match(/^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$/) != null;
-  }
 
   onReceive = data => {
     const { id, sender, text, createdAt } = data;
+    if (!this.checkVideoURL(text)) return;
     var date = new Date(createdAt);
-    if (!this.is_url(text)||this.checkVideoURL(text)||this.checkImageURL(text)) return;
     const incomingMessage = {
       id: id,
       object: {
-        type: "link",
+        type: "video",
         data: text
       },
       timestamp: date.toDateString(),
@@ -84,7 +84,7 @@ export default class linkTab extends React.Component {
       userId: "123",
       tokenProvider: tokenProvider
     });
-    const CHATKIT_ROOM_ID = "19410041";
+    const CHATKIT_ROOM_ID = this.props.loopId;
 
     chatManager
       .connect()
@@ -110,9 +110,20 @@ export default class linkTab extends React.Component {
           this.scrollView.scrollToEnd({ animated: true });
         }}
       >
+        <View>
+          <SearchBar
+            placeholder="Type Here..."
+            onChangeText={this.updateSearch}
+            value={this.state.search}
+            platform="ios"
+            containerStyle={styles.searchBarContainer}
+            inputStyle={styles.searchBarInput}
+            inputContainerStyle={styles.searchBarInputContainer}
+          />
+        </View>
         <View style={styles.cards}>
           {this.state.messages.map(lc => {
-            return lc.object.type == "link" ? (
+            return lc.object.type == "video" ? (
               <Card style={styles.card} key={lc.id} transparent>
                 <CardItem>
                   <Left>
@@ -138,7 +149,7 @@ export default class linkTab extends React.Component {
                 </CardItem>
                 <CardItem cardBody>
                   <View style={styles.messages}>
-                    <LoopLinkMessage url={lc.object.data} />
+                    <LoopVideoMessage />
                     <View>
                       <Button transparent style={styles.Iconbtn}>
                         <AntDesign

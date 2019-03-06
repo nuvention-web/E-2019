@@ -15,17 +15,17 @@ import {
 import { SearchBar } from "react-native-elements";
 import ActionSheet from "react-native-actionsheet";
 import { AntDesign } from "@expo/vector-icons";
-import theme from "../../assets/styles/theme.style";
-import commonStyle from "../../assets/styles/styles";
+import theme from "../../../assets/styles/theme.style";
+import commonStyle from "../../../assets/styles/styles";
 const devicesWidth = Dimensions.get("window").width;
-import styles from "../../assets/styles/loopchatstyles";
+import styles from "../../../assets/styles/loopchatstyles";
 import { ChatManager, TokenProvider } from "@pusher/chatkit-client";
 import {
   CHATKIT_TOKEN_PROVIDER_ENDPOINT,
   CHATKIT_INSTANCE_LOCATOR
-} from "../../assets/config";
+} from "../../../assets/config";
 import Swipeout from "react-native-swipeout";
-import Bubble from "./messages/bubble";
+import Bubble from "../messages/bubble";
 import { connect } from "react-redux";
 
 var BUTTONS = [

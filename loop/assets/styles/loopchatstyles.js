@@ -6,6 +6,9 @@ export default styles = StyleSheet.create({
   content: {
     marginBottom: 60
   },
+  precontent: {
+    marginBottom: 40
+  },
   sortBtn: {
     marginTop: 10
   },

@@ -69,12 +69,6 @@ export default class ExploreScreen extends React.Component {
     return (
       <Container>
         <Header searchBar rounded transparent style={styles.headerStyle}>
-        <Button
-              transparent
-              onPress={() => navigate("Home", { name: "Jane" })}
-            >
-              <Icon name="arrow-back" style={commonStyle.Icon} />
-            </Button>
           <Item style={styles.searchBarInput}>
             <Icon name="ios-search"  />
             <Input  placeholder="Search" />

@@ -14,15 +14,15 @@ import {
 } from "native-base";
 import { SearchBar } from "react-native-elements";
 import { AntDesign } from "@expo/vector-icons";
-import theme from "../../assets/styles/theme.style";
-import commonStyle from "../../assets/styles/styles";
-import styles from "../../assets/styles/loopchatstyles";
+import theme from "../../../assets/styles/theme.style";
+import commonStyle from "../../../assets/styles/styles";
+import styles from "../../../assets/styles/loopchatstyles";
 import { ChatManager, TokenProvider } from "@pusher/chatkit-client";
 import {
   CHATKIT_TOKEN_PROVIDER_ENDPOINT,
   CHATKIT_INSTANCE_LOCATOR
-} from "../../assets/config";
-import LoopTextMessage from "./messages/text";
+} from "../../../assets/config";
+import LoopTextMessage from "../messages/text";
 
 export default class textPreviewTab extends React.Component {
   constructor(props) {
@@ -96,11 +96,7 @@ export default class textPreviewTab extends React.Component {
   render() {
     return (
       <ScrollView
-        style={styles.content}
-        ref={ref => (this.scrollView = ref)}
-        onContentSizeChange={(contentWidth, contentHeight) => {
-          this.scrollView.scrollToEnd({ animated: true });
-        }}
+        style={styles.precontent}
       >
     
         <View style={styles.cards}>
@@ -132,15 +128,6 @@ export default class textPreviewTab extends React.Component {
                 <CardItem cardBody>
                   <View style={styles.messages}>
                     <LoopTextMessage type="others" data={lc.object.data} />
-                    <View>
-                      <Button transparent style={styles.Iconbtn}>
-                        <AntDesign
-                          name="up-square-o"
-                          style={commonStyle.ActionIcon}
-                        />
-                        <Text style={styles.Icontext}>0</Text>
-                      </Button>
-                    </View>
                   </View>
                 </CardItem>
               </Card>

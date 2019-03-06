@@ -1,5 +1,5 @@
 import React from "react";
-import { Image, View, StyleSheet, ScrollView } from "react-native";
+import { Image, View, StyleSheet, ScrollView, Dimensions } from "react-native";
 import {
   Content,
   Button,
@@ -13,46 +13,42 @@ import {
   Right
 } from "native-base";
 import { SearchBar } from "react-native-elements";
+import ActionSheet from "react-native-actionsheet";
 import { AntDesign } from "@expo/vector-icons";
-import theme from "../../assets/styles/theme.style";
-import commonStyle from "../../assets/styles/styles";
-import styles from "../../assets/styles/loopchatstyles";
+import theme from "../../../assets/styles/theme.style";
+import commonStyle from "../../../assets/styles/styles";
+import styles from "../../../assets/styles/loopchatstyles";
 import { ChatManager, TokenProvider } from "@pusher/chatkit-client";
 import {
   CHATKIT_TOKEN_PROVIDER_ENDPOINT,
   CHATKIT_INSTANCE_LOCATOR
-} from "../../assets/config";
-import LoopTextMessage from "./messages/text";
+} from "../../../assets/config";
+const devicesWidth = Dimensions.get("window").width;
+import LoopVideoMessage from "../messages/video";
 
-export default class textTab extends React.Component {
+export default class videoPreviewTab extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       search: "",
-      like: false,
       messages: []
     };
   }
 
-  updateSearch = search => {
-    this.setState({ search });
-  };
 
-  showActionSheet = () => {
-    this.ActionSheet.show();
-  };
-  is_url(url) {
-    return url.match(/^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$/) != null;
+
+  checkVideoURL(url) {
+    return url.match(/\.(mp4|m3u8)$/) != null;
   }
 
   onReceive = data => {
     const { id, sender, text, createdAt } = data;
+    if (!this.checkVideoURL(text)) return;
     var date = new Date(createdAt);
-    if (this.is_url(text)) return;
     const incomingMessage = {
       id: id,
       object: {
-        type: "text",
+        type: "video",
         data: text
       },
       timestamp: date.toDateString(),
@@ -82,7 +78,7 @@ export default class textTab extends React.Component {
       userId: "123",
       tokenProvider: tokenProvider
     });
-    const CHATKIT_ROOM_ID = this.props.loopId;
+    const CHATKIT_ROOM_ID = "19410041";
 
     chatManager
       .connect()
@@ -102,26 +98,11 @@ export default class textTab extends React.Component {
   render() {
     return (
       <ScrollView
-        style={styles.content}
-        ref={ref => (this.scrollView = ref)}
-        onContentSizeChange={(contentWidth, contentHeight) => {
-          this.scrollView.scrollToEnd({ animated: true });
-        }}
+        style={styles.precontent}
       >
-        <View>
-          <SearchBar
-            placeholder="Type Here..."
-            onChangeText={this.updateSearch}
-            value={this.state.search}
-            platform="ios"
-            containerStyle={styles.searchBarContainer}
-            inputStyle={styles.searchBarInput}
-            inputContainerStyle={styles.searchBarInputContainer}
-          />
-        </View>
         <View style={styles.cards}>
           {this.state.messages.map(lc => {
-            return lc.object.type == "text" ? (
+            return lc.object.type == "video" ? (
               <Card style={styles.card} key={lc.id} transparent>
                 <CardItem>
                   <Left>
@@ -147,16 +128,7 @@ export default class textTab extends React.Component {
                 </CardItem>
                 <CardItem cardBody>
                   <View style={styles.messages}>
-                    <LoopTextMessage type="others" data={lc.object.data} />
-                    <View>
-                      <Button transparent style={styles.Iconbtn}>
-                        <AntDesign
-                          name="up-square-o"
-                          style={commonStyle.ActionIcon}
-                        />
-                        <Text style={styles.Icontext}>0</Text>
-                      </Button>
-                    </View>
+                    <LoopVideoMessage />
                   </View>
                 </CardItem>
               </Card>

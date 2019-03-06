@@ -15,15 +15,15 @@ import {
 import { SearchBar } from "react-native-elements";
 import ActionSheet from "react-native-actionsheet";
 import { AntDesign } from "@expo/vector-icons";
-import theme from "../../assets/styles/theme.style";
-import commonStyle from "../../assets/styles/styles";
-import styles from "../../assets/styles/loopchatstyles";
+import theme from "../../../assets/styles/theme.style";
+import commonStyle from "../../../assets/styles/styles";
+import styles from "../../../assets/styles/loopchatstyles";
 import { ChatManager, TokenProvider } from "@pusher/chatkit-client";
 import {
   CHATKIT_TOKEN_PROVIDER_ENDPOINT,
   CHATKIT_INSTANCE_LOCATOR
-} from "../../assets/config";
-import LoopImageMessage from "./messages/image";
+} from "../../../assets/config";
+import LoopImageMessage from "../messages/image";
 
 export default class imageTab extends React.Component {
   constructor(props) {

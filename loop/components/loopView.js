@@ -19,12 +19,13 @@ import {
   Footer,
   Form
 } from "native-base";
-import AllTab from "./loopViews/all";
-import TextTab from "./loopViews/text";
-import ImageTab from "./loopViews/image";
-import VideoTab from "./loopViews/video";
-import LinkTab from "./loopViews/link";
+import AllTab from "./loopViews/tabs/all";
+import TextTab from "./loopViews/tabs/text";
+import ImageTab from "./loopViews/tabs/image";
+import VideoTab from "./loopViews/tabs/video";
+import LinkTab from "./loopViews/tabs/link";
 import theme from "../assets/styles/theme.style";
+import tabStyles from "../assets/styles/tabstyles";
 import commonStyle from "../assets/styles/styles";
 const devicesWidth = Dimensions.get("window").width;
 import { connect } from 'react-redux';
@@ -81,66 +82,66 @@ class LoopsViewScreen extends React.Component {
           </Right>
         </Header>
         <Tabs
-          tabBarUnderlineStyle={styles.tab}
+          tabBarUnderlineStyle={tabStyles.tab}
           locked={true}
           renderTabBar={() => <ScrollableTab scrollEnabled={false} style={{ borderWidth: 0 }} />}
         >
           <Tab
             heading="All"
-            tabStyle={styles.tabStyle}
-            activeTabStyle={styles.activeTabStyle}
-            activeTextStyle={styles.activeTab}
+            tabStyle={tabStyles.tabStyle}
+            activeTabStyle={tabStyles.activeTabStyle}
+            activeTextStyle={tabStyles.activeTab}
             textStyle={commonStyle.text}
           >
             <AllTab loopId={loopId} goBack={this.state.goBack}/>
           </Tab>
           <Tab
             heading="Top"
-            tabStyle={styles.tabStyle}
-            activeTabStyle={styles.activeTabStyle}
+            tabStyle={tabStyles.tabStyle}
+            activeTabStyle={tabStyles.activeTabStyle}
             textStyle={commonStyle.text}
-            activeTextStyle={styles.activeTab}
+            activeTextStyle={tabStyles.activeTab}
           />
           <Tab
             heading="Text"
-            tabStyle={styles.tabStyle}
-            activeTabStyle={styles.activeTabStyle}
+            tabStyle={tabStyles.tabStyle}
+            activeTabStyle={tabStyles.activeTabStyle}
             textStyle={commonStyle.text}
-            activeTextStyle={styles.activeTab}
+            activeTextStyle={tabStyles.activeTab}
           >
             <TextTab loopId={loopId}/>
           </Tab>
           <Tab
             heading="Image"
-            tabStyle={styles.tabStyle}
-            activeTabStyle={styles.activeTabStyle}
+            tabStyle={tabStyles.tabStyle}
+            activeTabStyle={tabStyles.activeTabStyle}
             textStyle={commonStyle.text}
-            activeTextStyle={styles.activeTab}
+            activeTextStyle={tabStyles.activeTab}
           >
             <ImageTab loopId={loopId}/>
           </Tab>
           <Tab
             heading="Video"
-            tabStyle={styles.tabStyle}
-            activeTabStyle={styles.activeTabStyle}
+            tabStyle={tabStyles.tabStyle}
+            activeTabStyle={tabStyles.activeTabStyle}
             textStyle={commonStyle.text}
-            activeTextStyle={styles.activeTab}
+            activeTextStyle={tabStyles.activeTab}
           >
             <VideoTab loopId={loopId}/>
           </Tab>
           <Tab
             heading="Link"
-            tabStyle={styles.tabStyle}
-            activeTabStyle={styles.activeTabStyle}
+            tabStyle={tabStyles.tabStyle}
+            activeTabStyle={tabStyles.activeTabStyle}
             textStyle={commonStyle.text}
-            activeTextStyle={styles.activeTab}
+            activeTextStyle={tabStyles.activeTab}
           ><LinkTab loopId={loopId}/></Tab>
           <Tab
             heading="Event"
-            tabStyle={styles.tabStyle}
-            activeTabStyle={styles.activeTabStyle}
+            tabStyle={tabStyles.tabStyle}
+            activeTabStyle={tabStyles.activeTabStyle}
             textStyle={commonStyle.text}
-            activeTextStyle={styles.activeTab}
+            activeTextStyle={tabStyles.activeTab}
           />
         </Tabs>
         
@@ -170,19 +171,6 @@ var styles = StyleSheet.create({
     fontFamily: theme.FONT_FAMILY,
     fontSize: 20,
     width: devicesWidth - 80
-  },
-  tab: {
-    backgroundColor: theme.PRIMARY_COLOR
-  },
-  activeTab: {
-    color: theme.PRIMARY_COLOR
-  },
-  tabStyle: {
-    backgroundColor: "white",
-    borderColor: "white"
-  },
-  activeTabStyle: {
-    backgroundColor: "white"
   },
   messageBox: {
     position: "absolute",
