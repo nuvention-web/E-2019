@@ -21,7 +21,8 @@ export default class HomeScreen extends React.Component {
 
   async componentWillMount() {
     await Font.loadAsync({
-      verdana: require("../assets/fonts/Verdana.ttf")
+      verdana: require("../assets/fonts/Verdana.ttf"),
+      'verdana-bold': require("../assets/fonts/verdanab.ttf")
     });
     this.setState({ fontLoaded: true });
   }
@@ -33,7 +34,7 @@ export default class HomeScreen extends React.Component {
     const { navigate } = this.props.navigation;
     return (
       <Container>
-        <Header
+        {this.state.fontLoaded? (<Header
           placement="left"
           leftComponent={<LeftHeader />}
           rightComponent={
@@ -46,7 +47,8 @@ export default class HomeScreen extends React.Component {
             justifyContent: "space-around",
             height: 100
           }}
-        />
+        />) : null}
+        
         {this.state.fontLoaded ? (
           <Loop navigation={this.props.navigation} />
         ) : null}
