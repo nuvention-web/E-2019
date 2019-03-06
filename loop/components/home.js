@@ -22,7 +22,8 @@ export default class HomeScreen extends React.Component {
   async componentWillMount() {
     await Font.loadAsync({
       verdana: require("../assets/fonts/Verdana.ttf"),
-      'verdana-bold': require("../assets/fonts/verdanab.ttf")
+      'verdana-bold': require("../assets/fonts/verdanab.ttf"),
+      'verdana-semibold': require("../assets/fonts/VerdanaPro-SemiBold.ttf")
     });
     this.setState({ fontLoaded: true });
   }

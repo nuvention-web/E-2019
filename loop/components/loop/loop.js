@@ -17,6 +17,7 @@ import {
 import Loops from "./loops";
 import PrivateLoop from "./privateLoop";
 import PublicLoop from "./publicLoop";
+import commonStyle from "../../assets/styles/styles";
 import theme from "../../assets/styles/theme.style";
 import { SearchBar, Header } from "react-native-elements";
 const devicesWidth = Dimensions.get("window").width;
@@ -77,9 +78,9 @@ export default class Loop extends React.Component {
             onChangeText={this.updateSearch}
             value={this.state.search}
             platform="ios"
-            containerStyle={styles.searchBarContainer}
-            inputStyle={styles.searchBarInput}
-            inputContainerStyle={styles.searchBarInputContainer}
+            containerStyle={commonStyle.searchBarContainer}
+            inputStyle={commonStyle.searchBarInput}
+            inputContainerStyle={commonStyle.searchBarInputContainer}
           />
         </View>
         <Segment style={{ backgroundColor: "white" }}>
@@ -96,17 +97,7 @@ export default class Loop extends React.Component {
             active={this.state.seg === 1 ? true : false}
             onPress={() => this.setState({ seg: 1 })}
           >
-            <Text
-              style={{
-                color: "black",
-                fontFamily: theme.FONT_FAMILY,
-                fontSize: theme.FONT_SIZE_MEDIUM,
-                paddingTop: 5,
-                paddingBottom: 5
-              }}
-            >
-              My Loops
-            </Text>
+            <Text style={this.state.seg === 1 ? styles.segTextActive: styles.segText}>My Loops</Text>
           </Button>
           <Button
             last
@@ -121,17 +112,7 @@ export default class Loop extends React.Component {
             active={this.state.seg === 2 ? true : false}
             onPress={() => this.setState({ seg: 2 })}
           >
-            <Text
-              style={{
-                color: "black",
-                fontFamily: theme.FONT_FAMILY,
-                fontSize: theme.FONT_SIZE_MEDIUM,
-                paddingTop: 5,
-                paddingBottom: 5
-              }}
-            >
-              LoopBook
-            </Text>
+            <Text style={this.state.seg === 2 ? styles.segTextActive: styles.segText}>LoopBook</Text>
           </Button>
         </Segment>
         <Content padder>
@@ -140,8 +121,14 @@ export default class Loop extends React.Component {
               {this.state.privateR != undefined &&
               this.state.publicR != undefined ? (
                 <View>
-                  <PrivateLoop navigation={this.props.navigation} loops={this.state.privateR} />
-                  <PublicLoop navigation={this.props.navigation} loops={this.state.publicR}/>
+                  <PrivateLoop
+                    navigation={this.props.navigation}
+                    loops={this.state.privateR}
+                  />
+                  <PublicLoop
+                    navigation={this.props.navigation}
+                    loops={this.state.publicR}
+                  />
                 </View>
               ) : null}
             </View>
@@ -171,16 +158,19 @@ const styles = StyleSheet.create({
     fontFamily: theme.FONT_FAMILY,
     fontSize: theme.FONT_SIZE_MEDIUM
   },
-  searchBarContainer: {
-    backgroundColor: "white"
+  segTextActive: {
+    color: "black",
+    fontFamily: theme.FONT_FAMILY_SEMIBOLD,
+    fontSize: theme.FONT_SIZE_GRANDE,
+    paddingTop: 5,
+    paddingBottom: 5
   },
-  searchBarInputContainer: {
-    backgroundColor: "#f6f6f6"
-  },
-  searchBarInput: {
-    fontFamily: theme.FONT_FAMILY,
-    fontSize: theme.FONT_SIZE_MEDIUM,
-    backgroundColor: "#f6f6f6"
+  segText: {
+    color: "#848484",
+    fontFamily: theme.FONT_FAMILY_SEMIBOLD,
+    fontSize: theme.FONT_SIZE_GRANDE,
+    paddingTop: 5,
+    paddingBottom: 5
   },
   footer: {
     backgroundColor: "white",

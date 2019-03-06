@@ -116,9 +116,9 @@ export default class imageTab extends React.Component {
             onChangeText={this.updateSearch}
             value={this.state.search}
             platform="ios"
-            containerStyle={styles.searchBarContainer}
-            inputStyle={styles.searchBarInput}
-            inputContainerStyle={styles.searchBarInputContainer}
+            containerStyle={commonStyle.searchBarContainer}
+            inputStyle={commonStyle.searchBarInput}
+            inputContainerStyle={commonStyle.searchBarInputContainer}
           />
         </View>
         <View style={styles.cards}>

@@ -71,17 +71,6 @@ export default styles = StyleSheet.create({
   actionbtn:{
     width:40
   },
-  searchBarContainer: {
-    backgroundColor: "white"
-  },
-  searchBarInputContainer: {
-    backgroundColor: "#f6f6f6"
-  },
-  searchBarInput: {
-    fontFamily: theme.FONT_FAMILY,
-    fontSize: theme.FONT_SIZE_MEDIUM,
-    backgroundColor: "#f6f6f6"
-  },
   actionbtnLik:{
     backgroundColor: '#F0F0F0',
     width: 40,

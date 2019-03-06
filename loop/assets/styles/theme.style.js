@@ -10,5 +10,6 @@ export default {
     PRIMARY_COLOR: "#8e07ff",
     GREY: "#F0F0F0",
     FONT_FAMILY:"verdana",
-    FONT_FAMILY_BOLD: "verdana-bold"
+    FONT_FAMILY_BOLD: "verdana-bold",
+    FONT_FAMILY_SEMIBOLD: "verdana-semibold"
   };

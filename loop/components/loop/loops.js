@@ -152,7 +152,7 @@ var styles = StyleSheet.create({
   looptext:{
     width: devicesWidth-74,
     fontFamily: theme.FONT_FAMILY,
-    fontSize: theme.FONT_SIZE_MEDIUM
+    fontSize: theme.FONT_SIZE_GRANDE
   },
   noteText: {
     fontFamily: theme.FONT_FAMILY,
