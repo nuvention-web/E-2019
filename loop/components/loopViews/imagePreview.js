@@ -1,5 +1,5 @@
 import React from "react";
-import { Image, View, StyleSheet, ScrollView } from "react-native";
+import { Image, View, StyleSheet,ScrollView} from "react-native";
 import {
   Content,
   Button,
@@ -13,6 +13,7 @@ import {
   Right
 } from "native-base";
 import { SearchBar } from "react-native-elements";
+import ActionSheet from "react-native-actionsheet";
 import { AntDesign } from "@expo/vector-icons";
 import theme from "../../assets/styles/theme.style";
 import commonStyle from "../../assets/styles/styles";
@@ -22,45 +23,29 @@ import {
   CHATKIT_TOKEN_PROVIDER_ENDPOINT,
   CHATKIT_INSTANCE_LOCATOR
 } from "../../assets/config";
-import LoopLinkMessage from "./messages/link";
+import LoopImageMessage from "./messages/image";
 
-export default class linkTab extends React.Component {
+export default class imagePreviewTab extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       search: "",
-      like: false,
       messages: []
     };
   }
 
-  updateSearch = search => {
-    this.setState({ search });
-  };
-
-  showActionSheet = () => {
-    this.ActionSheet.show();
-  };
-
-  checkVideoURL(url) {
-    return url.match(/\.(mp4|m3u8)$/) != null;
-  }
   checkImageURL(url) {
-    return url.match(/\.(jpeg|JPG|jpg|gif|png)$/) != null;
-  }
-
-  is_url(url) {
-    return url.match(/^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$/) != null;
+    return url.match(/\.(jpeg|jpg|gif|png)$/) != null;
   }
 
   onReceive = data => {
     const { id, sender, text, createdAt } = data;
+    if (!this.checkImageURL(text)) return;
     var date = new Date(createdAt);
-    if (!this.is_url(text)||this.checkVideoURL(text)||this.checkImageURL(text)) return;
     const incomingMessage = {
       id: id,
       object: {
-        type: "link",
+        type: "image",
         data: text
       },
       timestamp: date.toDateString(),
@@ -90,7 +75,7 @@ export default class linkTab extends React.Component {
       userId: "123",
       tokenProvider: tokenProvider
     });
-    const CHATKIT_ROOM_ID = this.props.loopId;
+    const CHATKIT_ROOM_ID = "19410041";
 
     chatManager
       .connect()
@@ -107,6 +92,7 @@ export default class linkTab extends React.Component {
         console.log(err);
       });
   }
+
   render() {
     return (
       <ScrollView
@@ -116,20 +102,10 @@ export default class linkTab extends React.Component {
           this.scrollView.scrollToEnd({ animated: true });
         }}
       >
-        <View>
-          <SearchBar
-            placeholder="Type Here..."
-            onChangeText={this.updateSearch}
-            value={this.state.search}
-            platform="ios"
-            containerStyle={styles.searchBarContainer}
-            inputStyle={styles.searchBarInput}
-            inputContainerStyle={styles.searchBarInputContainer}
-          />
-        </View>
+
         <View style={styles.cards}>
           {this.state.messages.map(lc => {
-            return lc.object.type == "link" ? (
+            return lc.object.type == "image" ? (
               <Card style={styles.card} key={lc.id} transparent>
                 <CardItem>
                   <Left>
@@ -155,7 +131,7 @@ export default class linkTab extends React.Component {
                 </CardItem>
                 <CardItem cardBody>
                   <View style={styles.messages}>
-                    <LoopLinkMessage url={lc.object.data} />
+                    <LoopImageMessage data={lc.object.data} />
                     <View>
                       <Button transparent style={styles.Iconbtn}>
                         <AntDesign

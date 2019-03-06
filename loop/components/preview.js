@@ -1,34 +1,36 @@
 import React from "react";
-import { Image, View, ScrollView,StyleSheet,Dimensions,} from "react-native";
+import { StyleSheet, View, Dimensions, KeyboardAvoidingView } from "react-native";
 import {
   Container,
   Header,
-  Title,
   Content,
   Button,
-  Text,
-  Card,
-  CardItem,
-  Thumbnail,
-  Body,
-  Icon,
   Left,
-  Right
+  Right,
+  Text,
+  Icon,
+  Item,
+  Input,
+  Tab,
+  Tabs,
+  Body,
+  Title,
+  ScrollableTab,
+  Footer,
+  Form
 } from "native-base";
-import { SearchBar } from "react-native-elements";
-import ActionSheet from "react-native-actionsheet";
-import { AntDesign } from "@expo/vector-icons";
+import AllPreviewTab from "./loopViews/allPreview";
+import TextPreviewTab from "./loopViews/textPreview";
+import ImagePreviewTab from "./loopViews/imagePreview";
+import VideoPreviewTab from "./loopViews/videoPreview";
+import LinkPreviewTab from "./loopViews/linkPreview";
 import theme from "../assets/styles/theme.style";
 import commonStyle from "../assets/styles/styles";
 const devicesWidth = Dimensions.get("window").width;
-import styles from "../assets/styles/loopchatstyles";
-import { ChatManager, TokenProvider } from '@pusher/chatkit-client';
-import {CHATKIT_TOKEN_PROVIDER_ENDPOINT, CHATKIT_INSTANCE_LOCATOR} from "../assets/config"
-import Swipeout from "react-native-swipeout";
-import LoopTextMessage from './loopViews/messages/text';
-import LoopImageMessage from './loopViews/messages/image';
-import LoopVideoMessage from './loopViews/messages/video';
-import Bubble from "./loopViews/messages/bubble";
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import addMessage from '../services/actions/messageActions';
+
 
 export default class PreviewScreen extends React.Component {
     static navigationOptions = {
@@ -37,85 +39,14 @@ export default class PreviewScreen extends React.Component {
     constructor(props) {
       super(props);
       this.state = {
-        messages:[],
-        loaded: false
+        message: "",
+        goBack: false
       };
-    }
-    checkVideoURL(url) {
-      return url.match(/\.(mp4|m3u8)$/) != null;
-    }
-    checkImageURL(url) {
-      return url.match(/\.(jpeg|JPG|jpg|gif|png)$/) != null;
-    }
-  
-    is_url(url) {
-      return url.match(/^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$/) != null;
-    }
-  
-    onReceive = data => {
-      const { id, sender, text, createdAt } = data;
-      var type;
-      if (this.checkImageURL(text)) type = "image";
-      else if (this.checkVideoURL(text)) type = "video";
-      else if (this.is_url(text)) type = "link";
-      else type = "text";
-      var date = new Date(createdAt);
-      var dateString = date.toDateString();
-      var timeString = date.toTimeString();
-      const incomingMessage = {
-        id: id,
-        object: {
-          type: type,
-          data: text
-        },
-        timestamp: dateString.substring(0, 11) + timeString.substring(0, 5),
-        actor: {
-          uuid: sender.id,
-          name: sender.name,
-          avatar:
-            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQmXGGuS_PrRhQt73sGzdZvnkQrPXvtA-9cjcPxJLhLo8rW-sVA"
-        }
-      };
-      allmessages = this.state.messages;
-      if (allmessages.some(m => m.id === id)) return;
-      allmessages.push(incomingMessage);
-      this.setState({ messages: allmessages});
-    };
-  
-    componentDidMount() {
-      // const { loopContent } = this.props;
-
-      
-      const tokenProvider = new TokenProvider({
-        url: CHATKIT_TOKEN_PROVIDER_ENDPOINT
-      });
-  
-      const chatManager = new ChatManager({
-        instanceLocator: CHATKIT_INSTANCE_LOCATOR,
-        userId: "123",
-        tokenProvider: tokenProvider
-      });
-      const CHATKIT_ROOM_ID = "19410041";
-  
-      chatManager
-        .connect()
-        .then(currentUser => {
-          this.currentUser = currentUser;
-          this.currentUser.subscribeToRoom({
-            roomId: CHATKIT_ROOM_ID,
-            hooks: {
-              onMessage: this.onReceive
-            }
-          });
-        })
-        .catch(err => {
-          console.log(err);
-        });
     }
       render(){
         const { navigate } = this.props.navigation;
           return(
-            <ScrollView>
+            <Container>
             <Header rounded hasTabs transparent>
               <Left>
                 <Button
@@ -128,38 +59,75 @@ export default class PreviewScreen extends React.Component {
               <Body><Text>Henry Crown Gym</Text></Body>
               <Right/>
             </Header>
-            <View style={styles.cards}>
-          {this.state.messages.map(lc => 
-            (<Card style={styles.card} key={lc.id} transparent>
-                <CardItem>
-                  <Left>
-                    <Thumbnail
-                      source={{
-                        uri:
-                          "https://phadvocates.org/wp-content/themes/cardinal/images/default-thumb.png"
-                      }}
-                      small
-                    />
-                    <Body>
-                      <Text style={commonStyle.text}>{lc.actor.name}</Text>
-                      <Text note style={commonStyle.text}>
-                        Top Poster
-                      </Text>
-                    </Body>
-                  </Left>
-                  <Right>
-                    <Text note style={commonStyle.text}>
-                      {lc.timestamp}
-                    </Text>
-                  </Right>
-                </CardItem>
-                <CardItem cardBody>
-                    <Bubble lc={lc} />
-                </CardItem>
-                </Card>)
-          )}
-        </View>
-            </ScrollView>
+            <Tabs
+          tabBarUnderlineStyle={styles.tab}
+          locked={true}
+          renderTabBar={() => <ScrollableTab scrollEnabled={false} style={{ borderWidth: 0 }} />}
+        >
+          <Tab
+            heading="All"
+            tabStyle={styles.tabStyle}
+            activeTabStyle={styles.activeTabStyle}
+            activeTextStyle={styles.activeTab}
+            textStyle={commonStyle.text}
+          >
+            <AllPreviewTab navigation={this.props.navigation} goBack={this.state.goBack}/>
+          </Tab>
+          <Tab
+            heading="Top"
+            tabStyle={styles.tabStyle}
+            activeTabStyle={styles.activeTabStyle}
+            textStyle={commonStyle.text}
+            activeTextStyle={styles.activeTab}
+          />
+          <Tab
+            heading="Text"
+            tabStyle={styles.tabStyle}
+            activeTabStyle={styles.activeTabStyle}
+            textStyle={commonStyle.text}
+            activeTextStyle={styles.activeTab}
+          >
+            <TextPreviewTab/>
+          </Tab>
+          <Tab
+            heading="Image"
+            tabStyle={styles.tabStyle}
+            activeTabStyle={styles.activeTabStyle}
+            textStyle={commonStyle.text}
+            activeTextStyle={styles.activeTab}
+          >
+            <ImagePreviewTab/>
+          </Tab>
+          <Tab
+            heading="Video"
+            tabStyle={styles.tabStyle}
+            activeTabStyle={styles.activeTabStyle}
+            textStyle={commonStyle.text}
+            activeTextStyle={styles.activeTab}
+          >
+            <VideoPreviewTab/>
+          </Tab>
+          <Tab
+            heading="Link"
+            tabStyle={styles.tabStyle}
+            activeTabStyle={styles.activeTabStyle}
+            textStyle={commonStyle.text}
+            activeTextStyle={styles.activeTab}
+          ><LinkPreviewTab/></Tab>
+          <Tab
+            heading="Event"
+            tabStyle={styles.tabStyle}
+            activeTabStyle={styles.activeTabStyle}
+            textStyle={commonStyle.text}
+            activeTextStyle={styles.activeTab}
+          />
+        </Tabs>
+        <Button style={{alignItems: 'center',width:200,marginLeft:(devicesWidth-200)/2,justifyContent: 'center',alignItems: 'center',marginBottom:40,marginTop:40}}>
+            <Text  >Add to your loop</Text>
+         
+        </Button>
+        </Container>
+    
             
           );
       }

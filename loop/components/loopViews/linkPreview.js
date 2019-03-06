@@ -34,13 +34,7 @@ export default class linkTab extends React.Component {
     };
   }
 
-  updateSearch = search => {
-    this.setState({ search });
-  };
 
-  showActionSheet = () => {
-    this.ActionSheet.show();
-  };
 
   checkVideoURL(url) {
     return url.match(/\.(mp4|m3u8)$/) != null;
@@ -90,7 +84,7 @@ export default class linkTab extends React.Component {
       userId: "123",
       tokenProvider: tokenProvider
     });
-    const CHATKIT_ROOM_ID = this.props.loopId;
+    const CHATKIT_ROOM_ID = "19410041";
 
     chatManager
       .connect()
@@ -116,17 +110,6 @@ export default class linkTab extends React.Component {
           this.scrollView.scrollToEnd({ animated: true });
         }}
       >
-        <View>
-          <SearchBar
-            placeholder="Type Here..."
-            onChangeText={this.updateSearch}
-            value={this.state.search}
-            platform="ios"
-            containerStyle={styles.searchBarContainer}
-            inputStyle={styles.searchBarInput}
-            inputContainerStyle={styles.searchBarInputContainer}
-          />
-        </View>
         <View style={styles.cards}>
           {this.state.messages.map(lc => {
             return lc.object.type == "link" ? (
