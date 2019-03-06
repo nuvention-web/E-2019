@@ -4,6 +4,8 @@ import theme from "../assets/styles/theme.style";
 import commonStyle from "../assets/styles/styles";
 import { MapView } from "expo";
 import * as data from "../assets/marker.json";
+import axios from "axios";
+
 import {
   Card,
   CardItem,
@@ -30,62 +32,40 @@ export default class LoopMap extends React.Component {
     this.state = {
       markers: data.markers,
       isLoading: true,
-      latitude: null,
-      longitude: null,
-      error: null,
       loaded: false
     };
   }
 
-  componentDidMount() {
-    this.watchId = navigator.geolocation.watchPosition(
-      position => {
-        this.setState({
-          latitude: position.coords.latitude,
-          longitude: position.coords.longitude,
-          error: null,
-          loaded: true
-        });
-      },
-      error => this.setState({ error: error.message }),
+  async componentDidMount() {
+    const res = await axios.get(
+      `https://loop-core.herokuapp.com/api/loops/nearby?`,
       {
-        enableHighAccuracy: true,
-        timeout: 20000,
-        maximumAge: 1000,
-        distanceFilter: 10
+        params: {
+          lat: this.props.lat,
+          long: this.props.long
+        }
       }
     );
+    console.log(res.data);
+    const dataSource = res.data.entities;
+    this.setState({ dataSource });
   }
 
-  componentWillUnmount() {
-    navigator.geolocation.clearWatch(this.watchId);
+  fetchdata() {
+    axios
+      .get(`https://loop-core.herokuapp.com/api/loops/nearby?`, {
+        params: {
+          lat: this.state.latitude,
+          long: this.state.longitude
+        }
+      })
+      .then(res => {
+        const dataSource = res.data.entities;
+        this.setState({ dataSource });
+      });
   }
 
   render() {
-    if (this.state.loaded & this.state.isLoading) {
-      fetch(
-        `https://loop-core.herokuapp.com/api/loops/nearby?lat=${encodeURIComponent(
-          this.state.latitude
-        )}&long=${encodeURIComponent(this.state.longitude)}`,
-        {
-          method: "GET",
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json"
-          }
-        }
-      )
-        .then(response => response.json())
-        .then(responseJson => {
-          this.setState({
-            isLoading: false,
-            dataSource: responseJson.entities
-          });
-        })
-        .catch(error => {
-          console.error(error);
-        });
-    }
     const { navigate } = this.props.navigation;
     return (
       <MapView
@@ -146,7 +126,7 @@ var styles = StyleSheet.create({
     padding: 10,
     maxWidth: devicesWidth - 100
   },
-  eyeIcon:{
+  eyeIcon: {
     fontSize: theme.ICON_SIZE_LARGER,
     color: theme.PRIMARY_COLOR
   }

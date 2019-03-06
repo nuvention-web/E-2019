@@ -10,6 +10,7 @@
     "@expo/vector-icons": "^9.0.0",
     "@expo/videoplayer": "^0.4.0",
     "@pusher/chatkit-client": "^1.3.2",
+    "axios": "^0.18.0",
     "emoji-utils": "^1.0.1",
     "expo": "^32.0.0",
     "native-base": "^2.11.0",

@@ -17,7 +17,11 @@ export default class ExploreScreen extends React.Component {
     this.state = {
       nearbyLoops: data.nearbyLoops,
       loaded: false,
-      showMap: true
+      showMap: true,
+      latitude:null,
+      longitude:null,
+      error:null,
+      loaded:false
     };
   }
 
@@ -62,6 +66,37 @@ export default class ExploreScreen extends React.Component {
       showMap: sm
     })
   }
+  componentDidMount(){
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        console.log("Get location successfully!")
+      },
+      (error) => this.setState({ error: error.message }),
+      { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 },
+    );
+    this.watchId = navigator.geolocation.watchPosition(
+      position => {
+        console.log(position.coords.latitude)
+        this.setState({
+          latitude: position.coords.latitude,
+          longitude: position.coords.longitude,
+          error: null,
+          loaded: true
+        });
+      },
+      error => this.setState({ error: error.message }),
+      {
+        enableHighAccuracy: true,
+        timeout: 20000,
+        maximumAge: 1000,
+        distanceFilter: 10
+      }
+    );
+  }
+
+  componentWillUnmount() {
+    navigator.geolocation.clearWatch(this.watchId);
+  }
 
   render() {
 
@@ -79,7 +114,7 @@ export default class ExploreScreen extends React.Component {
           </Button>
          
         </Header>
-      {this.state.showMap? 
+      {this.state.showMap && this.state.loaded? 
         (<Container>
         <View style={{maxHeight:70,flex:'2', flexDirection:'row', justifyContent: 'space-around', backgroundColor: 'transparent'}}>
         <Thumbnail source={require("../assets/01.png")} />
@@ -89,7 +124,7 @@ export default class ExploreScreen extends React.Component {
         <Thumbnail source={require("../assets/01.png")} />
 
           </View>
-        <LoopMap navigation={this.props.navigation}/>
+        <LoopMap navigation={this.props.navigation} lat={this.state.latitude} long={this.state.longitude}/>
         </Container>
         ): 
       (<Content padder style={{ backgroundColor: "white" }}>
