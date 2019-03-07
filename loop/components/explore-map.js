@@ -1,5 +1,5 @@
 import React from "react";
-import { StyleSheet, Dimensions, View } from "react-native";
+import { StyleSheet, Dimensions, View,ScrollView} from "react-native";
 import theme from "../assets/styles/theme.style";
 import commonStyle from "../assets/styles/styles";
 import { MapView } from "expo";
@@ -89,15 +89,16 @@ export default class LoopMap extends React.Component {
                 <MapView.Callout onPress={() => navigate("Preview")}>
                   <CardItem>
                     <Left>
-                      <Thumbnail large source={require("../assets/logo.png")} />
-
+                      <Thumbnail large source={require("../assets/pic/19410673.jpg")} />
                       <Body style={{ maxWidth: devicesWidth - 200 }}>
-                        <Text style={styles.text}>
+                        <Text style={styles.textStyle}>
                           Loop: {marker.title}
-                          {"\n"}
-                          {marker.distance}miles{"\n"}
+                          </Text>
+                          <Text style={styles.text}>
+                          {marker.distance} miles{"\n"}
                           Members: {marker.metrics.member_count}
-                          {"\n"}
+                          </Text>
+                          <Text style={styles.text}>
                           {marker.description}
                         </Text>
                       </Body>
@@ -129,5 +130,14 @@ var styles = StyleSheet.create({
   eyeIcon: {
     fontSize: theme.ICON_SIZE_LARGER,
     color: theme.PRIMARY_COLOR
-  }
+  },
+  semiBoldText: {
+    fontFamily: theme.FONT_FAMILY_SEMIBOLD
+  },
+  textStyle:{
+    color: "black",
+    fontFamily: theme.FONT_FAMILY_SEMIBOLD,
+    fontSize: theme.FONT_SIZE_MEDIUM,
+    padding: 10,
+    maxWidth: devicesWidth - 100}
 });

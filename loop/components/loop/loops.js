@@ -16,6 +16,7 @@ import {
   Title
 } from "native-base";
 import theme from "../../assets/styles/theme.style";
+import Images from '../../assets/pic/index';
 import commonStyle from "../../assets/styles/styles";
 const devicesWidth=Dimensions.get('window').width;
 import Swipeout from 'react-native-swipeout';
@@ -122,7 +123,7 @@ export default class Loops extends React.Component {
                         })
                       }>
                   <Left>
-                    <Thumbnail source={require("../../assets/01.png")} />
+                    <Thumbnail source={Images[loop.id]} />
                     <Body style={styles.loopbody}>
                       <Text style={styles.looptext} numberOfLines={1}>
                         {loop.name}
