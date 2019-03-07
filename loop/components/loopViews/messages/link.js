@@ -27,7 +27,7 @@ export default class LoopLinkMessage extends React.Component {
 var styles = StyleSheet.create({
   bubble: {
     backgroundColor: theme.GREY,
-    borderRadius: 40,
+    borderRadius: 30,
     marginLeft: 40,
     maxWidth: devicesWidth - 100
   },

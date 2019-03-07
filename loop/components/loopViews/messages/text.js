@@ -23,31 +23,31 @@ export default class LoopTextMessage extends React.Component {
 var styles = StyleSheet.create({
   bubble: {
     backgroundColor: theme.GREY,
-    borderRadius: 40,
+    borderRadius: 30,
     marginLeft: 40,
-    maxWidth: devicesWidth - 100
+    maxWidth: devicesWidth - 100,
+    paddingTop: 5,
   },
   myBubble: {
     backgroundColor: theme.PRIMARY_COLOR,
-    borderRadius: 40,
+    borderRadius: 30,
     marginRight: 40,
-    maxWidth: devicesWidth - 100
+    maxWidth: devicesWidth - 100,
+    paddingTop: 5,
   },
   textCard: {
     fontFamily: theme.FONT_FAMILY,
-    fontSize: theme.FONT_SIZE_MEDIUM,
+    fontSize: theme.FONT_SIZE_SEMIMED,
     paddingLeft: 20,
     paddingRight: 20,
-    paddingTop: 8,
-    paddingBottom: 12
+    marginBottom: 8
   },
   myTextCard: {
     fontFamily: theme.FONT_FAMILY,
-    fontSize: theme.FONT_SIZE_MEDIUM,
+    fontSize: theme.FONT_SIZE_SEMIMED,
     color: "white",
     paddingLeft: 20,
     paddingRight: 20,
-    paddingTop: 8,
-    paddingBottom: 12
+    paddingBottom: 8
   }
 });

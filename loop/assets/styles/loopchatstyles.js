@@ -4,7 +4,7 @@ const devicesWidth = Dimensions.get("window").width;
 
 export default styles = StyleSheet.create({
   content: {
-    marginBottom: 60
+    marginBottom: 45
   },
   precontent: {
     marginBottom: 40

@@ -154,7 +154,7 @@ class LoopsViewScreen extends React.Component {
             <Icon name="md-add" style={commonStyle.Icon} />
           </Button>
           <Item rounded style={styles.boxInput}>
-            <Input placeholder="Type something" onChangeText={(text) => this.setState({ message: text })} value={this.state.message}/>
+            <Input style={styles.input} placeholder="Type something" onChangeText={(text) => this.setState({ message: text })} value={this.state.message}/>
           </Item>
           <Button transparent onPress={this.sendMessage.bind(this)}>
             <Icon name="send" style={commonStyle.Icon} />
@@ -168,8 +168,8 @@ class LoopsViewScreen extends React.Component {
 
 var styles = StyleSheet.create({
   title: {
-    fontFamily: theme.FONT_FAMILY,
-    fontSize: 20,
+    fontFamily: theme.FONT_FAMILY_SEMIBOLD,
+    fontSize: theme.FONT_SIZE_MEDIUM,
     width: devicesWidth - 80
   },
   messageBox: {
@@ -182,13 +182,21 @@ var styles = StyleSheet.create({
     display: "flex",
     justifyContent: "space-around",
     flexDirection: "row",
-    padding: 5,
+    paddingLeft: 5,
+    paddingRight: 5,
+    paddingTop:2,
+    paddingBottom:2,
     backgroundColor: "white",
   },
   boxInput: {
     backgroundColor: "#f3f3f5",
     borderColor: "white",
-    width: devicesWidth - 100
+    width: devicesWidth - 100,
+    height: 45
+  },
+  input:{
+    fontFamily: theme.FONT_FAMILY,
+    fontSize: theme.FONT_SIZE_SEMIMED
   }
 });
 

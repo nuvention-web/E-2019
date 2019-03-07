@@ -62,7 +62,7 @@ export default class PreviewScreen extends React.Component {
             </Button>
           </Left>
           <Body>
-            <Text>Henry Crown Gym</Text>
+            <Title style={styles.title}>Henry Crown Gym</Title>
           </Body>
           <Right />
         </Header>
@@ -147,6 +147,11 @@ export default class PreviewScreen extends React.Component {
 }
 
 var styles = StyleSheet.create({
+  title: {
+    fontFamily: theme.FONT_FAMILY_SEMIBOLD,
+    fontSize: theme.FONT_SIZE_MEDIUM,
+    width: devicesWidth - 80
+  },
   addBtnContainer:{
       position: "absolute",
       left: 0,
