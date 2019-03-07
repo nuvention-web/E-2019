@@ -7,6 +7,7 @@ export default {
     ICON_SIZE_LARGER: 28,
     FONT_SIZE_VENTI: 22,
     FONT_SIZE_LARGE: 26,
+    FONT_SIZE_LARGER: 28,
     PRIMARY_COLOR: "#8e07ff",
     GREY: "#F0F0F0",
     FONT_FAMILY:"verdana",

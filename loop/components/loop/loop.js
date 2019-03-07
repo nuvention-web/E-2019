@@ -169,8 +169,6 @@ const styles = StyleSheet.create({
     color: "#848484",
     fontFamily: theme.FONT_FAMILY_SEMIBOLD,
     fontSize: theme.FONT_SIZE_GRANDE,
-    paddingTop: 5,
-    paddingBottom: 5
   },
   footer: {
     backgroundColor: "white",

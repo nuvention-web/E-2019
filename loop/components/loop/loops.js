@@ -127,9 +127,9 @@ export default class Loops extends React.Component {
                       <Text style={styles.looptext} numberOfLines={1}>
                         {loop.name}
                       </Text>
-                      {/* <Text note style={styles.noteText} numberOfLines={1}>
-                        {this.findLastMessage(loop.id, loop.lastMessage)}
-                      </Text> */}
+                      <Text note style={styles.noteText} numberOfLines={1}>
+                        Note here....
+                      </Text>
                     </Body>
                   </Left>
                   <Right>
@@ -151,8 +151,8 @@ var styles = StyleSheet.create({
   },
   looptext:{
     width: devicesWidth-74,
-    fontFamily: theme.FONT_FAMILY,
-    fontSize: theme.FONT_SIZE_GRANDE
+    fontFamily: theme.FONT_FAMILY_SEMIBOLD,
+    fontSize: theme.FONT_SIZE_MEDIUM
   },
   noteText: {
     fontFamily: theme.FONT_FAMILY,

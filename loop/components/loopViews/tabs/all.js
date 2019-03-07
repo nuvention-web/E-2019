@@ -47,6 +47,7 @@ class allTab extends React.Component {
       like: false,
       messages: [],
       loaded: false,
+      scrollEnabled: true
     };
   }
 
@@ -61,6 +62,10 @@ class allTab extends React.Component {
   updateLike = () => {
     this.setState({ like: !this.state.like });
   };
+
+  _allowScroll =(scrollEnabled) => {
+    this.setState({ scrollEnabled: scrollEnabled })
+  }
 
   showActionSheet = () => {
     this.ActionSheet.show();
@@ -184,7 +189,7 @@ class allTab extends React.Component {
             </Button>
           </View>
         ),
-        backgroundColor: "white",
+        backgroundColor: "transparent",
         onPress: () => {
           console.log("Delete Item");
         }
@@ -204,7 +209,7 @@ class allTab extends React.Component {
             </Button>
           </View>
         ),
-        backgroundColor: "white",
+        backgroundColor: "transparent",
         onPress: () => {
           console.log("Delete Item");
         }
@@ -213,6 +218,7 @@ class allTab extends React.Component {
     return (
       <ScrollView
         style={styles.content}
+        scrollEnabled={this.state.scrollEnabled}
         ref={ref => (this.scrollView = ref)}
         onContentSizeChange={(contentWidth, contentHeight) => {
           this.scrollView.scrollToEnd({ animated: true });
@@ -307,7 +313,7 @@ class allTab extends React.Component {
                   <Swipeout
                     key={lc.id}
                     left={swipeBtns}
-                    backgroundColor="#fff"
+                    backgroundColor="transparent"
                     buttonWidth={60}
                   >
                     <Bubble lc={lc} />
@@ -316,8 +322,10 @@ class allTab extends React.Component {
                   <Swipeout
                     key={lc.id}
                     right={swipeBtns}
-                    backgroundColor="#fff"
+                    backgroundColor="transparent"
                     buttonWidth={60}
+                    sensitivity={100}
+                    scroll={event => this._allowScroll(event)}
                   >
                     <Bubble lc={lc} />
                   </Swipeout>

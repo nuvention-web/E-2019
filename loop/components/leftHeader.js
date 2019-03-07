@@ -25,8 +25,8 @@ export default class LeftHeader extends React.Component {
     const uri = require(`../assets/group.png`);
     return (
         <View style={{flex: 1, flexDirection: 'row'}}>
-        <Thumbnail source={require("../assets/01.png")} style={{marginTop:10}} />
-        <Text style={{marginTop:25,marginLeft:20,fontSize:20, fontFamily: theme.FONT_FAMILY_BOLD}}>Home</Text>
+        <Thumbnail source={require("../assets/01.png")} style={{marginTop:12, marginLeft: 10, width: 50, height: 50, borderRadius:25}} />
+        <Text style={{marginTop:25,marginLeft:20,fontSize:theme.FONT_SIZE_LARGER, fontFamily: theme.FONT_FAMILY_SEMIBOLD}}>Home</Text>
         </View>
 
     );

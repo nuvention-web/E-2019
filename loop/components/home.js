@@ -39,15 +39,11 @@ export default class HomeScreen extends React.Component {
           placement="left"
           leftComponent={<LeftHeader />}
           rightComponent={
-            <Button iconRight transparent>
+            <Button iconRight transparent style={styles.addBtn} >
               <AntDesign name="plus" style={commonStyle.BottomIcon} />
             </Button>
           }
-          containerStyle={{
-            backgroundColor: "white",
-            justifyContent: "space-around",
-            height: 100
-          }}
+          containerStyle={styles.headerContainer}
         />) : null}
         
         {this.state.fontLoaded ? (
@@ -57,3 +53,17 @@ export default class HomeScreen extends React.Component {
     );
   }
 }
+
+var styles=StyleSheet.create({
+  headerContainer:{
+    backgroundColor: "white",
+    justifyContent: "space-around",
+    height: 90,
+  },
+  addBtn:{
+    marginRight:10,  
+    width:40, height: 40, 
+    borderRadius: 20, 
+    justifyContent: 'center'
+  }
+})
