@@ -25,6 +25,7 @@ import {
 } from "../../../assets/config";
 const devicesWidth = Dimensions.get("window").width;
 import LoopVideoMessage from "../messages/video";
+import Avatars from '../../../assets/pic/avatar.js';
 
 export default class videoPreviewTab extends React.Component {
   constructor(props) {
@@ -107,10 +108,7 @@ export default class videoPreviewTab extends React.Component {
                 <CardItem>
                   <Left>
                     <Thumbnail
-                      source={{
-                        uri:
-                          "https://phadvocates.org/wp-content/themes/cardinal/images/default-thumb.png"
-                      }}
+                      source={Avatars[lc.actor.uuid]}
                       small
                     />
                     <Body>

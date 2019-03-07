@@ -20,6 +20,7 @@ import commonStyle from "../../../assets/styles/styles";
 const devicesWidth = Dimensions.get("window").width;
 import styles from "../../../assets/styles/loopchatstyles";
 import { ChatManager, TokenProvider } from "@pusher/chatkit-client";
+import Avatars from '../../../assets/pic/avatar.js';
 import {
   CHATKIT_TOKEN_PROVIDER_ENDPOINT,
   CHATKIT_INSTANCE_LOCATOR
@@ -275,10 +276,7 @@ class allTab extends React.Component {
                       </View>
 
                       <Thumbnail
-                        source={{
-                          uri:
-                            "https://phadvocates.org/wp-content/themes/cardinal/images/default-thumb.png"
-                        }}
+                        source={Avatars[lc.actor.uuid]}
                         small
                       />
                     </View>
@@ -288,10 +286,7 @@ class allTab extends React.Component {
                 <CardItem>
                   <Left>
                     <Thumbnail
-                      source={{
-                        uri:
-                          "https://phadvocates.org/wp-content/themes/cardinal/images/default-thumb.png"
-                      }}
+                      source={Avatars[lc.actor.uuid]}
                       small
                     />
                     <Body>

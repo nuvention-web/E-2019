@@ -23,6 +23,7 @@ import {
   CHATKIT_INSTANCE_LOCATOR
 } from "../../../assets/config";
 import LoopLinkMessage from "../messages/link";
+import Avatars from '../../../assets/pic/avatar.js';
 
 export default class linkTab extends React.Component {
   constructor(props) {
@@ -113,10 +114,7 @@ export default class linkTab extends React.Component {
                 <CardItem>
                   <Left>
                     <Thumbnail
-                      source={{
-                        uri:
-                          "https://phadvocates.org/wp-content/themes/cardinal/images/default-thumb.png"
-                      }}
+                      source={Avatars[lc.actor.uuid]}
                       small
                     />
                     <Body>

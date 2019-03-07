@@ -24,6 +24,7 @@ import {
   CHATKIT_INSTANCE_LOCATOR
 } from "../../../assets/config";
 import LoopImageMessage from "../messages/image";
+import Avatars from '../../../assets/pic/avatar.js';
 
 export default class imagePreviewTab extends React.Component {
   constructor(props) {
@@ -106,10 +107,7 @@ export default class imagePreviewTab extends React.Component {
                 <CardItem>
                   <Left>
                     <Thumbnail
-                      source={{
-                        uri:
-                          "https://phadvocates.org/wp-content/themes/cardinal/images/default-thumb.png"
-                      }}
+                      source={Avatars[lc.actor.uuid]}
                       small
                     />
                     <Body>
