@@ -13,7 +13,7 @@
 The current application comprises of three components
 1. React.JS front-end app
 2. Node.JS Backend service
-3. Pusher - SaaS for real-time messaging and push notification. **Credentials will be shared offline.**
+3. Pusher - SaaS for real-time messaging and push notification. **Credentials if needed can be shared offline.**
 
 ## Current Code
 The current code is isolated in two separate branches
