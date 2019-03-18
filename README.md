@@ -1,11 +1,12 @@
 # NUvention Team E
 
 ## Demo
-# Instructions
+### Instructions
 
 1. Have expo downloaded on your phone 
 2. Register a new account or log in your account
-2. Scan this QRCode please (sorry, we only support ios version)
+3. Scan this QRCode please (sorry, we only support ios version)
+
 ![Image of QRCode](ios.png)
 
 ## Components
