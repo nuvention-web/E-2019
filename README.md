@@ -55,6 +55,7 @@ Contact Person
 | ----------------------|-----------------------------------------|
 | Prerak Rustagi | PrerakRustagu2019@u.northwestern.edu |
 | Nirmal Balachundhar | NirmalBalachundhar2021@u.northwestern.edu |
+| Ding Xiang (Rockwell) | DingXiang2015@u.northwestern.edu |
 
 ### install dependencies:
 ```
