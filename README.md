@@ -1,18 +1,19 @@
 # NUvention Team E
 
 ## Demo
-# Instructions
+### Instructions
 
 1. Have expo downloaded on your phone 
 2. Register a new account or log in your account
-2. Scan this QRCode please (sorry, we only support ios version)
+3. Scan this QRCode please (sorry, we only support ios version)
+
 ![Image of QRCode](ios.png)
 
 ## Components
 The current application comprises of three components
 1. React.JS front-end app
 2. Node.JS Backend service
-3. Pusher - SaaS for real-time messaging and push notification. **Credentials will be shared offline.**
+3. Pusher - SaaS for real-time messaging and push notification. **Credentials if needed can be shared offline.**
 
 ## Current Code
 The current code is isolated in two separate branches
@@ -54,6 +55,7 @@ Contact Person
 | ----------------------|-----------------------------------------|
 | Prerak Rustagi | PrerakRustagu2019@u.northwestern.edu |
 | Nirmal Balachundhar | NirmalBalachundhar2021@u.northwestern.edu |
+| Ding Xiang (Rockwell) | DingXiang2015@u.northwestern.edu |
 
 ### install dependencies:
 ```
