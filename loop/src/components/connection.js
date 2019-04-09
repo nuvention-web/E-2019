@@ -22,6 +22,7 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import StarIcon from '@material-ui/icons/Star';
 import Grid from "@material-ui/core/Grid";
 import "../connection.scss";
+import Button from '@material-ui/core/Button';
 
 const mytheme = createMuiTheme({
   palette: {
@@ -145,9 +146,10 @@ constructor(props) {
           </Typography>
         </CardContent>
         <CardActions className={classes.actions} disableActionSpacing>
+        <Button size="small">Talk To</Button>
           <IconButton aria-label="Done">
             <DoneIcon color={p.color2} />
-            TALK TO
+        
           </IconButton>
           
           <IconButton
