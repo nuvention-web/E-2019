@@ -35,7 +35,7 @@ class App extends Component {
             roadmap?
           </Typography>
           <MuiThemeProvider theme={theme}>
-          <Button onClick={() => this.props.history.push('/home')} variant="contained"  color="secondary" className={classes.btn}>
+          <Button onClick={() => this.props.history.push('/home/main')} variant="contained"  color="secondary" className={classes.btn}>
             Import profile from Linkedin
           </Button></MuiThemeProvider>
         </div>
