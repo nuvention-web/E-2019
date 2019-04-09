@@ -13,6 +13,8 @@ import CardContent from "@material-ui/core/CardContent";
 import CardMedia from "@material-ui/core/CardMedia";
 import Button from "@material-ui/core/Button";
 import Grid from "@material-ui/core/Grid";
+import LinearProgress from "@material-ui/core/LinearProgress";
+
 const mytheme = createMuiTheme({
   palette: {
     primary: {
@@ -33,26 +35,31 @@ const modules = [
   {
     id: 0,
     name: "Connections",
-    description: "Talk to your connections"
+    description: "Talk to your connections who are experts in Linkedin.",
+    progress: 10
   },
   {
     id: 1,
     name: "Skills & Courses",
-    description: "Learn skills from courses(Mooc)"
+    description: "Learn skills from courses(Mooc, Coursera).",
+    progress: 1
   },
   {
     id: 2,
     name: "Articles & Posts",
-    description: "View some relevant articles and posts"
+    description: "View some relevant articles and posts.",
+    progress: 100
   },
   {
     id: 3,
     name: "Events",
-    description: "Participate in relevant events"
+    description: "Participate in relevant events or conferences.",
+    progress: 50
   }
 ];
 const styles = theme => ({
-  card: {
+  progress: {
+    marginTop: theme.spacing.unit * 2
   },
   section1: {
     margin: `${theme.spacing.unit * 3}px ${theme.spacing.unit * 2}px`
@@ -100,16 +107,18 @@ class CareerHome extends Component {
                         Module {m.id} : {m.name}
                       </Typography>
                       <Typography component="p">{m.description}</Typography>
+                      <div className={classes.progress}>
+                        <MuiThemeProvider theme={mytheme}>
+                          <LinearProgress
+                            color="primary"
+                            variant="determinate"
+                            value={m.progress}
+                          />
+                        </MuiThemeProvider>
+                      </div>
                     </CardContent>
                   </CardActionArea>
-                  <CardActions>
-                    <Button size="small" color="primary">
-                      Share
-                    </Button>
-                    <Button size="small" color="primary">
-                      Learn More
-                    </Button>
-                  </CardActions>
+                  <CardActions />
                 </Card>
               </Grid>
             ))}
