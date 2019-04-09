@@ -24,6 +24,8 @@ import BookMarkIcon from "@material-ui/icons/BookmarkBorder";
 import HomeIcon from "@material-ui/icons/Home";
 import MainHome from "./homec";
 import CareerHome from "./homex";
+import { Route, Link,Switch, BrowserRouter as Router } from "react-router-dom";
+
 const drawerWidth = 240;
 
 const mytheme = createMuiTheme({
@@ -120,6 +122,7 @@ class Home extends React.Component {
   handleDrawerClose = () => {
     this.setState({ open: false });
   };
+  
 
   render() {
     const { classes, theme } = this.props;
@@ -169,29 +172,45 @@ class Home extends React.Component {
             </IconButton>
           </div>
           <List>
-            <ListItem button key={"Home"} onClick={()=>this.setState({switch: false})}>
-              <ListItemIcon><HomeIcon /></ListItemIcon>
+            <ListItem
+              button
+              key={"Home"}
+              onClick={() => this.props.history.push("/home/main")}
+            >
+              <ListItemIcon>
+                <HomeIcon />
+              </ListItemIcon>
               <ListItemText primary={"Home"} />
             </ListItem>
-        </List>
+          </List>
           <Divider />
           <List>
-            <ListItem button key={"UX Designer"} onClick={()=>this.setState({switch: true})}>
-              <ListItemIcon><BookMarkIcon/></ListItemIcon>
+            <ListItem
+              button
+              key={"UX Designer"}
+              onClick={() => this.props.history.push("/home/career")}
+            >
+              <ListItemIcon>
+                <BookMarkIcon />
+              </ListItemIcon>
               <ListItemText primary={"UX Designer"} />
             </ListItem>
           </List>
           <Divider />
           <List>
             <ListItem button key={"Frontend Manager"}>
-            <ListItemIcon><BookMarkIcon/></ListItemIcon>
+              <ListItemIcon>
+                <BookMarkIcon />
+              </ListItemIcon>
               <ListItemText primary={"Frontend Engineer"} />
             </ListItem>
           </List>
           <Divider />
           <List>
             <ListItem button key={"Fullstack Engineer"}>
-            <ListItemIcon><BookMarkIcon/></ListItemIcon>
+              <ListItemIcon>
+                <BookMarkIcon />
+              </ListItemIcon>
               <ListItemText primary={"Fullstack Engineer"} />
             </ListItem>
           </List>
@@ -201,8 +220,13 @@ class Home extends React.Component {
             [classes.contentShift]: open
           })}
         >
-          <div className={classes.drawerHeader} />
-          {this.state.switch? <CareerHome />: <MainHome />}
+        <div className={classes.drawerHeader} />
+            <Switch>
+              <Route path="/home/main" component={MainHome} />
+              <Route path="/home/career" component={CareerHome} />
+            </Switch>
+{/*          
+          {this.state.switch ? <CareerHome /> : <MainHome />} */}
         </main>
       </div>
     );
