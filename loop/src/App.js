@@ -1,10 +1,8 @@
 import React, { Component } from "react";
 import "./App.css";
 import Typography from "@material-ui/core/Typography";
-import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 import PropTypes from "prop-types";
 import Button from "@material-ui/core/Button";
-import blue from '@material-ui/core/colors/blue';
 import { withStyles, MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 
 const theme = createMuiTheme({
