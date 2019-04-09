@@ -54,6 +54,11 @@ const styles = theme => ({
 });
 
 class MainHome extends Component {
+  
+  handleDelete = () => {
+    alert("You clicked the delete icon."); // eslint-disable-line no-alert
+  };
+
   render() {
     const { classes } = this.props;
     return (

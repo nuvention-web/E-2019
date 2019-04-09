@@ -121,10 +121,6 @@ class Home extends React.Component {
     this.setState({ open: false });
   };
 
-  handleDelete = () => {
-    alert("You clicked the delete icon."); // eslint-disable-line no-alert
-  };
-
   render() {
     const { classes, theme } = this.props;
     const { open } = this.state;
