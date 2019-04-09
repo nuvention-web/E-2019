@@ -54,9 +54,13 @@ const styles = theme => ({
 });
 
 class MainHome extends Component {
-  
+
   handleDelete = () => {
     alert("You clicked the delete icon."); // eslint-disable-line no-alert
+  };
+
+  handleClick = () => {
+    alert("You clicked the label."); // eslint-disable-line no-alert
   };
 
   render() {
@@ -97,26 +101,26 @@ class MainHome extends Component {
               <Chip
                 className={classes.lightchip}
                 color="primary"
-                label="UX Designer"
-                onDelete={this.handleDelete}
+                label="UI Designer"
+                onClick={this.handleClick}
               />
               <Chip
                 className={classes.lightchip}
                 color="primary"
                 label="Product Manager"
-                onDelete={this.handleDelete}
+                onClick={this.handleClick}
               />
               <Chip
                 className={classes.lightchip}
                 color="primary"
                 label="Software Engineer"
-                onDelete={this.handleDelete}
+                onClick={this.handleClick}
               />
               <Chip
                 className={classes.lightchip}
                 color="primary"
-                label="Hard"
-                onDelete={this.handleDelete}
+                label="Data Scientist"
+                onClick={this.handleClick}
               />
             </MuiThemeProvider>
           </div>
