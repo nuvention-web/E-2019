@@ -14,7 +14,7 @@ import CardMedia from "@material-ui/core/CardMedia";
 import Button from "@material-ui/core/Button";
 import Grid from "@material-ui/core/Grid";
 import LinearProgress from "@material-ui/core/LinearProgress";
-
+import ButtonBase from '@material-ui/core/ButtonBase';
 const mytheme = createMuiTheme({
   palette: {
     primary: {
@@ -96,7 +96,10 @@ class CareerHome extends Component {
             {modules.map(m => (
               <Grid key={m.id} item xs={3}>
                 <Card className={classes.card}>
-                  <CardActionArea>
+                <CardActionArea 
+          className={classes.cardAction}
+          onClick={() => this.props.history.push('/home/career/connection')} >
+                  
                     <CardMedia
                       className={classes.media}
                       image="/static/images/cards/contemplative-reptile.jpg"
@@ -118,7 +121,7 @@ class CareerHome extends Component {
                       </div>
                     </CardContent>
                   </CardActionArea>
-                  <CardActions />
+          
                 </Card>
               </Grid>
             ))}

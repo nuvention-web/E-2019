@@ -24,6 +24,7 @@ import BookMarkIcon from "@material-ui/icons/BookmarkBorder";
 import HomeIcon from "@material-ui/icons/Home";
 import MainHome from "./homec";
 import CareerHome from "./homex";
+import Connection from "./connection"
 import { Route, Link,Switch, BrowserRouter as Router } from "react-router-dom";
 
 const drawerWidth = 240;
@@ -223,6 +224,7 @@ class Home extends React.Component {
         <div className={classes.drawerHeader} />
             <Switch>
               <Route path="/home/main" component={MainHome} />
+              <Route path="/home/career/connection" component={Connection}/>
               <Route path="/home/career" component={CareerHome} />
             </Switch>
 {/*          
