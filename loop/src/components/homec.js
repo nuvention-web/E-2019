@@ -29,10 +29,10 @@ const mytheme = createMuiTheme({
     },
     MuiTypography:{
       colorTextPrimary:{
-        color:"#c95441"
+        color:"#FF4141"
       },
       colorTextSecondary:{
-        color: "#4d9163"
+        color: "#3CC480"
       },
       h6:{
         fontWeight: "bold"
@@ -46,7 +46,7 @@ const styles = theme => ({
     margin: theme.spacing.unit * 2
   },
   paper: {
-    padding: theme.spacing.unit,
+    padding: theme.spacing.unit*2,
     display: "flex",
     flexDirection: "column",
     color: theme.palette.text.secondary
@@ -58,7 +58,8 @@ const styles = theme => ({
   papercontent: {
     marginTop: theme.spacing.unit * 1.5,
     display: "flex",
-    flexDirection: "row"
+    flexDirection: "row",
+    justifyContent:"space-between"
   },
   papercaption: {
     display: "flex",
@@ -94,6 +95,7 @@ class MainHome extends Component {
                         <Typography variant="h6">6000</Typography>
                         <Typography variant="caption" color="textPrimary">⬇ 43%</Typography>
                       </div>
+                      <img alt="Touchpoints" src={require('../statics/barchart1.png')} />
                     </div>
                   </Paper>
                 </Grid>
@@ -105,6 +107,7 @@ class MainHome extends Component {
                         <Typography variant="h6">41.2%</Typography>
                         <Typography variant="caption" color="textSecondary">⬆ 43%</Typography>
                       </div>
+                      <img alt="Response" src={require('../statics/barchart2.png')} />
                     </div>
                   </Paper>
                 </Grid>
@@ -116,6 +119,7 @@ class MainHome extends Component {
                         <Typography variant="h6">603</Typography>
                         <Typography variant="caption" color="textPrimary">⬇ 53%</Typography>
                       </div>
+                      <img alt="connection"src={require('../statics/barchart3.png')} />
                     </div>
                   </Paper>
                 </Grid>
