@@ -11,9 +11,7 @@ import Grid from "@material-ui/core/Grid";
 const mytheme = createMuiTheme({
   palette: {
     primary: {
-      light: "#D3D0CB",
-      main: "#4281A4",
-      dark: "#9CAFB7"
+      main: "#757475",
     },
     secondary: {
       main: "#EAD2AC",
@@ -21,12 +19,23 @@ const mytheme = createMuiTheme({
     },
     error: {
       main: "#FE938C"
-    }
+    },
   },
   overrides: {
     MuiPaper: {
       elevation2: {
         boxShadow: "0 3px 5px 2px rgba(0, 0, 0, .05)"
+      }
+    },
+    MuiTypography:{
+      colorTextPrimary:{
+        color:"#c95441"
+      },
+      colorTextSecondary:{
+        color: "#4d9163"
+      },
+      h6:{
+        fontWeight: "bold"
       }
     }
   }
@@ -47,6 +56,7 @@ const styles = theme => ({
     flex: 1
   },
   papercontent: {
+    marginTop: theme.spacing.unit * 1.5,
     display: "flex",
     flexDirection: "row"
   },
@@ -78,33 +88,33 @@ class MainHome extends Component {
               <Grid container spacing={24}>
                 <Grid item xs={4}>
                   <Paper className={classes.paper}>
-                    <Typography component="p">Total Touchpoints</Typography>
+                    <Typography component="p" color="primary">Total Touchpoints</Typography>
                     <div className={classes.papercontent}>
                       <div className={classes.papercaption}>
                         <Typography variant="h6">6000</Typography>
-                        <Typography variant="caption">43%</Typography>
+                        <Typography variant="caption" color="textPrimary">⬇ 43%</Typography>
                       </div>
                     </div>
                   </Paper>
                 </Grid>
                 <Grid item xs={4}>
                   <Paper className={classes.paper}>
-                    <Typography component="p">Avg. Response Rate</Typography>
+                    <Typography component="p" color="primary">Avg. Response Rate</Typography>
                     <div className={classes.papercontent}>
                       <div className={classes.papercaption}>
                         <Typography variant="h6">41.2%</Typography>
-                        <Typography variant="caption">43%</Typography>
+                        <Typography variant="caption" color="textSecondary">⬆ 43%</Typography>
                       </div>
                     </div>
                   </Paper>
                 </Grid>
                 <Grid item xs={4}>
                   <Paper className={classes.paper}>
-                    <Typography component="p">Total Connections</Typography>
+                    <Typography component="p" color="primary">Total Connections</Typography>
                     <div className={classes.papercontent}>
                       <div className={classes.papercaption}>
                         <Typography variant="h6">603</Typography>
-                        <Typography variant="caption">53%</Typography>
+                        <Typography variant="caption" color="textPrimary">⬇ 53%</Typography>
                       </div>
                     </div>
                   </Paper>
