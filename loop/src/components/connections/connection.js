@@ -19,6 +19,8 @@ import Divider from "@material-ui/core/Divider";
 import InputBase from "@material-ui/core/InputBase";
 import SearchIcon from "@material-ui/icons/Search";
 import { fade } from "@material-ui/core/styles/colorManipulator";
+import CssBaseline from "@material-ui/core/CssBaseline";
+import Pagination from "material-ui-flat-pagination";
 
 const mytheme = createMuiTheme({
   palette: {
@@ -26,7 +28,7 @@ const mytheme = createMuiTheme({
       main: "#757475"
     },
     secondary: {
-      main: "#EAD2AC",
+      main: "#3B86FF",
       dark: "#E6B89C"
     },
     error: {
@@ -60,6 +62,20 @@ const mytheme = createMuiTheme({
     MuiIconButton: {
       colorPrimary: {
         color: "#CECFD0"
+      }
+    },
+    MuiFlatPageButton:{
+      root:{
+        backgroundColor: "#fff",
+        marginRight: 10,
+        "&:hover": {
+          backgroundColor: "#3B86FF",
+          color: "#fff"
+        },
+      },
+      rootCurrent:{
+        backgroundColor: "#3B86FF",
+        color: "#fff"
       }
     }
   }
@@ -196,16 +212,26 @@ const styles = theme => ({
     },
     color: theme.palette.common.black
   },
+  pagination:{
+    position: "fixed",
+    bottom: 15,
+    right: 15
+  }
 });
 
 class Connection extends Component {
+  constructor(props) {
+    super(props);
+    this.state = { offset: 0 };
+  }
+
   handleDelete = () => {
     alert("You clicked the delete icon."); // eslint-disable-line no-alert
   };
 
-  handleClick = () => {
-    alert("You clicked the label."); // eslint-disable-line no-alert
-  };
+  handleClick(offset) {
+    this.setState({ offset });
+  }
 
   render() {
     const { classes } = this.props;
@@ -349,6 +375,15 @@ class Connection extends Component {
               </Grid>
             </Grid>
           </div>
+          <CssBaseline />
+          <div className={classes.pagination}>
+        <Pagination
+          limit={10}
+          offset={this.state.offset}
+          total={100}
+          onClick={(e, offset) => this.handleClick(offset)}
+        />
+        </div>
         </div>
       </MuiThemeProvider>
     );
