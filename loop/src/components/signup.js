@@ -126,7 +126,7 @@ class SignUp extends React.Component {
                   {submitting || sent ? 'In progress…' : 'Sign Up'}
                 </FormButton>
                 <Typography variant="body2" align="center">
-              <Link  underline="always" component={RouterLink} to="/signin">
+              <Link  underline="always" component={RouterLink} to="/app/signin">
                 Already have an account?Sign In.
               </Link>
             </Typography>

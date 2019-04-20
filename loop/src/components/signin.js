@@ -101,7 +101,7 @@ class SignIn extends React.Component {
             label="Remember me"
             />
             <Typography align="center" style={{display:'inline-flex'}}>
-            <Link underline="always" component={RouterLink} to="/forgetpassword">
+            <Link underline="always" component={RouterLink} to="/app/forgetpassword">
               Forgot password?
             </Link>
           </Typography>
@@ -117,7 +117,7 @@ class SignIn extends React.Component {
                 </FormButton>
                 
                 <Button variant="outlined" className={classes.button}
-                onClick={()=>this.props.history.push("/signup")}>
+                onClick={()=>this.props.history.push("/app/signup")}>
                 Sign Up
                 </Button>
               
