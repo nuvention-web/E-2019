@@ -243,7 +243,7 @@ class ConnectionDetails extends Component {
                     <div className={classes.progressbar}>
                       <SemiCircleProgressBar
                         percentage={20}
-                        stroke="#FF8373"
+                        stroke="#FFDA83"
                         diameter={135}
                         strokeWidth="20"
                         background="#F0F2F8"
