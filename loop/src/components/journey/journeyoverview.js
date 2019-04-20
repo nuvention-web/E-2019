@@ -133,7 +133,7 @@ class JourneyOverview extends Component {
           <div className={classes.skillset}>
             <Grid container spacing={24}>
               <Grid item xs={4}>
-              <div onClick={() => this.props.history.push("/home/journeycontent")}>
+              <div onClick={() => this.props.history.push("/home/noconnection")}>
                 <Paper className={classes.paper}>
                   <Typography component="p" color="primary">
                     Kellogg

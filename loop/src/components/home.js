@@ -34,7 +34,8 @@ import Badge from "@material-ui/core/Badge";
 import Journeyoverview from "./journey/journeyoverview";
 import Journeycontent from "./journey/journeycontent";
 import connectiondetails from "./connections/connectiondetails";
-
+import nojourney from "./journey/nojourny"
+import noconnection from "./connections/noconnection"
 const drawerWidth = 240;
 
 const mytheme = createMuiTheme({
@@ -275,7 +276,7 @@ class Home extends React.Component {
                 <ListItem
                   button
                   key={"Journey"}
-                  onClick={() => this.props.history.push("/home/journey")}
+                  onClick={() => this.props.history.push("/home/nojourney")}
                 >
                   <ListItemIcon>
                     <BarChartIcon />
@@ -317,8 +318,10 @@ class Home extends React.Component {
           <Switch>
           <Redirect exact from={`/home`} to={`/home/overview`} />
             <Route path="/home/overview" component={Overview} />
+            <Route path="/home/nojourney" component={nojourney} />
             <Route path="/home/journey" component={Journeyoverview} />
             <Route path="/home/journeycontent" component={Journeycontent} />
+            <Route path="/home/noconnection" component={noconnection} />
             <Route path="/home/connection" component={Connection} />
             <Route path="/home/connectiondetails" component={connectiondetails} />
           </Switch>
