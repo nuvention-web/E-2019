@@ -40,13 +40,10 @@ const drawerWidth = 240;
 const mytheme = createMuiTheme({
   palette: {
     primary: {
-      light: "#D3D0CB",
       main: "#4281A4",
-      dark: "#9CAFB7"
     },
     secondary: {
-      main: "#EAD2AC",
-      dark: "#E6B89C"
+      main: "#FFC06A",
     },
     error: {
       main: "#FE938C"
@@ -97,6 +94,11 @@ const styles = theme => ({
     [theme.breakpoints.up("sm")]: {
       width: `calc(100% - ${drawerWidth}px)`
     }
+  },
+  iconbtn:{
+    marginTop: theme.spacing.unit *1.2,
+    width: 45,
+    height: 45
   },
   menuButton: {
     marginLeft: 12,
@@ -216,7 +218,7 @@ class Home extends React.Component {
               </div>
               <div className={classes.grow} />
               <div className={classes.sectionDesktop}>
-                <IconButton>
+                <IconButton className={classes.iconbtn}>
                   <Badge badgeContent={17} color="secondary">
                     <NotificationsIcon />
                   </Badge>

@@ -54,9 +54,19 @@ const mytheme = createMuiTheme({
       }
     },
     MuiChip: {
+      root:{
+        
+      },
       outlinedPrimary: {
         color: "#3B86FF",
-        borderColor: "#3B86FF"
+        borderColor: "#3B86FF",
+        
+      },
+      clickable:{
+        "&:hover, &:active, &:focus": {
+          backgroundColor: "#3B86FF !important",
+          color: "#fff",
+        },
       }
     },
     MuiIconButton: {
@@ -222,7 +232,7 @@ const styles = theme => ({
 class Connection extends Component {
   constructor(props) {
     super(props);
-    this.state = { offset: 0 };
+    this.state = { offset: 0, clicked: false };
   }
 
   handleDelete = () => {
@@ -231,6 +241,10 @@ class Connection extends Component {
 
   handleClick(offset) {
     this.setState({ offset });
+  }
+
+  handleChipClick() {
+    console.log("s")
   }
 
   render() {
@@ -247,12 +261,14 @@ class Connection extends Component {
                 <Chip
                   label="Kellogg"
                   className={classes.chip}
+                  onClick={this.handleChipClick}
                   variant="outlined"
                   color="primary"
                 />
                 <Chip
                   label="Project Manager"
                   className={classes.chip}
+                  onClick={this.handleChipClick}
                   variant="outlined"
                   color="primary"
                 />

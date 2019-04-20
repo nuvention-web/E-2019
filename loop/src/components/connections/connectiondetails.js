@@ -41,7 +41,8 @@ const mytheme = createMuiTheme({
         color: "#3CC480"
       },
       h6: {
-        fontWeight: "bold"
+        fontWeight: "bold",
+        fontSize: "1rem"
       }
     },
     MuiChip: {
