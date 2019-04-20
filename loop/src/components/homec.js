@@ -82,7 +82,7 @@ class MainHome extends Component {
       <div>
         <div className={classes.section2}>
           <Typography gutterBottom variant="h5">
-            Journey
+            Journey > Kellogg
           </Typography>
           <div className={classes.skillset}>
             <MuiThemeProvider theme={mytheme}>

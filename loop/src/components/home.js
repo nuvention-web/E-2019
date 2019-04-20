@@ -25,14 +25,15 @@ import ChatIcon from "@material-ui/icons/Chat";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
-import BookMarkIcon from "@material-ui/icons/BookmarkBorder";
 import HomeIcon from "@material-ui/icons/Home";
-import MainHome from "./homec";
-import CareerHome from "./homex";
-import Connection from "./connection";
+import Overview from "./overview";
+import Connection from "./connections/connection";
 import { Route, Link, Switch, BrowserRouter as Router } from "react-router-dom";
 import { fade } from "@material-ui/core/styles/colorManipulator";
 import Badge from "@material-ui/core/Badge";
+import Journeyoverview from "./journey/journeyoverview";
+import Journeycontent from "./journey/journeycontent";
+import connectiondetails from "./connections/connectiondetails";
 
 const drawerWidth = 240;
 
@@ -123,6 +124,8 @@ const styles = theme => ({
     ...theme.mixins.toolbar
   },
   content: {
+    backgroundColor: "#f0f0f7",
+    height: "100vh",
     flexGrow: 1,
     padding: theme.spacing.unit * 3
   },
@@ -254,11 +257,15 @@ class Home extends React.Component {
                 </Typography>
               </div>
               <List>
-                <ListItem button key={"Home"}>
+                <ListItem
+                  button
+                  key={"Overview"}
+                  onClick={() => this.props.history.push("/home/overview")}
+                >
                   <ListItemIcon>
                     <HomeIcon color="#9596aa" />
                   </ListItemIcon>
-                  <ListItemText primary={"Home"} />
+                  <ListItemText primary={"Overview"} />
                 </ListItem>
               </List>
               <Divider />
@@ -266,7 +273,7 @@ class Home extends React.Component {
                 <ListItem
                   button
                   key={"Journey"}
-                  onClick={() => this.props.history.push("/home/main")}
+                  onClick={() => this.props.history.push("/home/journey")}
                 >
                   <ListItemIcon>
                     <BarChartIcon />
@@ -276,7 +283,8 @@ class Home extends React.Component {
               </List>
               <Divider />
               <List>
-                <ListItem button key={"Connections"}>
+                <ListItem button key={"Connections"}
+                onClick={() => this.props.history.push("/home/connection")}>
                   <ListItemIcon>
                     <PermIdentityIcon />
                   </ListItemIcon>
@@ -305,9 +313,11 @@ class Home extends React.Component {
         <main className={classNames(classes.content)}>
           <div className={classes.drawerHeaderHeight} />
           <Switch>
-            <Route path="/home/main" component={MainHome} />
-            <Route path="/home/career/connection" component={Connection} />
-            <Route path="/home/career" component={CareerHome} />
+            <Route path="/home/overview" component={Overview} />
+            <Route path="/home/journey" component={Journeyoverview} />
+            <Route path="/home/journeycontent" component={Journeycontent} />
+            <Route path="/home/connection" component={Connection} />
+            <Route path="/home/connectiondetails" component={connectiondetails} />
           </Switch>
           {/*          
           {this.state.switch ? <CareerHome /> : <MainHome />} */}
