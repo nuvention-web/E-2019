@@ -8,6 +8,8 @@ import SplitPane from "react-split-pane";
 import Signin from "./components/signin"
 import SignUp from "./components/signup"
 import ForgetPassword from "./components/forgetpassword"
+import { Route, IndexRoute, Redirect, Switch, BrowserRouter as Router } from "react-router-dom";
+
 const theme = createMuiTheme({
   palette: {
     secondary: {
@@ -36,7 +38,12 @@ class App extends Component {
       <SplitPane split="vertical" defaultSize="50%" primary="first" pane1ClassName="App-bg">
         <div></div>
         <div>
-        <SignUp/>
+        <Switch>
+          <Redirect exact from={`/`} to={`/signin`} />
+            <Route path="/signin" component={Signin} />
+            <Route path="/signup" component={SignUp} />
+            <Route path="/forgetpassword" component={ForgetPassword} />
+          </Switch>
         </div>
       </SplitPane>
 

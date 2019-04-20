@@ -28,7 +28,7 @@ import ListItemText from "@material-ui/core/ListItemText";
 import HomeIcon from "@material-ui/icons/Home";
 import Overview from "./overview";
 import Connection from "./connections/connection";
-import { Route, Link, Switch, BrowserRouter as Router } from "react-router-dom";
+import { Route, Redirect, Switch, BrowserRouter as Router } from "react-router-dom";
 import { fade } from "@material-ui/core/styles/colorManipulator";
 import Badge from "@material-ui/core/Badge";
 import Journeyoverview from "./journey/journeyoverview";
@@ -315,6 +315,7 @@ class Home extends React.Component {
         <main className={classNames(classes.content)}>
           <div className={classes.drawerHeaderHeight} />
           <Switch>
+          <Redirect exact from={`/home`} to={`/home/overview`} />
             <Route path="/home/overview" component={Overview} />
             <Route path="/home/journey" component={Journeyoverview} />
             <Route path="/home/journeycontent" component={Journeycontent} />

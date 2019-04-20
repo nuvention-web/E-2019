@@ -89,7 +89,8 @@ class ForgotPassword extends React.Component {
                   disabled={submitting || sent}
                   size="large"
                   color="secondary"
-                  width="100"
+                  width="80"
+                  
                 >
                   {submitting || sent ? 'In progress…' : 'Send request'}
                 </FormButton>

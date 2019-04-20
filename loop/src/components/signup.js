@@ -18,6 +18,8 @@ import FormButton from '../modules/form/FormButton';
 import FormFeedback from '../modules/form/FormFeedback';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
+import { Link as RouterLink } from 'react-router-dom'
+
 const styles = theme => ({
   form: {
     marginTop: theme.spacing.unit * 6,
@@ -117,13 +119,14 @@ class SignUp extends React.Component {
                 <FormButton
                   className={classes.button}
                   disabled={submitting || sent}
+                  size="large"
                   color="secondary"
-                  width="80%"
+                  width="100"
                 >
                   {submitting || sent ? 'In progress…' : 'Sign Up'}
                 </FormButton>
                 <Typography variant="body2" align="center">
-              <Link  underline="always">
+              <Link  underline="always" component={RouterLink} to="/signin">
                 Already have an account?Sign In.
               </Link>
             </Typography>

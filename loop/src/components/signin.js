@@ -19,6 +19,8 @@ import TextField from '@material-ui/core/TextField';
 import FormControl from '@material-ui/core/FormControl';
 import Input from '@material-ui/core/Input';
 import InputLabel from '@material-ui/core/InputLabel';
+import { Link as RouterLink } from 'react-router-dom'
+
 const styles = theme => ({
   form: {
     marginTop: theme.spacing.unit * 6,
@@ -99,23 +101,23 @@ class SignIn extends React.Component {
             label="Remember me"
             />
             <Typography align="center" style={{display:'inline-flex'}}>
-            <Link underline="always" >
+            <Link underline="always" component={RouterLink} to="/forgetpassword">
               Forgot password?
             </Link>
           </Typography>
         
                 <FormButton
                   className={classes.button}
-                  disabled={submitting || sent}
                   size="small"
                   color="secondary"
                   width="80%"
-    
+                  onClick={()=>this.props.history.push("/home")}
                 >
                   {submitting || sent ? 'In progress…' : 'Log In'}
                 </FormButton>
                 
-                <Button variant="outlined" className={classes.button}>
+                <Button variant="outlined" className={classes.button}
+                onClick={()=>this.props.history.push("/signup")}>
                 Sign Up
                 </Button>
               

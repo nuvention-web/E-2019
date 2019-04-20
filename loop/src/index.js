@@ -14,8 +14,9 @@ library.add(fab)
 const routing = (
     <Router>
       <div>
-        <Route exact path="/" component={App} />
-        <Route path="/home" component={Home} />
+        <Route path="/home" component={Home} >
+        </Route>
+        <Route path="/" component={App} />
       </div>
     </Router>
   )
