@@ -5,7 +5,7 @@ import App from './App';
 import Home from './components/home';
 import Main from './components/homec';
 import * as serviceWorker from './serviceWorker';
-import { Route, Link, BrowserRouter as Router } from 'react-router-dom'
+import { Route, Switch, Redirect, BrowserRouter as Router } from 'react-router-dom'
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { fab } from '@fortawesome/free-brands-svg-icons'
 
@@ -14,9 +14,12 @@ library.add(fab)
 const routing = (
     <Router>
       <div>
+      <Switch>
+          <Redirect exact from={`/`} to={`/app`} />
         <Route path="/home" component={Home} >
         </Route>
-        <Route path="/" component={App} />
+        <Route path="/app" component={App} />
+        </Switch>
       </div>
     </Router>
   )

@@ -39,10 +39,10 @@ class App extends Component {
         <div></div>
         <div>
         <Switch>
-          <Redirect exact from={`/`} to={`/signin`} />
-            <Route path="/signin" component={Signin} />
-            <Route path="/signup" component={SignUp} />
-            <Route path="/forgetpassword" component={ForgetPassword} />
+          <Redirect exact from={`/app`} to={`/app/signin`} />
+            <Route path="/app/signin" component={Signin} />
+            <Route path="/app/signup" component={SignUp} />
+            <Route path="/app/forgetpassword" component={ForgetPassword} />
           </Switch>
         </div>
       </SplitPane>
