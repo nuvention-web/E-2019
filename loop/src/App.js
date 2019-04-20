@@ -4,6 +4,7 @@ import Typography from "@material-ui/core/Typography";
 import PropTypes from "prop-types";
 import Button from "@material-ui/core/Button";
 import { withStyles, MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
+import SplitPane from "react-split-pane";
 
 const theme = createMuiTheme({
   palette: {
@@ -20,6 +21,9 @@ const styles = theme => ({
   iconSmall: {
     fontSize: 20
   },
+  sidebg:{
+
+  }
 });
 
 class App extends Component {
@@ -27,7 +31,12 @@ class App extends Component {
     const { classes } = this.props;
     return (
       <div className="App">
-        <div className="App-header">
+      <SplitPane split="vertical" defaultSize="50%" primary="first" pane1ClassName="App-bg">
+        <div></div>
+        <div></div>
+      </SplitPane>
+
+        {/* <div className="App-header">
           <Typography component="h2" variant="h2" gutterBottom>
             Ready to view your
           </Typography>
@@ -38,7 +47,7 @@ class App extends Component {
           <Button onClick={() => this.props.history.push('/home/main')} variant="contained"  color="secondary" className={classes.btn}>
             Import profile from Linkedin
           </Button></MuiThemeProvider>
-        </div>
+        </div> */}
       </div>
       
     );
