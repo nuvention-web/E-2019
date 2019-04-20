@@ -36,7 +36,7 @@ class App extends Component {
       <SplitPane split="vertical" defaultSize="50%" primary="first" pane1ClassName="App-bg">
         <div></div>
         <div>
-        <Signin/>
+        <SignUp/>
         </div>
       </SplitPane>
 

@@ -8,7 +8,9 @@ import Grid from '@material-ui/core/Grid';
 import Link from '@material-ui/core/Link';
 import { Field, Form, FormSpy } from 'react-final-form';
 import Typography from '../modules/components/Typography';
-
+import FormControl from '@material-ui/core/FormControl';
+import Input from '@material-ui/core/Input';
+import InputLabel from '@material-ui/core/InputLabel';
 import AppForm from '../modules/views/AppForm';
 import { email, required } from '../modules/form/validation';
 import RFTextField from '../modules/form/RFTextField';
@@ -58,7 +60,7 @@ class SignUp extends React.Component {
        
         <AppForm>
           <React.Fragment>
-            <Typography variant="h3" gutterBottom marked="center" align="center">
+            <Typography variant="h3" gutterBottom align="center">
               L o o p
             </Typography>
             <Typography variant="body2" align="center">
@@ -74,59 +76,30 @@ class SignUp extends React.Component {
               <form onSubmit={handleSubmit} className={classes.form} noValidate>
                 <Grid container spacing={16}>
                   <Grid item xs={12} sm={6}>
-                    <Field
-                      autoFocus
-                      component={RFTextField}
-                      autoComplete="fname"
-                      fullWidth
-                      label="First name"
-                      name="firstName"
-                      required
-                    />
+                  <FormControl margin="normal" required fullWidth>
+            <InputLabel htmlFor="password">Last Name</InputLabel>
+            <Input name="password"  id="password" autoComplete="current-password" />
+          </FormControl>
                   </Grid>
                   <Grid item xs={12} sm={6}>
-                    <Field
-                      component={RFTextField}
-                      autoComplete="lname"
-                      fullWidth
-                      label="Last name"
-                      name="lastName"
-                      required
-                    />
+                  <FormControl margin="normal" required fullWidth>
+            <InputLabel htmlFor="password">Last Name</InputLabel>
+            <Input name="password"  id="password" autoComplete="current-password" />
+          </FormControl>
                   </Grid>
                 </Grid>
-                <Field
-                  autoComplete="email"
-                  component={RFTextField}
-                  disabled={submitting || sent}
-                  fullWidth
-                  label="Email"
-                  margin="normal"
-                  name="email"
-                  required
-                />
-                <Field
-                  fullWidth
-                  component={RFTextField}
-                  disabled={submitting || sent}
-                  required
-                  name="password"
-                  autoComplete="current-password"
-                  label="Password"
-                  type="password"
-                  margin="normal"
-                />
-                <Field
-                  fullWidth
-                  component={RFTextField}
-                  disabled={submitting || sent}
-                  required
-                  name="confirm password"
-                  autoComplete="current-password"
-                  label="Confirm Password"
-                  type="password"
-                  margin="normal"
-                />
+                <FormControl margin="normal" required fullWidth>
+            <InputLabel htmlFor="email">Email Address</InputLabel>
+            <Input id="email" name="email" autoComplete="email" autoFocus />
+          </FormControl>
+          <FormControl margin="normal" required fullWidth>
+            <InputLabel htmlFor="password">Password</InputLabel>
+            <Input name="password" type="password" id="password" autoComplete="current-password" />
+          </FormControl>
+          <FormControl margin="normal" required fullWidth>
+            <InputLabel htmlFor="password">Confirm Password</InputLabel>
+            <Input name="password" type="password" id="password" autoComplete="current-password" />
+          </FormControl>
                 <FormSpy subscription={{ submitError: true }}>
                   {({ submitError }) =>
                     submitError ? (
