@@ -5,7 +5,7 @@ import PropTypes from "prop-types";
 import Button from "@material-ui/core/Button";
 import { withStyles, MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import SplitPane from "react-split-pane";
-
+import Signin from "./components/signin"
 import SignUp from "./components/signup"
 import ForgetPassword from "./components/forgetpassword"
 const theme = createMuiTheme({
@@ -35,11 +35,13 @@ class App extends Component {
       <div className="App">
       <SplitPane split="vertical" defaultSize="50%" primary="first" pane1ClassName="App-bg">
         <div></div>
-        <div></div>
+        <div>
+        <Signin/>
+        </div>
       </SplitPane>
 
         {/* <div className="App-header">
-      <SignUp/>
+     
         {/*<div className="App-header">
           <Typography component="h2" variant="h2" gutterBottom>
             Ready to view your
@@ -47,10 +49,7 @@ class App extends Component {
           <Typography component="h2" variant="h2" gutterBottom>
             roadmap?
           </Typography>
-          <MuiThemeProvider theme={theme}>
-          <Button onClick={() => this.props.history.push('/home/main')} variant="contained"  color="secondary" className={classes.btn}>
-            Import profile from Linkedin
-          </Button></MuiThemeProvider>
+          
         </div> */}
 
       </div>
