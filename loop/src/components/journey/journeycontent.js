@@ -12,6 +12,7 @@ import Avatar from "@material-ui/core/Avatar";
 import SemiCircleProgressBar from "react-progressbar-semicircle";
 import { IconButton } from "@material-ui/core";
 import LeftArrowIcon from "@material-ui/icons/KeyboardBackspace";
+import HeatMap from "../charts/heat";
 
 const mytheme = createMuiTheme({
   palette: {
@@ -203,7 +204,9 @@ class JourneyContent extends Component {
               <Typography component="p" color="primary">
                 HeatMap
               </Typography>
-              <div className={classes.papercontent} />
+              <div style={{ padding: 20 }}>
+              <HeatMap />
+              </div>
             </Paper>
           </div>
           <div className={classes.reminder}>

@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import Typography from "@material-ui/core/Typography";
 import PropTypes from "prop-types";
+import Button from '@material-ui/core/Button';
+
 import {
   withStyles,
   MuiThemeProvider,
@@ -10,6 +12,7 @@ import Paper from "@material-ui/core/Paper";
 import Grid from "@material-ui/core/Grid";
 import Avatar from "@material-ui/core/Avatar";
 import SemiCircleProgressBar from "react-progressbar-semicircle";
+import HeatMap from "./charts/heat";
 
 const mytheme = createMuiTheme({
   palette: {
@@ -17,8 +20,7 @@ const mytheme = createMuiTheme({
       main: "#757475"
     },
     secondary: {
-      main: "#EAD2AC",
-      dark: "#E6B89C"
+      main: "#3B86FF",
     },
     error: {
       main: "#FE938C"
@@ -39,7 +41,7 @@ const mytheme = createMuiTheme({
       },
       h6: {
         fontWeight: "bold"
-      }
+      },
     }
   }
 });
@@ -64,7 +66,7 @@ const styles = theme => ({
   reminder: {
     marginTop: theme.spacing.unit * 3
   },
-  progressbar:{
+  progressbar: {
     // height: 63
   },
   papercontent: {
@@ -73,12 +75,12 @@ const styles = theme => ({
     flexDirection: "row",
     justifyContent: "space-between"
   },
-  papercontent_bar:{
+  papercontent_bar: {
     display: "flex",
     flexDirection: "row",
     justifyContent: "space-between"
   },
-  papercontent_reminder:{
+  papercontent_reminder: {
     marginTop: theme.spacing.unit * 1.5,
     display: "flex",
     flexDirection: "row",
@@ -98,16 +100,23 @@ const styles = theme => ({
   remindercaption: {
     display: "flex",
     flexDirection: "column",
-    margin:theme.spacing.unit * 1.5
+    margin: theme.spacing.unit * 1.5
   },
   bigAvatar: {
     margin: 10,
     width: 65,
     height: 65
   },
- 
+  heatmapheader:{
+    display:"flex",
+    flexDirection: "row"
+  },
+  hbutton:{
+    marginTop: -theme.spacing.unit * 0.6,
+    marginLeft: theme.spacing.unit * 1,
+    fontSize: 12
+  }
 });
-
 
 class Overview extends Component {
   handleDelete = () => {
@@ -136,18 +145,24 @@ class Overview extends Component {
                   <div className={classes.papercontent_bar}>
                     <div className={classes.papercaption} />
                     <div className={classes.progressbar}>
-                    <SemiCircleProgressBar percentage={20} stroke="#FF8373" diameter={135} strokeWidth="20" background="#F0F2F8" showPercentValue />
+                      <SemiCircleProgressBar
+                        percentage={20}
+                        stroke="#FF8373"
+                        diameter={135}
+                        strokeWidth="20"
+                        background="#F0F2F8"
+                        showPercentValue
+                      />
                     </div>
                   </div>
                 </Paper>
               </Grid>
               <Grid item xs={4}>
                 <Paper className={classes.paper}>
-              
-                <Typography component="p" color="primary">
-                  Touchpoint
+                  <Typography component="p" color="primary">
+                    Touchpoint
                   </Typography>
-                
+
                   <div className={classes.papercontent}>
                     <div className={classes.papercaption}>
                       <Typography variant="h6">1000</Typography>
@@ -171,14 +186,27 @@ class Overview extends Component {
           </div>
           <div className={classes.maincharts}>
             <Paper className={classes.paper}>
-            
+              <div className={classes.heatmapheader}>
               <Typography component="p" color="primary">
                 HeatMap
               </Typography>
-              <div className={classes.papercontent} />
+                <Button color="secondary" className={classes.hbutton}>
+                  Overall
+                </Button>
+                <Button color="primary" className={classes.hbutton}>
+                  Kellog
+                </Button>
+                <Button color="primary" className={classes.hbutton}>
+                  Project Manager
+                </Button>
+              </div>
+              
+              <div style={{ padding: 20 }}>
+                <HeatMap />
+              </div>
             </Paper>
           </div>
-          
+
           <div className={classes.reminder}>
             <Paper className={classes.paper}>
               <Typography component="p" color="primary">
@@ -207,7 +235,7 @@ class Overview extends Component {
                   <div className={classes.remindercaption}>
                     <Typography variant="h6">Nick Herasimenka</Typography>
                     <Typography variant="caption">
-                    Schedule a coffee meet in 3 days 
+                      Schedule a coffee meet in 3 days
                     </Typography>
                   </div>
                 </div>

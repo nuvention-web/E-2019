@@ -368,7 +368,6 @@ class ConnectionDetails extends Component {
               <div style={{ padding: 20 }}>
                 <LineChart />
               </div>
-              <div className={classes.papercontent} />
             </Paper>
           </div>
           <div className={classes.reminder}>
