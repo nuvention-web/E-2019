@@ -228,22 +228,6 @@ class Overview extends Component {
             <option value={30}>Last Year</option>
           </NativeSelect>
         </FormControl>
-        </form><form className={classes.root} autoComplete="off">
-                  <FormControl className={classes.margin}>
-          <InputLabel htmlFor="age-customized-native-simple" className={classes.bootstrapFormLabel}>
-            Time
-          </InputLabel>
-          <NativeSelect
-            value={this.state.time}
-            onChange={this.handleTime}
-            input={<BootstrapInput name="age" id="age-customized-native-simple" />}
-          >
-            <option value="Last 6 Months" />
-            <option value={10}>Last Month</option>
-            <option value={20}>Last 6 Months</option>
-            <option value={30}>Last Year</option>
-          </NativeSelect>
-        </FormControl>
         </form>
         </div>
         <div className={classes.papercontent}>
