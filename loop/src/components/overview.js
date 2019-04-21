@@ -13,6 +13,10 @@ import Grid from "@material-ui/core/Grid";
 import Avatar from "@material-ui/core/Avatar";
 import SemiCircleProgressBar from "react-progressbar-semicircle";
 import HeatMap from "./charts/heat";
+import FormControl from "@material-ui/core/FormControl";
+import Select from "@material-ui/core/Select";
+import NativeSelect from "@material-ui/core/NativeSelect";
+import InputBase from "@material-ui/core/InputBase";
 
 const mytheme = createMuiTheme({
   palette: {
@@ -109,14 +113,56 @@ const styles = theme => ({
   },
   heatmapheader:{
     display:"flex",
+    flexDirection: "row",
+    justifyContent: "space-between"
+  },
+  heatmaplefth:{
+    display:"flex",
     flexDirection: "row"
   },
   hbutton:{
-    marginTop: -theme.spacing.unit * 0.6,
+    marginTop: -theme.spacing.unit * 1.3,
     marginLeft: theme.spacing.unit * 1,
     fontSize: 12
   }
 });
+
+const BootstrapInput = withStyles(theme => ({
+  root: {
+    "label + &": {
+      marginTop: theme.spacing.unit * 3
+    }
+  },
+  input: {
+    borderRadius: 4,
+    position: "relative",
+    backgroundColor: theme.palette.background.paper,
+    border: "1px solid #ced4da",
+    fontSize: 12,
+    width: "auto",
+    padding: "10px 26px 10px 12px",
+    transition: theme.transitions.create(["border-color", "box-shadow"]),
+    // Use the system font instead of the default Roboto font.
+    fontFamily: [
+      "-apple-system",
+      "BlinkMacSystemFont",
+      '"Segoe UI"',
+      "Roboto",
+      '"Helvetica Neue"',
+      "Arial",
+      "sans-serif",
+      '"Apple Color Emoji"',
+      '"Segoe UI Emoji"',
+      '"Segoe UI Symbol"'
+    ].join(","),
+    "&:focus": {
+      borderRadius: 4,
+      borderColor: "#80bdff",
+      boxShadow: "0 0 0 0.2rem rgba(0,123,255,.25)"
+    }
+  }
+}))(InputBase);
+
 
 class Overview extends Component {
   handleDelete = () => {
@@ -187,6 +233,7 @@ class Overview extends Component {
           <div className={classes.maincharts}>
             <Paper className={classes.paper}>
               <div className={classes.heatmapheader}>
+              <div className={classes.heatmaplefth}>
               <Typography component="p" color="primary">
                 HeatMap
               </Typography>
@@ -199,6 +246,26 @@ class Overview extends Component {
                 <Button color="primary" className={classes.hbutton}>
                   Project Manager
                 </Button>
+              </div>
+              <form autoComplete="off">
+                      <FormControl >
+                        <NativeSelect
+                          value={10}
+                          onChange={this.handleTime}
+                          input={
+                            <BootstrapInput
+                              name="age"
+                              id="age-customized-native-simple"
+                            />
+                          }
+                        >
+                          <option value="Last 6 Months" />
+                          <option value={10}>Last Month</option>
+                          <option value={20}>Last 6 Months</option>
+                          <option value={30}>Last Year</option>
+                        </NativeSelect>
+                      </FormControl>
+                    </form>
               </div>
               
               <div style={{ padding: 20 }}>
