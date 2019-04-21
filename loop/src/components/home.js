@@ -85,7 +85,9 @@ const mytheme = createMuiTheme({
 const styles = theme => ({
   root: {
     display: "flex",
-    color: "#fff"
+    color: "#fff",
+    backgroundColor: "#f0f0f7",
+    minHeight: "100vh"
   },
   grow: {
     flexGrow: 1
@@ -127,8 +129,7 @@ const styles = theme => ({
     ...theme.mixins.toolbar
   },
   content: {
-    backgroundColor: "#f0f0f7",
-    height: "100vh",
+    
     flexGrow: 1,
     padding: theme.spacing.unit * 3
   },

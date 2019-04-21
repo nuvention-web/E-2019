@@ -2,7 +2,9 @@ import React from 'react';
 
 import fusioncharts from "fusioncharts";
 import charts from "fusioncharts/fusioncharts.charts";
-import ReactFusioncharts from "react-fusioncharts";
+import ReactFC from 'react-fusioncharts';
+import FusionTheme from 'fusioncharts/themes/fusioncharts.theme.fusion';
+ReactFC.fcRoot(fusioncharts, charts, FusionTheme);
 
 // Resolves charts dependancy
 charts(fusioncharts);
@@ -60,10 +62,9 @@ const dataSource = {
 export default class LineChart extends React.Component {
   render() {
     return (
-      <ReactFusioncharts
+      <ReactFC
         type="spline"
         width='100%'
-        height='50%'
         dataFormat="JSON"
         dataSource={dataSource}
       />
