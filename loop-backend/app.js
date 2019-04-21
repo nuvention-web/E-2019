@@ -7,7 +7,8 @@ app.get('/', (req, res) => {
 
 app.get('/api/loops/users', (req, res) =>{
     var user1 = {firstName: 'David Lee', school: 'Kellog', careerGoal: 'Project Manager'}
-    res.json([user1])
+    var user2 = {firstName: 'John Doe', school: 'McCormick', careerGoal: 'Software Engineer'}
+    res.json([user1, user2])
 });
 
 app.listen(3000, () =>{
