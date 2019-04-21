@@ -1,5 +1,6 @@
 const express = require('express');
 const app = express();
+const morgan = require('morgan');
 
 app.get('/', (req, res) => {
     res.send('Loop makes your professional network better')
@@ -16,4 +17,4 @@ app.get('/api/loops/users', (req, res) =>{
 // http://localhost:3000
 app.listen(3000, () =>{
     console.log("Loop server is listening on port 3000...")
-})
+});
