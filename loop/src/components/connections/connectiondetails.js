@@ -13,7 +13,17 @@ import SemiCircleProgressBar from "react-progressbar-semicircle";
 import Chip from "@material-ui/core/Chip";
 import { IconButton } from "@material-ui/core";
 import LeftArrowIcon from "@material-ui/icons/KeyboardBackspace";
-
+import PieExample from "../charts/pie";
+import LineExample from "../charts/line";
+import LineChart from "../charts/linechart";
+import PieChart from "../charts/piechart";
+import Heat from "../charts/heat";
+import InputLabel from '@material-ui/core/InputLabel';
+import MenuItem from '@material-ui/core/MenuItem';
+import FormControl from '@material-ui/core/FormControl';
+import Select from '@material-ui/core/Select';
+import NativeSelect from '@material-ui/core/NativeSelect';
+import InputBase from '@material-ui/core/InputBase';
 const mytheme = createMuiTheme({
   palette: {
     primary: {
@@ -160,10 +170,66 @@ const styles = theme => ({
   chip: {
     fontSize: 12,
     marginLeft: theme.spacing.unit * 0.5
-  }
+  },
+  margin: {
+    marginTop:-theme.spacing.unit*3,
+    marginLeft: theme.spacing.unit*33,
+  },
+  margin2: {
+    marginTop:-theme.spacing.unit*3,
+    marginLeft: theme.spacing.unit*90,
+  },
+  bootstrapFormLabel: {
+    fontSize: 18,
+  },
+  root: {
+    display: 'flex',
+    flexWrap: 'wrap',
+  },
 });
+const BootstrapInput = withStyles(theme => ({
+  root: {
+    'label + &': {
+      marginTop: theme.spacing.unit * 3,
+    },
+  },
+  input: {
+    borderRadius: 4,
+    position: 'relative',
+    backgroundColor: theme.palette.background.paper,
+    border: '1px solid #ced4da',
+    fontSize: 12,
+    width: 'auto',
+    padding: '10px 26px 10px 12px',
+    transition: theme.transitions.create(['border-color', 'box-shadow']),
+    // Use the system font instead of the default Roboto font.
+    fontFamily: [
+      '-apple-system',
+      'BlinkMacSystemFont',
+      '"Segoe UI"',
+      'Roboto',
+      '"Helvetica Neue"',
+      'Arial',
+      'sans-serif',
+      '"Apple Color Emoji"',
+      '"Segoe UI Emoji"',
+      '"Segoe UI Symbol"',
+    ].join(','),
+    '&:focus': {
+      borderRadius: 4,
+      borderColor: '#80bdff',
+      boxShadow: '0 0 0 0.2rem rgba(0,123,255,.25)',
+    },
+  },
+}))(InputBase);
 
 class ConnectionDetails extends Component {
+  state = {
+    time: '',
+  };
+  handleChange = event => {
+    this.setState({ time: event.target.value });
+  };
   handleDelete = () => {
     alert("You clicked the delete icon."); // eslint-disable-line no-alert
   };
@@ -271,19 +337,74 @@ class ConnectionDetails extends Component {
           </div>
           <div className={classes.maincharts}>
             <Paper className={classes.paper}>
+            <div style={{display:'inline-flex'}}>
               <Typography component="p" color="primary">
-                HeatMap
+                TimeLine
               </Typography>
+              <form className={classes.root} autoComplete="off">
+                  <FormControl className={classes.margin2}>
+          <InputLabel htmlFor="age-customized-native-simple" className={classes.bootstrapFormLabel}>
+            Time
+          </InputLabel>
+          <NativeSelect
+            value={this.state.time}
+            onChange={this.handleTime}
+            input={<BootstrapInput name="age" id="age-customized-native-simple" />}
+          >
+            <option value="Last 6 Months" />
+            <option value={10}>Last Month</option>
+            <option value={20}>Last 6 Months</option>
+            <option value={30}>Last Year</option>
+          </NativeSelect>
+        </FormControl>
+        </form>
+        </div>
+        <div style={{padding:20}}>
+              <LineChart/>
+              </div>
               <div className={classes.papercontent} />
             </Paper>
           </div>
           <div className={classes.reminder}>
             <Grid container spacing={24}>
               <Grid item xs>
-                <Paper className={classes.paper}>
-                  <Typography component="p" color="primary">
-                    Touchpoint
+              <Paper className={classes.paper}>
+                <div style={{display:'inline-flex'}}>
+                <Typography component="p" color="primary">
+                  Touchpoint
                   </Typography>
+                  <form className={classes.root} autoComplete="off">
+                  <FormControl className={classes.margin}>
+          <InputLabel htmlFor="age-customized-native-simple" className={classes.bootstrapFormLabel}>
+            Time
+          </InputLabel>
+          <NativeSelect
+            value={this.state.time}
+            onChange={this.handleTime}
+            input={<BootstrapInput name="age" id="age-customized-native-simple" />}
+          >
+            <option value="Last 6 Months" />
+            <option value={10}>Last Month</option>
+            <option value={20}>Last 6 Months</option>
+            <option value={30}>Last Year</option>
+          </NativeSelect>
+        </FormControl>
+        </form>
+        </div>
+        <div className={classes.papercontent}>
+                    <div className={classes.papercaption}>
+                  
+                  
+                    </div>
+                  </div>
+                <PieExample/>
+                  
+                  <div className={classes.papercontent}>
+                    <div className={classes.papercaption}>
+                  
+                  
+                    </div>
+                  </div>
                 </Paper>
               </Grid>
               <Grid item xs>

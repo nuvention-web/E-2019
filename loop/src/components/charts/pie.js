@@ -30,8 +30,8 @@ export default class PieExample extends React.Component{
 
   render() {
     return (
-      <div>
-        <Doughnut data={data} />
+      <div style={{maxWidth:500}} >
+        <Doughnut data={data} style={{maxHeight:100}}/>
       </div>
     );
   }

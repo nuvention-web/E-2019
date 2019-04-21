@@ -12,7 +12,7 @@ const dataSource = {
     caption: "",
     yaxisname: "",
     anchorradius: "5",
-    plottooltext: "Touchpoint<br /><b>Email</b>:2<br />Response Rate: 50%<br/><b>Social Media</b>: 1<br />Response Rate: 100%<br />Suggestion:<br />Send him an article<br />Invite him for a coffee ",
+    plottooltext: "<card>Touchpoint<br /><b>Email</b>:2<br />Response Rate: 50%<br/><b>Social Media</b>: 1<br />Response Rate: 100%<br />Suggestion:<br />Send him an article<br />Invite him for a coffee</card>",
     showhovereffect: "1",
     showvalues: "0",
     numbersuffix: "%",
@@ -27,7 +27,7 @@ const dataSource = {
     borderColor: "#FFFFFF",
     borderThickness: "0",
     bgColor: "#FFFFFF",
-    bgAlpha: "0"
+    bgAlpha: "50"
   },
   data: [
     {
