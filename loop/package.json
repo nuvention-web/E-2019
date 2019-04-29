@@ -27,6 +27,7 @@
     "react-router-dom": "^5.0.0",
     "react-scripts": "2.1.8",
     "react-split-pane": "^0.1.87",
+    "semantic-ui-react": "^0.86.0",
     "semiotic": "^1.19.7",
     "shave": "^2.5.3",
     "validator": "^10.11.0"

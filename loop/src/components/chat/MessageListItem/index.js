@@ -5,8 +5,8 @@ import ToolbarButton from '../ToolbarButton';
 import Message from '../Message';
 import moment from 'moment';
 
-import '../MessageList/MessageList.css';
-
+import '../css/MessageList.css';
+import '../css/Toolbar.css';
 const MY_USER_ID = 'apple';
 
 export default class MessageListItem extends Component {
@@ -107,10 +107,12 @@ export default class MessageListItem extends Component {
     const { photo, name, text } = this.props.data;
     return(
       <div className="message-list">
-        <Toolbar
-          title={name}
-          LeftItems={<img className="conversation-photo" src={photo} alt="conversation" />}
-        />
+        <div className="toolbar">
+        <div className="left-items"><img className="conversation-photo" src={photo} alt="conversation" /></div>
+        <h1 className="toolbar-title">{ name}</h1>
+
+      </div>
+
         <div className="message-list-container">{this.renderMessages()}</div>
         <Compose/>
       </div>

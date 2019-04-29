@@ -5,7 +5,7 @@ import Toolbar from '../Toolbar';
 import ToolbarButton from '../ToolbarButton';
 import axios from 'axios';
 
-import './ConversationList.css';
+import '../css/ConversationList.css';
 
 export default class ConversationList extends Component {
   constructor(props) {

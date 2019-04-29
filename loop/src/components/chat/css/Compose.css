@@ -2,17 +2,18 @@
   padding: 10px;
   display: flex;
   align-items: center;
-  background: white;
-  border-top: 1px solid #eeeef1;
+  background:#F5F6FA;
+  border: 1px solid #707070;
   width: calc(100% - 20px);
   bottom: 0px;
   height:100px;
+  margin-left:10px;
 }
 
 @supports (backdrop-filter: blur(20px)) {
   .compose {
-    border: none;
-    background-color: rgba(255, 255, 255, 0.8);
+    border: 1px solid #707070;
+    background-color:#F5F6FA;
     backdrop-filter: blur(20px);
   }
 }

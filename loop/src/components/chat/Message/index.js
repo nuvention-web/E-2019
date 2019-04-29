@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import moment from 'moment';
-import './Message.css';
+import '../css/Message.css';
 
 export default class Message extends Component {
   render() {

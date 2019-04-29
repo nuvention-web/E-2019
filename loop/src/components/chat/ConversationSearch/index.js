@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import './ConversationSearch.css';
+import '../css/ConversationSearch.css';
 
 export default class ConversationSearch extends Component {
   render() {

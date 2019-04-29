@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import './Compose.css';
-
+import '../css/Compose.css';
+import { Icon } from 'semantic-ui-react'
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import Button from '@material-ui/core/Button';
@@ -25,14 +25,20 @@ const styles = theme => ({
     const { classes } = this.props;
     return (
       <div className="compose">
+        
         <input
           type="text"
           className="compose-input"
           placeholder="type your message here..."
         />
+        {/*<div>
+        <Icon  name='linkify'/>
+        <Icon  name='smile outline'/>
+        </div>*/}
         <Button variant="contained" color="primary" className={classes.button}>
         Send
       </Button>
+      
       </div>
     );
   }
