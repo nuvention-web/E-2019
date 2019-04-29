@@ -36,6 +36,7 @@ import Journeycontent from "./journey/journeycontent";
 import connectiondetails from "./connections/connectiondetails";
 import nojourney from "./journey/nojourny"
 import noconnection from "./connections/noconnection"
+import Chat from "./chat"
 const drawerWidth = 240;
 
 const mytheme = createMuiTheme({
@@ -296,7 +297,8 @@ class Home extends React.Component {
                 </ListItem>
               </List>
               <List>
-                <ListItem button key={"Chat Rooms"}>
+                <ListItem button key={"Chat Rooms"}
+                onClick={() => this.props.history.push("/home/chatroom")}>
                   <ListItemIcon>
                     <ChatIcon style={{ fontSize: 22 }} />
                   </ListItemIcon>
@@ -325,6 +327,7 @@ class Home extends React.Component {
             <Route path="/home/noconnection" component={noconnection} />
             <Route path="/home/connection" component={Connection} />
             <Route path="/home/connectiondetails" component={connectiondetails} />
+            <Route path="/home/chatroom" component={Chat} />
           </Switch>
           {/*          
           {this.state.switch ? <CareerHome /> : <MainHome />} */}
