@@ -1,4 +1,7 @@
-var redisConnector = require('./redisConnector')
+var redisConnector = require('./redisConnector');
+var kairosDB = require('./tsdb');
+
 module.exports = {
-  redisConnector: redisConnector
+  redisConnector: redisConnector,
+  tsdb: kairosDB
 };
