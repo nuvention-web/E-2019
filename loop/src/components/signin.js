@@ -20,6 +20,8 @@ import FormControl from '@material-ui/core/FormControl';
 import Input from '@material-ui/core/Input';
 import InputLabel from '@material-ui/core/InputLabel';
 import { Link as RouterLink } from 'react-router-dom'
+import firebase from "firebase";
+import { myFirebase } from "../firebase";
 
 const styles = theme => ({
   form: {
@@ -37,6 +39,8 @@ const styles = theme => ({
 class SignIn extends React.Component {
   state = {
     sent: false,
+    email: "",
+    password: "",
   };
 
   validate = values => {
@@ -52,8 +56,24 @@ class SignIn extends React.Component {
     return errors;
   };
 
-  handleSubmit = () => {};
-
+  
+  handleSubmit = event => {
+    event.preventDefault();
+    const { email, password } = this.state;
+    myFirebase
+      .auth()
+      .signInWithEmailAndPassword(email, password)
+      .then(user => {
+        this.props.history.push("/home");
+      })
+      .catch(error => {
+        console.log(error);
+        this.setState({ error: error });
+      });
+  };
+  handleInputChange = event => {
+    this.setState({ [event.target.name]: event.target.value });
+  };
   render() {
     const { classes } = this.props;
     const { sent } = this.state;
@@ -79,11 +99,16 @@ class SignIn extends React.Component {
               <form onSubmit={handleSubmit} className={classes.form} noValidate>
                 <FormControl margin="normal" required fullWidth>
             <InputLabel htmlFor="email">Email Address</InputLabel>
-            <Input id="email" name="email" autoComplete="email" autoFocus />
+            <Input id="email" name="email" autoComplete="email" autoFocus 
+         onChange={this.handleInputChange}
+/>
           </FormControl>
           <FormControl margin="normal" required fullWidth>
             <InputLabel htmlFor="password">Password</InputLabel>
-            <Input name="password" type="password" id="password" autoComplete="current-password" />
+            <Input name="password" type="password" id="password" autoComplete="current-password" 
+            onChange={this.handleInputChange}
+
+            />
           </FormControl>
                 <FormSpy subscription={{ submitError: true }}>
                   {({ submitError }) =>
@@ -111,7 +136,7 @@ class SignIn extends React.Component {
                   size="small"
                   color="secondary"
                   width="80%"
-                  onClick={()=>this.props.history.push("/home")}
+                  onClick={this.handleSubmit}
                 >
                   {submitting || sent ? 'In progress…' : 'Log In'}
                 </FormButton>

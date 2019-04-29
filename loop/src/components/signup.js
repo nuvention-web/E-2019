@@ -64,7 +64,6 @@ class SignUp extends React.Component {
 
   handleSubmit = event => {
     event.preventDefault();
-    console.log("Eeee");
     const { email, password, firstname, lastname } = this.state;
     myFirebase
       .auth()
