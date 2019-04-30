@@ -204,12 +204,13 @@ class Home extends React.Component {
   };
 
   componentDidMount = () => {
-    var user = myFirebase.auth().currentUser;
-    if (user) {
-      console.log(user)
-    } else {
-      console.log("failed")
-    }
+    myFirebase.auth().onAuthStateChanged(user => {
+      if (user) {
+        console.log("user is logged");
+      }else{
+        this.props.history.push("/app/sigin");
+      }
+    });
   };
 
   render() {
