@@ -76,11 +76,11 @@ class SignUp extends React.Component {
         }).then(function() {
           // Profile updated successfully!
           console.log(user)
-          this.props.history.push("/home")
+          
         }, function(error) {
           console.log(error)
           // An error happened.
-        });
+        }).then(()=> this.props.history.push("/home"));
       })
       .catch(error => {
         console.log(error);

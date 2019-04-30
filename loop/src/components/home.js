@@ -205,7 +205,6 @@ class Home extends React.Component {
 
   componentDidMount = () => {
     var user = myFirebase.auth().currentUser;
-
     if (user) {
       console.log(user)
     } else {
