@@ -21,6 +21,7 @@ import Checkbox from "@material-ui/core/Checkbox";
 import { Link as RouterLink } from "react-router-dom";
 import firebase from "firebase";
 import { myFirebase } from "../firebase";
+import { FormErrors } from "./formErrors";
 
 const styles = theme => ({
   form: {
@@ -40,14 +41,24 @@ class SignUp extends React.Component {
     sent: false,
     email: "",
     password: "",
+    confirmpassword: "",
     error: null,
     firstname: "",
-    lastname: ""
+    lastname: "",
+    checked: false,
+    formErrors: { email: '', password: '', firstname: '', lastname: '', confirmpassword: '', checked: false },
+    emailValid: false,
+    passwordValid: false,
+    firstnameValid: false,
+    lastNameValid: false,
+    confirmpasswordValid: false,
+    checkedValid: false,
+    formValid: false
   };
 
   validate = values => {
     const errors = required(
-      ["firstName", "lastName", "email", "password"],
+      ["firstname", "lastname", "email", "password"],
       values,
       this.props
     );
@@ -73,24 +84,83 @@ class SignUp extends React.Component {
 
         user.updateProfile({
           displayName: firstname + " " + lastname,
-        }).then(function() {
+        }).then(function () {
           // Profile updated successfully!
           console.log(user)
-          
-        }, function(error) {
+
+        }, function (error) {
           console.log(error)
           // An error happened.
-        }).then(()=> this.props.history.push("/home"));
+        }).then(() => this.props.history.push("/home"));
       })
       .catch(error => {
         console.log(error);
         this.setState({ error: error });
+        alert(error.message);
       });
   };
 
   handleInputChange = event => {
-    this.setState({ [event.target.name]: event.target.value });
+    const name = event.target.name;
+    const value = event.target.value;
+    this.setState({ [name]: value },
+      () => { this.validateField(name, value) });
   };
+
+  validateField(fieldName, value) {
+    let fieldValidationErrors = this.state.formErrors;
+    let emailValid = this.state.emailValid;
+    let passwordValid = this.state.passwordValid;
+    let firstnameValid = this.state.firstnameValid;
+    let lastnameValid = this.state.lastnameValid;
+    let confirmpasswordValid = this.state.confirmpasswordValid;
+    let checkedValid = this.state.checkedValid;
+    switch (fieldName) {
+      case 'firstname':
+        firstnameValid = value.length >= 1;
+        fieldValidationErrors.firstname = firstnameValid ? '' : ' is null';
+        break;
+      case 'lastname':
+        lastnameValid = value.length >= 1;
+        fieldValidationErrors.lastname = lastnameValid ? '' : ' is null';
+        break;
+      case 'email':
+        emailValid = value.match(/^([\w.%+-]+)@([\w-]+\.)+([\w]{2,})$/i);
+        fieldValidationErrors.email = emailValid ? '' : ' is invalid';
+        break;
+      case 'password':
+        passwordValid = value.length >= 6;
+        fieldValidationErrors.password = passwordValid ? '' : ' is too short';
+        break;
+      case 'confirmpassword':
+        confirmpasswordValid = (value === this.state.password);
+        fieldValidationErrors.confirmpassword = confirmpasswordValid ? '' : ' is not right';
+        break;
+      case 'checked':
+        checkedValid = (value === true);
+        console.log(value)
+        fieldValidationErrors.checked = checkedValid ? '' : 'is not confirmed';
+        break;
+      default:
+        break;
+    }
+    this.setState({
+      formErrors: fieldValidationErrors,
+      emailValid: emailValid,
+      passwordValid: passwordValid,
+      firstnameValid: firstnameValid,
+      lastnameValid: lastnameValid,
+      confirmpasswordValid: confirmpasswordValid,
+    }, this.validateForm);
+  }
+  validateForm() {
+    this.setState({
+      formValid: this.state.checkedValid && this.state.emailValid && this.state.passwordValid && this.state.firstnameValid && this.state.lastnameValid && this.state.confirmpasswordValid
+    });
+  }
+  errorClass(error) {
+    return (error.length === 0 ? '' : 'has-error');
+  }
 
   render() {
     const { classes } = this.props;
@@ -162,9 +232,13 @@ class SignUp extends React.Component {
                     name="confirmpassword"
                     type="password"
                     id="confirmpassword"
-                    autoComplete="current-password"
+
+                    onChange={this.handleInputChange}
                   />
                 </FormControl>
+                <div className="panel panel-default">
+                  <FormErrors formErrors={this.state.formErrors} />
+                </div>
                 <FormSpy subscription={{ submitError: true }}>
                   {({ submitError }) =>
                     submitError ? (
@@ -175,20 +249,37 @@ class SignUp extends React.Component {
                   }
                 </FormSpy>
                 <FormControlLabel
-                  control={<Checkbox value="remember" color="primary" />}
+                  control={<Checkbox value="false" color="primary" onChange={(event) => {
+                    this.setState({ checkedValid: event.target.checked })
+                  }} />}
                   style={{ display: "flex", marginLeft: -20 }}
                   label="I agree with terms and conditions"
+
                 />
-                <FormButton
-                  className={classes.button}
-                  disabled={submitting || sent}
-                  size="large"
-                  color="secondary"
-                  width="100"
-                  onClick={this.handleSubmit}
-                >
-                  {submitting || sent ? "In progress…" : "Sign Up"}
-                </FormButton>
+                {this.state.checkedValid && this.state.emailValid && this.state.passwordValid && this.state.firstnameValid && this.state.lastnameValid && this.state.confirmpasswordValid ?
+                  (<FormButton
+                    className={classes.button}
+                    disabled={submitting || sent}
+                    size="large"
+                    color="secondary"
+                    width="100"
+                    onClick={this.handleSubmit}
+                    disabled={false}
+                  >
+                    {submitting || sent ? "In progress…" : "Sign Up"}
+                  </FormButton>) : (<FormButton
+                    className={classes.button}
+                    disabled={submitting || sent}
+                    size="large"
+                    color="secondary"
+                    width="100"
+                    onClick={this.handleSubmit}
+                    disabled={true}
+                  >
+                    {submitting || sent ? "In progress…" : "Sign Up"}
+                  </FormButton>)
+                }
+
                 <Typography variant="body2" align="center">
                   <Link
                     underline="always"

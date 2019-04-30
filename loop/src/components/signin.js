@@ -167,8 +167,8 @@ class SignIn extends React.Component {
                   }
                 </FormSpy>
                
-            <FormControlLabel
-            control={<Checkbox value="remember" color="primary" />}
+            <FormControl
+      
             style={{display:'inline-flex',width:'80%',marginLeft:-20}}
             label="Remember me"
             />
