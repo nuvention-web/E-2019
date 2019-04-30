@@ -7,7 +7,6 @@ import moment from "moment";
 import { myFirestore, myFirebase } from "../../../firebase";
 import "../css/MessageList.css";
 import "../css/Toolbar.css";
-
 export default class MessageListItem extends Component {
   constructor(props) {
     super(props);

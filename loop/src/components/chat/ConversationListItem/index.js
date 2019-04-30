@@ -76,9 +76,9 @@ export default class ConversationListItem extends Component {
     if (this.listUser.length > 0) {
       let firstone = [];
       if (Object.entries(this.state.selectedUser).length === 0){
-        firstone.push(<MessageListItem data={this.listUser[0].data()} />);
+        firstone.push(<MessageListItem data={this.listUser[0].data()} first={true}/>);
       }else{
-        firstone.push(<MessageListItem data={this.state.selectedUser} />);
+        firstone.push(<MessageListItem data={this.state.selectedUser} first={false}/>);
       }
       
       return firstone;
