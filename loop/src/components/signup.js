@@ -20,7 +20,7 @@ import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Checkbox from "@material-ui/core/Checkbox";
 import { Link as RouterLink } from "react-router-dom";
 import firebase from "firebase";
-import { myFirebase } from "../firebase";
+import { myFirebase, myFirestore } from "../firebase";
 import { FormErrors } from "./formErrors";
 
 const styles = theme => ({
@@ -76,17 +76,31 @@ class SignUp extends React.Component {
   handleSubmit = event => {
     event.preventDefault();
     const { email, password, firstname, lastname } = this.state;
+    const ref = myFirestore.collection("user");
+
     myFirebase
       .auth()
       .createUserWithEmailAndPassword(email, password)
       .then((user) => {
         user = firebase.auth().currentUser;
-
         user.updateProfile({
           displayName: firstname + " " + lastname,
         }).then(function () {
           // Profile updated successfully!
           console.log(user)
+          const newuser = {
+            id: user.uid,
+            photourl: "",
+            name: user.displayName
+          };
+  
+          ref.doc(user.uid).set(newuser)
+            .then(() => {
+              console.log("successfully added user")
+            })
+            .catch(err => {
+              console.log(err);
+            });
 
         }, function (error) {
           console.log(error)
