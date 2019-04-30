@@ -15,6 +15,7 @@ export default class MessageListItem extends Component {
     };
     this.touserdata = this.props.data;
     this.mess = [];
+    this.groupChatId = null;
   }
 
   componentDidMount() {
@@ -31,19 +32,19 @@ export default class MessageListItem extends Component {
       this.messagesEnd.scrollIntoView({ behavior: "smooth" });
     }
   }
+  
+  hashString = str => {
+    let hash = 0
+    for (let i = 0; i < str.length; i++) {
+      hash += Math.pow(str.charCodeAt(i) * 31, str.length - i)
+      hash = hash & hash // Convert to 32bit integer
+    }
+    return hash
+  }
 
   getMess = () => {
     var user = myFirebase.auth().currentUser;
     if (user) {
-      // const result = await myFirestore
-      //   .collection("messages")
-      //   .doc(user.uid)
-      //   .collection(this.touserdata.id)
-      //   .get();
-      // if (result.docs.length > 0) {
-      //   this.mess = [...result.docs];
-      //   this.setState({ isLoading: false });
-      // }
       if (this.removeListener) {
         this.removeListener();
       }
@@ -51,11 +52,19 @@ export default class MessageListItem extends Component {
       this.setState({
         isLoading: true
       });
-      
+      if (
+        this.hashString(user.uid) >=
+        this.hashString(this.touserdata.id)
+      ) {
+        this.groupChatId = `${user.uid}-${this.touserdata.id}`
+      } else {
+        this.groupChatId = `${this.touserdata.id}-${user.uid}`
+      }
+
       this.removeListener = myFirestore
         .collection("messages")
-        .doc(user.uid)
-        .collection(this.touserdata.id)
+        .doc(this.groupChatId)
+        .collection(this.groupChatId)
         .onSnapshot(
           snapshot => {
             snapshot.docChanges().forEach(change => {
@@ -166,7 +175,7 @@ export default class MessageListItem extends Component {
             }}
           />
         </div>
-        <Compose data={this.props.data} />
+        <Compose data={this.props.data} groupId={this.groupChatId}/>
       </div>
     );
   }

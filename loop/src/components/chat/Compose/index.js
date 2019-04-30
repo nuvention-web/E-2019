@@ -56,8 +56,8 @@ class Compose extends Component {
 
     myFirestore
       .collection("messages")
-      .doc(user.uid)
-      .collection(this.touserdata.id)
+      .doc(this.props.groupId)
+      .collection(this.props.groupId)
       .doc(timestamp)
       .set(itemMessage)
       .then(() => {
