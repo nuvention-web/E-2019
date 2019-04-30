@@ -22,6 +22,7 @@ import InputLabel from '@material-ui/core/InputLabel';
 import { Link as RouterLink } from 'react-router-dom'
 import firebase from "firebase";
 import { myFirebase } from "../firebase";
+import {FormErrors} from "./formErrors"
 
 const styles = theme => ({
   form: {
@@ -41,6 +42,11 @@ class SignIn extends React.Component {
     sent: false,
     email: "",
     password: "",
+    formErrors: {email: '', password: ''},
+    emailValid: false,
+    passwordValid: false,
+    formValid: false
+  
   };
 
   validate = values => {
@@ -69,11 +75,45 @@ class SignIn extends React.Component {
       .catch(error => {
         console.log(error);
         this.setState({ error: error });
+        alert(error.message);
       });
   };
   handleInputChange = event => {
-    this.setState({ [event.target.name]: event.target.value });
+    const name = event.target.name;
+    const value = event.target.value;
+    this.setState({[name]: value},
+                  () => { this.validateField(name, value) });
+  
+
   };
+  validateField(fieldName, value) {
+    let fieldValidationErrors = this.state.formErrors;
+    let emailValid = this.state.emailValid;
+    let passwordValid = this.state.passwordValid;
+  switch(fieldName) {
+      case 'email':
+        emailValid = value.match(/^([\w.%+-]+)@([\w-]+\.)+([\w]{2,})$/i);
+        fieldValidationErrors.email = emailValid ? '' : ' is invalid';
+        break;
+      case 'password':
+        passwordValid = value.length >= 6;
+        fieldValidationErrors.password = passwordValid ? '': ' is too short';
+        break;
+      default:
+        break;
+    }
+    this.setState({formErrors: fieldValidationErrors,
+                    emailValid: emailValid,
+                    passwordValid: passwordValid
+                  }, this.validateForm);
+  }
+  validateForm() {
+    this.setState({formValid: this.state.emailValid &&
+                              this.state.passwordValid});
+  }
+  errorClass(error) {
+    return(error.length === 0 ? '' : 'has-error');
+ }
   render() {
     const { classes } = this.props;
     const { sent } = this.state;
@@ -97,11 +137,15 @@ class SignIn extends React.Component {
           >
             {({ handleSubmit, submitting }) => (
               <form onSubmit={handleSubmit} className={classes.form} noValidate>
+              
+              
                 <FormControl margin="normal" required fullWidth>
             <InputLabel htmlFor="email">Email Address</InputLabel>
             <Input id="email" name="email" autoComplete="email" autoFocus 
-         onChange={this.handleInputChange}
+         onChange={this.handleInputChange} className={`form-group
+         ${this.errorClass(this.state.formErrors.email)}`}
 />
+
           </FormControl>
           <FormControl margin="normal" required fullWidth>
             <InputLabel htmlFor="password">Password</InputLabel>
@@ -109,6 +153,9 @@ class SignIn extends React.Component {
             onChange={this.handleInputChange}
 
             />
+            <div className="panel panel-default">
+              <FormErrors formErrors={this.state.formErrors} />
+              </div>
           </FormControl>
                 <FormSpy subscription={{ submitError: true }}>
                   {({ submitError }) =>
