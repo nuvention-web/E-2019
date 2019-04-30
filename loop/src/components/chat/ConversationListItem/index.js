@@ -99,7 +99,7 @@ export default class ConversationListItem extends Component {
             )} */}
           </div>
         </div>
-        <div className="scrollable content">{this.renderFirstMessaging()}</div>
+        <div className="content">{this.renderFirstMessaging()}</div>
       </div>
     );
   }

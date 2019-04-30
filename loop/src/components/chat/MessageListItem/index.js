@@ -19,25 +19,60 @@ export default class MessageListItem extends Component {
 
   componentDidMount() {
     this.getMess();
+    this.scrollToBottom();
+  }
+  
+  componentDidUpdate() {
+    this.scrollToBottom();
   }
 
-  getMess = async () => {
+  scrollToBottom = () => {
+    if (this.messagesEnd) {
+      this.messagesEnd.scrollIntoView({ behavior: "smooth" });
+    }
+  }
+
+  getMess = () => {
     var user = myFirebase.auth().currentUser;
     if (user) {
-      const result = await myFirestore
+      // const result = await myFirestore
+      //   .collection("messages")
+      //   .doc(user.uid)
+      //   .collection(this.touserdata.id)
+      //   .get();
+      // if (result.docs.length > 0) {
+      //   this.mess = [...result.docs];
+      //   this.setState({ isLoading: false });
+      // }
+      if (this.removeListener) {
+        this.removeListener();
+      }
+      this.mess.length = 0;
+      this.setState({
+        isLoading: true
+      });
+      
+      this.removeListener = myFirestore
         .collection("messages")
         .doc(user.uid)
         .collection(this.touserdata.id)
-        .get();
-      if (result.docs.length > 0) {
-        this.mess = [...result.docs];
-        this.setState({ isLoading: false });
-      }
+        .onSnapshot(
+          snapshot => {
+            snapshot.docChanges().forEach(change => {
+              this.mess.push(change.doc);
+            });
+            this.setState({
+              isLoading: false
+            });
+          },
+          err => {
+            console.log(err)
+          }
+        );
     } else {
       console.log("failed");
     }
   };
-
 
   renderMess = () => {
     if (this.mess.length > 0) {
@@ -47,7 +82,7 @@ export default class MessageListItem extends Component {
         let i = 0;
         let messageCount = this.mess.length;
         while (i < messageCount) {
-          let currentMess = {}
+          let currentMess = {};
           let previous = this.mess[i - 1];
           let current = this.mess[i];
           let next = this.mess[i + 1];
@@ -103,7 +138,7 @@ export default class MessageListItem extends Component {
       } else {
         console.log("failed");
       }
-    }else{
+    } else {
       return null;
     }
   };
@@ -123,8 +158,15 @@ export default class MessageListItem extends Component {
           <h1 className="toolbar-title">{name}</h1>
         </div>
 
-        <div className="message-list-container">{this.renderMess()}</div>
-        <Compose />
+        <div className="viewListContentChat">{this.renderMess()}
+        <div
+            style={{ float: 'left', clear: 'both' }}
+            ref={el => {
+              this.messagesEnd = el
+            }}
+          />
+        </div>
+        <Compose data={this.props.data} />
       </div>
     );
   }

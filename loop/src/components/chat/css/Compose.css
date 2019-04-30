@@ -10,6 +10,25 @@
   margin-left:10px;
 }
 
+.viewInput {
+  flex: 1;
+  border-radius: 4px;
+  padding-left: 10px;
+  padding-right: 10px;
+  border: 0px;
+  height: 30px;
+}
+
+.viewBottom {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  height: 50px;
+  border-top: 1px solid #e8e8e8;
+}
+
+
 @supports (backdrop-filter: blur(20px)) {
   .compose {
     /* border: 1px solid #707070; */

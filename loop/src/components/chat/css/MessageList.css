@@ -3,3 +3,28 @@
   padding-bottom: 70px;
   height:58vh;
 }
+
+.viewListContentChat {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  overflow-y: scroll;
+  padding-top: 10px;
+  padding-left: 10px;
+  padding-bottom: 20px;
+  height: 65vh;
+}
+
+.viewListContentChat::-webkit-scrollbar-track {
+  padding: 2px 0;
+}
+
+.viewListContentChat::-webkit-scrollbar {
+  width: 6px;
+}
+
+.viewListContentChat::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+  background-color: #e8e8e8;
+}
