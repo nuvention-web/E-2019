@@ -43,7 +43,13 @@ import nojourney from "./journey/nojourny";
 import noconnection from "./connections/noconnection";
 import Chat from "./chat";
 import { myFirebase } from "../firebase";
-
+import ClickAwayListener from '@material-ui/core/ClickAwayListener';
+import Grow from '@material-ui/core/Grow';
+import Paper from '@material-ui/core/Paper';
+import Popper from '@material-ui/core/Popper';
+import MenuItem from '@material-ui/core/MenuItem';
+import MenuList from '@material-ui/core/MenuList';
+import firebase from "firebase"
 const drawerWidth = 240;
 
 const mytheme = createMuiTheme({
@@ -192,7 +198,8 @@ const styles = theme => ({
 class Home extends React.Component {
   state = {
     open: true,
-    switch: false
+    switch: false,
+    openAccount:false,
   };
 
   handleDrawerOpen = () => {
@@ -202,20 +209,30 @@ class Home extends React.Component {
   handleDrawerClose = () => {
     this.setState({ open: false });
   };
+  handleToggleAccount = () => {
+    this.setState(state => ({ openAccount: !state.openAccount }));
+  };
 
+  handleCloseAccount = event => {
+    if (this.anchorEl.contains(event.target)) {
+      return;
+    }
+
+    this.setState({ openAccount: false });
+  };
   componentDidMount = () => {
     myFirebase.auth().onAuthStateChanged(user => {
       if (user) {
         console.log("user is logged");
       }else{
-        this.props.history.push("/app/sigin");
+        this.props.history.push("/app/signin");
       }
     });
   };
 
   render() {
     const { classes, theme } = this.props;
-    const { open } = this.state;
+    const { open,openAccount } = this.state;
 
     return (
       <div className={classes.root}>
@@ -243,9 +260,13 @@ class Home extends React.Component {
                   </Badge>
                 </IconButton>
                 <IconButton
-                  aria-owns="material-appbar"
-                  aria-haspopup="true"
-                  color="inherit"
+                 buttonRef={node => {
+                  this.anchorEl = node;
+                }}
+                aria-owns={open ? 'menu-list-grow' : undefined}
+                aria-haspopup="true"
+                onClick={this.handleToggleAccount}
+                color="inherit"
                 >
                   <Avatar
                     alt="Remy Sharp"
@@ -253,6 +274,24 @@ class Home extends React.Component {
                     className={classes.avatar}
                   />
                 </IconButton>
+                <Popper open={openAccount} anchorEl={this.anchorEl} transition disablePortal>
+            {({ TransitionProps, placement }) => (
+              <Grow
+                {...TransitionProps}
+                id="menu-list-grow"
+                style={{ transformOrigin: placement === 'bottom' ? 'center top' : 'center bottom' }}
+              >
+                <Paper>
+                  <ClickAwayListener onClickAway={this.handleCloseAccount}>
+                    <MenuList>
+                      <MenuItem >Profile</MenuItem>
+                      <MenuItem onClick={() => firebase.auth().signOut()}>Logout</MenuItem>
+                    </MenuList>
+                  </ClickAwayListener>
+                </Paper>
+              </Grow>
+            )}
+          </Popper>
               </div>
             </Toolbar>
           </AppBar>
