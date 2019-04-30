@@ -23,7 +23,15 @@ export default class ConversationListItem extends Component {
   };
   componentDidMount() {
     shave(".conversation-snippet", 20);
-    this.getListUser();
+    myFirebase.auth().onAuthStateChanged(user => {
+      if (user) {
+        this.getListUser();
+      }else{
+        this.props.history.push("/app/sigin");
+      }
+    });
+
+    
   }
 
   getListUser = async () => {
