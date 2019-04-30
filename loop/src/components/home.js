@@ -28,24 +28,31 @@ import ListItemText from "@material-ui/core/ListItemText";
 import HomeIcon from "@material-ui/icons/Home";
 import Overview from "./overview";
 import Connection from "./connections/connection";
-import { Route, Redirect, Switch, BrowserRouter as Router } from "react-router-dom";
+import {
+  Route,
+  Redirect,
+  Switch,
+  BrowserRouter as Router
+} from "react-router-dom";
 import { fade } from "@material-ui/core/styles/colorManipulator";
 import Badge from "@material-ui/core/Badge";
 import Journeyoverview from "./journey/journeyoverview";
 import Journeycontent from "./journey/journeycontent";
 import connectiondetails from "./connections/connectiondetails";
-import nojourney from "./journey/nojourny"
-import noconnection from "./connections/noconnection"
-import Chat from "./chat"
+import nojourney from "./journey/nojourny";
+import noconnection from "./connections/noconnection";
+import Chat from "./chat";
+import { myFirebase } from "../firebase";
+
 const drawerWidth = 240;
 
 const mytheme = createMuiTheme({
   palette: {
     primary: {
-      main: "#4281A4",
+      main: "#4281A4"
     },
     secondary: {
-      main: "#FFC06A",
+      main: "#FFC06A"
     },
     error: {
       main: "#FE938C"
@@ -99,8 +106,8 @@ const styles = theme => ({
       width: `calc(100% - ${drawerWidth}px)`
     }
   },
-  iconbtn:{
-    marginTop: theme.spacing.unit *1.2,
+  iconbtn: {
+    marginTop: theme.spacing.unit * 1.2,
     width: 45,
     height: 45
   },
@@ -130,7 +137,6 @@ const styles = theme => ({
     ...theme.mixins.toolbar
   },
   content: {
-    
     flexGrow: 1,
     padding: theme.spacing.unit * 3
   },
@@ -195,6 +201,16 @@ class Home extends React.Component {
 
   handleDrawerClose = () => {
     this.setState({ open: false });
+  };
+
+  componentDidMount = () => {
+    var user = myFirebase.auth().currentUser;
+
+    if (user) {
+      console.log(user)
+    } else {
+      console.log("failed")
+    }
   };
 
   render() {
@@ -288,8 +304,11 @@ class Home extends React.Component {
               </List>
               <Divider />
               <List>
-                <ListItem button key={"Connections"}
-                onClick={() => this.props.history.push("/home/connection")}>
+                <ListItem
+                  button
+                  key={"Connections"}
+                  onClick={() => this.props.history.push("/home/connection")}
+                >
                   <ListItemIcon>
                     <PermIdentityIcon />
                   </ListItemIcon>
@@ -297,8 +316,11 @@ class Home extends React.Component {
                 </ListItem>
               </List>
               <List>
-                <ListItem button key={"Chat Rooms"}
-                onClick={() => this.props.history.push("/home/chatroom")}>
+                <ListItem
+                  button
+                  key={"Chat Rooms"}
+                  onClick={() => this.props.history.push("/home/chatroom")}
+                >
                   <ListItemIcon>
                     <ChatIcon style={{ fontSize: 22 }} />
                   </ListItemIcon>
@@ -319,14 +341,17 @@ class Home extends React.Component {
         <main className={classNames(classes.content)}>
           <div className={classes.drawerHeaderHeight} />
           <Switch>
-          <Redirect exact from={`/home`} to={`/home/overview`} />
+            <Redirect exact from={`/home`} to={`/home/overview`} />
             <Route path="/home/overview" component={Overview} />
             <Route path="/home/nojourney" component={nojourney} />
             <Route path="/home/journey" component={Journeyoverview} />
             <Route path="/home/journeycontent" component={Journeycontent} />
             <Route path="/home/noconnection" component={noconnection} />
             <Route path="/home/connection" component={Connection} />
-            <Route path="/home/connectiondetails" component={connectiondetails} />
+            <Route
+              path="/home/connectiondetails"
+              component={connectiondetails}
+            />
             <Route path="/home/chatroom" component={Chat} />
           </Switch>
           {/*          

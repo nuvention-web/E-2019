@@ -68,14 +68,19 @@ class SignUp extends React.Component {
     myFirebase
       .auth()
       .createUserWithEmailAndPassword(email, password)
-      .then(user => {
-        myFirebase
-          .database()
-          .ref("users/" + user.user.uid)
-          .set({
-            firstname: firstname,
-            lastname: lastname
-          }).then(()=> this.props.history.push("/home"));
+      .then((user) => {
+        user = firebase.auth().currentUser;
+
+        user.updateProfile({
+          displayName: firstname + " " + lastname,
+        }).then(function() {
+          // Profile updated successfully!
+          console.log(user)
+          this.props.history.push("/home")
+        }, function(error) {
+          console.log(error)
+          // An error happened.
+        });
       })
       .catch(error => {
         console.log(error);
