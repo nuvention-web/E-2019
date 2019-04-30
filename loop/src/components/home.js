@@ -248,7 +248,7 @@ class Home extends React.Component {
                 >
                   <Avatar
                     alt="Remy Sharp"
-                    src="https://bootdey.com/img/Content/avatar/avatar6.png"
+                    src="https://bootdey.com/img/Content/avatar/avatar7.png"
                     className={classes.avatar}
                   />
                 </IconButton>

@@ -104,11 +104,11 @@ export default class MessageListItem extends Component {
   }
 
   render() {
-    const { photo, name, text } = this.props.data;
+    const { photourl, name } = this.props.data;
     return(
       <div className="message-list">
         <div className="toolbar">
-        <div className="left-items"><img className="conversation-photo" src={photo} alt="conversation" /></div>
+        <div className="left-items"><img className="conversation-photo" src={photourl} alt="conversation" /></div>
         <h1 className="toolbar-title">{ name}</h1>
 
       </div>
