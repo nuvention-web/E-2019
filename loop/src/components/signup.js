@@ -87,13 +87,13 @@ class SignUp extends React.Component {
           displayName: firstname + " " + lastname,
         }).then(function () {
           // Profile updated successfully!
-          console.log(user)
+          //console.log(user)
           const newuser = {
             id: user.uid,
             photourl: "",
             name: user.displayName
           };
-  
+          
           ref.doc(user.uid).set(newuser)
             .then(() => {
               console.log("successfully added user")

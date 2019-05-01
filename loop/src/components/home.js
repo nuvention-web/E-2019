@@ -42,14 +42,17 @@ import connectiondetails from "./connections/connectiondetails";
 import nojourney from "./journey/nojourny";
 import noconnection from "./connections/noconnection";
 import Chat from "./chat";
-import { myFirebase } from "../firebase";
-import ClickAwayListener from '@material-ui/core/ClickAwayListener';
-import Grow from '@material-ui/core/Grow';
-import Paper from '@material-ui/core/Paper';
-import Popper from '@material-ui/core/Popper';
-import MenuItem from '@material-ui/core/MenuItem';
-import MenuList from '@material-ui/core/MenuList';
-import firebase from "firebase"
+import { myFirebase,myFirestore } from "../firebase";
+import ClickAwayListener from "@material-ui/core/ClickAwayListener";
+import Grow from "@material-ui/core/Grow";
+import Paper from "@material-ui/core/Paper";
+import Popper from "@material-ui/core/Popper";
+import MenuItem from "@material-ui/core/MenuItem";
+import MenuList from "@material-ui/core/MenuList";
+import firebase from "firebase";
+import { updateJourneyStatus } from "../services/actions";
+import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
 const drawerWidth = 240;
 
 const mytheme = createMuiTheme({
@@ -196,11 +199,14 @@ const styles = theme => ({
 });
 
 class Home extends React.Component {
-  state = {
-    open: true,
-    switch: false,
-    openAccount:false,
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      open: true,
+      switch: false,
+      openAccount: false,
+    };
+  }
 
   handleDrawerOpen = () => {
     this.setState({ open: true });
@@ -220,11 +226,45 @@ class Home extends React.Component {
 
     this.setState({ openAccount: false });
   };
+
+  checkUserJourney = () => {
+    if (this.props.empty){
+      console.log("wth")
+      this.props.history.push("/home/nojourney")
+    }else{
+      this.props.history.push("/home/journey")
+    }
+  };
+
+  checkUserJourneyOverview = () => {
+    if (this.props.empty){
+      this.props.history.push("/home/nojourney")
+    }else{
+      this.props.history.push("/home/overview")
+    }
+  };
+
+  getJourneys = async user => {
+    if (user) {
+      const result = await myFirestore
+        .collection("user")
+        .doc(user.uid)
+        .collection("journeys")
+        .get();
+      console.log(result.docs);
+      if (result.docs.length > 0) {
+        this.props.updateJourneyStatus(false)
+      }
+    } else {
+      console.log("failed");
+    }
+  };
+
   componentDidMount = () => {
     myFirebase.auth().onAuthStateChanged(user => {
       if (user) {
-        console.log("user is logged");
-      }else{
+        this.getJourneys(user);
+      } else {
         this.props.history.push("/app/signin");
       }
     });
@@ -232,7 +272,7 @@ class Home extends React.Component {
 
   render() {
     const { classes, theme } = this.props;
-    const { open,openAccount } = this.state;
+    const { open, openAccount } = this.state;
 
     return (
       <div className={classes.root}>
@@ -260,13 +300,13 @@ class Home extends React.Component {
                   </Badge>
                 </IconButton>
                 <IconButton
-                 buttonRef={node => {
-                  this.anchorEl = node;
-                }}
-                aria-owns={open ? 'menu-list-grow' : undefined}
-                aria-haspopup="true"
-                onClick={this.handleToggleAccount}
-                color="inherit"
+                  buttonRef={node => {
+                    this.anchorEl = node;
+                  }}
+                  aria-owns={open ? "menu-list-grow" : undefined}
+                  aria-haspopup="true"
+                  onClick={this.handleToggleAccount}
+                  color="inherit"
                 >
                   <Avatar
                     alt="Remy Sharp"
@@ -274,24 +314,38 @@ class Home extends React.Component {
                     className={classes.avatar}
                   />
                 </IconButton>
-                <Popper open={openAccount} anchorEl={this.anchorEl} transition disablePortal>
-            {({ TransitionProps, placement }) => (
-              <Grow
-                {...TransitionProps}
-                id="menu-list-grow"
-                style={{ transformOrigin: placement === 'bottom' ? 'center top' : 'center bottom' }}
-              >
-                <Paper>
-                  <ClickAwayListener onClickAway={this.handleCloseAccount}>
-                    <MenuList>
-                      <MenuItem >Profile</MenuItem>
-                      <MenuItem onClick={() => firebase.auth().signOut()}>Logout</MenuItem>
-                    </MenuList>
-                  </ClickAwayListener>
-                </Paper>
-              </Grow>
-            )}
-          </Popper>
+                <Popper
+                  open={openAccount}
+                  anchorEl={this.anchorEl}
+                  transition
+                  disablePortal
+                >
+                  {({ TransitionProps, placement }) => (
+                    <Grow
+                      {...TransitionProps}
+                      id="menu-list-grow"
+                      style={{
+                        transformOrigin:
+                          placement === "bottom"
+                            ? "center top"
+                            : "center bottom"
+                      }}
+                    >
+                      <Paper>
+                        <ClickAwayListener
+                          onClickAway={this.handleCloseAccount}
+                        >
+                          <MenuList>
+                            <MenuItem>Profile</MenuItem>
+                            <MenuItem onClick={() => firebase.auth().signOut()}>
+                              Logout
+                            </MenuItem>
+                          </MenuList>
+                        </ClickAwayListener>
+                      </Paper>
+                    </Grow>
+                  )}
+                </Popper>
               </div>
             </Toolbar>
           </AppBar>
@@ -320,7 +374,7 @@ class Home extends React.Component {
                 <ListItem
                   button
                   key={"Overview"}
-                  onClick={() => this.props.history.push("/home/overview")}
+                  onClick={this.checkUserJourneyOverview}
                 >
                   <ListItemIcon>
                     <HomeIcon color="#9596aa" />
@@ -333,7 +387,7 @@ class Home extends React.Component {
                 <ListItem
                   button
                   key={"Journey"}
-                  onClick={() => this.props.history.push("/home/nojourney")}
+                  onClick={this.checkUserJourney}
                 >
                   <ListItemIcon>
                     <BarChartIcon />
@@ -406,4 +460,21 @@ Home.propTypes = {
   theme: PropTypes.object.isRequired
 };
 
-export default withStyles(styles, { withTheme: true })(Home);
+
+const mapStateToProps = state => {
+  return { empty: state.modalReducer.empty };
+};
+
+const mapDispatchToProps = dispatch => {
+  return bindActionCreators(
+    {
+      updateJourneyStatus
+    },
+    dispatch
+  );
+};
+
+export default withStyles(styles, { withTheme: true })(connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Home));

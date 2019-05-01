@@ -7,10 +7,10 @@ import {
 } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
 import FormButton from "../../modules/form/FormButton";
-import Modal from "@material-ui/core/Modal";
-import FormControl from "@material-ui/core/FormControl";
-import Input from "@material-ui/core/Input";
-import InputLabel from "@material-ui/core/InputLabel";
+import JourneyModal from "./createjourney";
+import {updateModalStatus} from "../../services/actions";
+import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
 
 const styles = theme => ({
   section_center: {
@@ -40,16 +40,17 @@ const styles = theme => ({
 const mytheme = createMuiTheme({});
 
 class Nojourney extends Component {
-  state = {
-    open: false
-  };
-  handleClose = () => {
-    this.setState({
-      open: false
-    }); 
-  };
+  constructor(props) {
+    super(props);
+    this.state = {};
+    this.handleClick = this.handleClick.bind(this)
+  }
+  handleClick() {
+    this.props.updateModalStatus(true);
+  }
+
   render() {
-    const { classes } = this.props;
+    const { classes, history } = this.props;
     return (
       <MuiThemeProvider theme={mytheme}>
         <div className={classes.section_center}>
@@ -61,32 +62,11 @@ class Nojourney extends Component {
             size="large"
             color="secondary"
             width="100"
-            onClick={() => this.setState({ open: true })}
+            onClick={this.handleClick}
           >
             Create Journey
           </FormButton>
-          <Modal
-            aria-labelledby="simple-modal-title"
-            aria-describedby="simple-modal-description"
-            open={this.state.open}
-            onClose={this.handleClose}
-          >
-            <div className={classes.paper}>
-              <FormControl margin="normal" required fullWidth>
-                <InputLabel htmlFor="jname">Journey Name</InputLabel>
-                <Input id="jname" name="jname" autoFocus />
-              </FormControl>
-              <FormButton
-                className={classes.button}
-                size="small"
-                color="secondary"
-                width="80%"
-                onClick={() => this.props.history.push("/home/journey")}
-              >
-                Create
-              </FormButton>
-            </div>
-          </Modal>
+          <JourneyModal history={history}/>
         </div>
       </MuiThemeProvider>
     );
@@ -97,4 +77,18 @@ Nojourney.propTypes = {
   classes: PropTypes.object.isRequired
 };
 
-export default withStyles(styles)(Nojourney);
+const mapDispatchToProps = dispatch => {
+  return bindActionCreators(
+    {
+      updateModalStatus
+    },
+    dispatch
+  );
+};
+
+export default withStyles(styles)(
+  connect(
+    null,
+    mapDispatchToProps
+  )(Nojourney)
+);

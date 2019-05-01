@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import Typography from "@material-ui/core/Typography";
 import PropTypes from "prop-types";
-import Button from '@material-ui/core/Button';
+import Button from "@material-ui/core/Button";
 
 import {
   withStyles,
@@ -17,6 +17,10 @@ import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
 import NativeSelect from "@material-ui/core/NativeSelect";
 import InputBase from "@material-ui/core/InputBase";
+import { myFirebase, myFirestore } from "../firebase";
+import { updateJourneyStatus } from "../services/actions";
+import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
 
 const mytheme = createMuiTheme({
   palette: {
@@ -24,7 +28,7 @@ const mytheme = createMuiTheme({
       main: "#757475"
     },
     secondary: {
-      main: "#3B86FF",
+      main: "#3B86FF"
     },
     error: {
       main: "#FE938C"
@@ -45,7 +49,7 @@ const mytheme = createMuiTheme({
       },
       h6: {
         fontWeight: "bold"
-      },
+      }
     }
   }
 });
@@ -111,16 +115,16 @@ const styles = theme => ({
     width: 65,
     height: 65
   },
-  heatmapheader:{
-    display:"flex",
+  heatmapheader: {
+    display: "flex",
     flexDirection: "row",
     justifyContent: "space-between"
   },
-  heatmaplefth:{
-    display:"flex",
+  heatmaplefth: {
+    display: "flex",
     flexDirection: "row"
   },
-  hbutton:{
+  hbutton: {
     marginTop: -theme.spacing.unit * 1.3,
     marginLeft: theme.spacing.unit * 1,
     fontSize: 12
@@ -163,8 +167,12 @@ const BootstrapInput = withStyles(theme => ({
   }
 }))(InputBase);
 
-
 class Overview extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+    };
+  }
   handleDelete = () => {
     alert("You clicked the delete icon."); // eslint-disable-line no-alert
   };
@@ -172,11 +180,36 @@ class Overview extends Component {
   handleClick = () => {
     alert("You clicked the label."); // eslint-disable-line no-alert
   };
+  componentDidMount() {
+    myFirebase.auth().onAuthStateChanged(user => {
+      if (user) {
+        this.getJourneys(user);
+      }
+    });
+  }
+  getJourneys = async user => {
+    if (user) {
+      const result = await myFirestore
+        .collection("user")
+        .doc(user.uid)
+        .collection("journeys")
+        .get();
+      console.log(result.docs);
+      if (result.docs.length > 0) {
+        this.props.updateJourneyStatus(false);
+      }else{
+        this.props.history.push("/home/nojourney")
+      }
+    } else {
+      console.log("failed");
+    }
+  };
 
   render() {
     const { classes } = this.props;
     return (
-      <MuiThemeProvider theme={mytheme}>
+         <MuiThemeProvider theme={mytheme}>
+         {!this.props.empty? (
         <div className={classes.section2}>
           <Typography gutterBottom variant="h5">
             Overview
@@ -233,41 +266,41 @@ class Overview extends Component {
           <div className={classes.maincharts}>
             <Paper className={classes.paper}>
               <div className={classes.heatmapheader}>
-              <div className={classes.heatmaplefth}>
-              <Typography component="p" color="primary">
-                HeatMap
-              </Typography>
-                <Button color="secondary" className={classes.hbutton}>
-                  Overall
-                </Button>
-                <Button color="primary" className={classes.hbutton}>
-                  Kellog
-                </Button>
-                <Button color="primary" className={classes.hbutton}>
-                  Project Manager
-                </Button>
+                <div className={classes.heatmaplefth}>
+                  <Typography component="p" color="primary">
+                    HeatMap
+                  </Typography>
+                  <Button color="secondary" className={classes.hbutton}>
+                    Overall
+                  </Button>
+                  <Button color="primary" className={classes.hbutton}>
+                    Kellog
+                  </Button>
+                  <Button color="primary" className={classes.hbutton}>
+                    Project Manager
+                  </Button>
+                </div>
+                <form autoComplete="off">
+                  <FormControl>
+                    <NativeSelect
+                      value={10}
+                      onChange={this.handleTime}
+                      input={
+                        <BootstrapInput
+                          name="age"
+                          id="age-customized-native-simple"
+                        />
+                      }
+                    >
+                      <option value="Last 6 Months" />
+                      <option value={10}>Last Month</option>
+                      <option value={20}>Last 6 Months</option>
+                      <option value={30}>Last Year</option>
+                    </NativeSelect>
+                  </FormControl>
+                </form>
               </div>
-              <form autoComplete="off">
-                      <FormControl >
-                        <NativeSelect
-                          value={10}
-                          onChange={this.handleTime}
-                          input={
-                            <BootstrapInput
-                              name="age"
-                              id="age-customized-native-simple"
-                            />
-                          }
-                        >
-                          <option value="Last 6 Months" />
-                          <option value={10}>Last Month</option>
-                          <option value={20}>Last 6 Months</option>
-                          <option value={30}>Last Year</option>
-                        </NativeSelect>
-                      </FormControl>
-                    </form>
-              </div>
-              
+
               <div style={{ padding: 20 }}>
                 <HeatMap />
               </div>
@@ -309,9 +342,9 @@ class Overview extends Component {
               </div>
             </Paper>
           </div>
-        </div>
+        </div>): null}
       </MuiThemeProvider>
-    );
+     );
   }
 }
 
@@ -319,4 +352,20 @@ Overview.propTypes = {
   classes: PropTypes.object.isRequired
 };
 
-export default withStyles(styles)(Overview);
+const mapStateToProps = state => {
+  return { empty: state.modalReducer.empty };
+};
+
+const mapDispatchToProps = dispatch => {
+  return bindActionCreators(
+    {
+      updateJourneyStatus
+    },
+    dispatch
+  );
+}
+
+export default withStyles(styles)(connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Overview));
