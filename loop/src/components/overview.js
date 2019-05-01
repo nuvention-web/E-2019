@@ -21,6 +21,7 @@ import { myFirebase, myFirestore } from "../firebase";
 import { updateJourneyStatus } from "../services/actions";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
+import {get_a_User_by_email} from "../services/findreducer";
 
 const mytheme = createMuiTheme({
   palette: {
@@ -210,8 +211,9 @@ class Overview extends Component {
          <MuiThemeProvider theme={mytheme}>
          {!this.props.empty? (
         <div className={classes.section2}>
+        <div>{get_a_User_by_email("punolee@outlook.com")}</div>
           <Typography gutterBottom variant="h5">
-            Overview
+            overview
           </Typography>
           <div className={classes.skillset}>
             <Grid container spacing={24}>

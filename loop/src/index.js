@@ -16,11 +16,17 @@ import { fab } from "@fortawesome/free-brands-svg-icons";
 import { Provider } from "react-redux";
 import { createStore } from "redux";
 import MainReducer from "./services/store";
+import { ApolloProvider } from 'react-apollo';
+import ApolloClient from 'apollo-boost';
 const store = createStore(MainReducer);
+const client = new ApolloClient({
+  uri: 'https://us-central1-e-2019.cloudfunctions.net/api/graphql'
+});
 
 library.add(fab);
 
 const routing = (
+  <ApolloProvider client={client}>
   <Provider store={store}>
   <Router>
     <div>
@@ -32,6 +38,7 @@ const routing = (
     </div>
   </Router>
   </Provider>
+  </ApolloProvider>
 );
 
 ReactDOM.render(routing, document.getElementById("root"));
