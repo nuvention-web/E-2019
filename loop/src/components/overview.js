@@ -194,11 +194,10 @@ class Overview extends Component {
         .doc(user.uid)
         .collection("journeys")
         .get();
-      console.log(result.docs);
-      if (result.docs.length > 0) {
-        this.props.updateJourneyStatus(false);
-      }else{
+      if (result.docs.length == 0){
         this.props.history.push("/home/nojourney")
+      }else{
+        this.props.updateJourneyStatus(false);
       }
     } else {
       console.log("failed");
