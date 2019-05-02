@@ -17,10 +17,10 @@ class FriendListItem extends Component {
     };
 
     handleclick = () =>{
-        if (this.props.friendlist.some((i)=> i===this.props.data.id)){
+        if (this.props.friendlist.some((i)=> i.id===this.props.data.id)){
             console.log("are you going to delete this friend?")
         }else{
-            this.props.updateFriendList(this.props.data.id)
+            this.props.updateFriendList(this.props.data)
         }
     }
     render() {

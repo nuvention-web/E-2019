@@ -23,6 +23,7 @@ import SearchIcon from '@material-ui/icons/Search';
 import InputBase from '@material-ui/core/InputBase';
 import { fade } from '@material-ui/core/styles/colorManipulator';
 import {get_a_User_by_email} from "../../services/findreducer";
+import { connect } from "react-redux";
 
 const styles = theme => ({
   section_center: {
@@ -193,28 +194,25 @@ class NoConnection extends Component {
             </Button>
             </div>
            {this.state.email!=""? (
-            
-              <List>
-                {get_a_User_by_email(this.state.email)}
-    </List>):null}
-              {/*{this.state.friendList!=""? (
-              <List>
-                {this.state.friendList.map(friend=>
+            <List>{get_a_User_by_email(this.state.email)}</List>):null}
+              {this.props.friendlist.length!==0? (
+                <List>
+                {this.props.friendlist.map(friend=>(
                 <ListItem button>
                   <ListItemAvatar>
                     <Avatar
-                      className={classes.bigAvatar}
                       src="https://bootdey.com/img/Content/avatar/avatar6.png"
                     />
                   </ListItemAvatar>
-                  <ListItemText  >{get_a_User_by_email(this.state.email)}</ListItemText>
+                  <ListItemText  >{friend.name}</ListItemText>
                   <ListItemSecondaryAction>
-                    <IconButton onClick={()=>{this.setState({added:!this.state.added});console.log(get_a_User_by_email(this.state.email).key)} }>
+                    <IconButton onClick={()=>{this.setState({added:!this.state.added});} }>
                       {this.state.added? <DoneIcon />: <AddIcon/>}
                     </IconButton>
                   </ListItemSecondaryAction>
-                </ListItem>
-                </List>):null}*/}
+              </ListItem>))}
+              </List>):null}
+                
               <div className={classes.dialogf}>
               <FormButton
                 className={classes.fbutton}
@@ -239,4 +237,12 @@ NoConnection.propTypes = {
   classes: PropTypes.object.isRequired
 };
 
-export default withStyles(styles)(NoConnection);
+const mapStateToProps = state => {
+  return { friendlist: state.friendReducer.friendlist };
+};
+
+
+export default withStyles(styles)(connect(
+  mapStateToProps,
+  null
+)(NoConnection));
