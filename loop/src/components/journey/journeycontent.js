@@ -136,6 +136,10 @@ class JourneyContent extends Component {
     alert("You clicked the label."); // eslint-disable-line no-alert
   };
 
+  componentDidMount(){
+    // console.log(this.props.location.state.journeyname)
+  }
+
   render() {
     const { classes } = this.props;
     return (
@@ -147,7 +151,7 @@ class JourneyContent extends Component {
             </IconButton>
 
             <Typography gutterBottom variant="h5" className={classes.header_h5}>
-              Kellogg
+              {this.props.location.state.journeyname}
             </Typography>
           </div>
 
@@ -162,7 +166,7 @@ class JourneyContent extends Component {
                     <div className={classes.papercaption} />
                     <div className={classes.progressbar}>
                       <SemiCircleProgressBar
-                        percentage={50}
+                        percentage={0}
                         stroke="#FFDA83"
                         diameter={135}
                         strokeWidth="20"
@@ -180,7 +184,7 @@ class JourneyContent extends Component {
                   </Typography>
                   <div className={classes.papercontent}>
                     <div className={classes.papercaption}>
-                      <Typography variant="h6">600</Typography>
+                      <Typography variant="h6">0</Typography>
                     </div>
                   </div>
                 </Paper>
@@ -192,7 +196,7 @@ class JourneyContent extends Component {
                   </Typography>
                   <div className={classes.papercontent}>
                     <div className={classes.papercaption}>
-                      <Typography variant="h6">80</Typography>
+                      <Typography variant="h6">0</Typography>
                     </div>
                   </div>
                 </Paper>

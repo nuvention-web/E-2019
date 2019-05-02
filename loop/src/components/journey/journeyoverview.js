@@ -12,7 +12,7 @@ import AddIcon from "@material-ui/icons/Add";
 import SemiCircleProgressBar from "react-progressbar-semicircle";
 import { myFirestore, myFirebase } from "../../firebase";
 import { IconButton } from "@material-ui/core";
-import {updateModalStatus} from "../../services/actions";
+import { updateModalStatus } from "../../services/actions";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import JourneyModal from "./createjourney";
@@ -124,8 +124,9 @@ class JourneyOverview extends Component {
     super(props);
     this.state = {
       isLoading: true,
-      id:"",
-      name:""
+      id: "",
+      name: "",
+      contactsEmpty: true
     };
     this.listjourney = [];
   }
@@ -144,17 +145,14 @@ class JourneyOverview extends Component {
       }
     });
   }
-  handleJounnry=()=>{
 
-  }
-  getJourneys = async (user) => {
+  getJourneys = async user => {
     if (user) {
       const result = await myFirestore
         .collection("user")
         .doc(user.uid)
         .collection("journeys")
         .get();
-      console.log(result.docs);
       if (result.docs.length > 0) {
         this.listjourney = [...result.docs];
         this.setState({ isLoading: false });
@@ -164,15 +162,36 @@ class JourneyOverview extends Component {
     }
   };
 
-  renderJourney = (classes) => {
+  checkConnection = async(journeyid, journeyname) => {
+    var user = myFirebase.auth().currentUser;
+    const contacts = await myFirestore
+      .collection("user")
+      .doc(user.uid)
+      .collection("journeys")
+      .doc(journeyid)
+      .collection("contacts")
+      .get();
+    if (contacts.docs.length > 0) {
+      this.setState({ contactsEmpty: false });
+      this.props.history.push({
+        pathname: "/home/journeycontent",
+        state: { journeyname: journeyname, journeyid: journeyid}
+      });
+    } else {
+      this.props.history.push({
+        pathname: "/home/noconnection",
+        state: { name: journeyname, id: journeyid}
+      });
+    }
+  }
+
+  renderJourney = classes => {
     if (this.listjourney.length > 0) {
       let viewlistjourney = [];
       this.listjourney.forEach((item, index) => {
         viewlistjourney.push(
           <Grid item xs={4} key={item.data().id}>
-            <div onClick={() => {this.props.history.push({pathname:"/home/noconnection",state: { name
-: item.data().journeyname,id
-: item.data().id }});console.log(item.data().journeyname)}}>
+            <div onClick={()=>this.checkConnection(item.data().id, item.data().journeyname)}>
               <Paper className={classes.paper}>
                 <Typography component="p" color="primary">
                   {item.data().journeyname}
@@ -198,8 +217,8 @@ class JourneyOverview extends Component {
         );
       });
       return viewlistjourney;
-    }else{
-      return null
+    } else {
+      return null;
     }
   };
 
@@ -207,27 +226,26 @@ class JourneyOverview extends Component {
     const { classes, history } = this.props;
     return (
       <div>
-      <MuiThemeProvider theme={mytheme}>
-        <div className={classes.section2}>
-          <Typography gutterBottom variant="h5">
-            Journey
-          </Typography>
-          <div className={classes.skillset}>
-            <Grid container spacing={24}>
-            {this.renderJourney(classes)}
-              <Grid item xs={4}>
-                <Paper className={classes.paper_journey_add}>
-                <IconButton onClick={this.handleClick}>
-                  <AddIcon style={{ fontSize: 30 }} />
-                </IconButton>
-                  
-                </Paper>
+        <MuiThemeProvider theme={mytheme}>
+          <div className={classes.section2}>
+            <Typography gutterBottom variant="h5">
+              Journey
+            </Typography>
+            <div className={classes.skillset}>
+              <Grid container spacing={24}>
+                {this.renderJourney(classes)}
+                <Grid item xs={4}>
+                  <Paper className={classes.paper_journey_add}>
+                    <IconButton onClick={this.handleClick}>
+                      <AddIcon style={{ fontSize: 30 }} />
+                    </IconButton>
+                  </Paper>
+                </Grid>
               </Grid>
-            </Grid>
+            </div>
           </div>
-        </div>
-      </MuiThemeProvider>
-      <JourneyModal history={history}/>
+        </MuiThemeProvider>
+        <JourneyModal history={history} />
       </div>
     );
   }
@@ -236,7 +254,6 @@ class JourneyOverview extends Component {
 JourneyOverview.propTypes = {
   classes: PropTypes.object.isRequired
 };
-
 
 const mapDispatchToProps = dispatch => {
   return bindActionCreators(
@@ -247,7 +264,9 @@ const mapDispatchToProps = dispatch => {
   );
 };
 
-export default withStyles(styles)(connect(
-  null,
-  mapDispatchToProps
-)(JourneyOverview));
+export default withStyles(styles)(
+  connect(
+    null,
+    mapDispatchToProps
+  )(JourneyOverview)
+);

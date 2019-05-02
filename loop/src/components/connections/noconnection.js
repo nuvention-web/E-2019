@@ -17,15 +17,17 @@ import Dialog from "@material-ui/core/Dialog";
 import AddIcon from "@material-ui/icons/Add";
 import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
 import IconButton from "@material-ui/core/IconButton";
-import Button from '@material-ui/core/Button';
-import DoneIcon from '@material-ui/icons/Done';
-import SearchIcon from '@material-ui/icons/Search';
-import InputBase from '@material-ui/core/InputBase';
-import { fade } from '@material-ui/core/styles/colorManipulator';
-import {get_a_User_by_email} from "../../services/findreducer";
+import Button from "@material-ui/core/Button";
+import DoneIcon from "@material-ui/icons/Done";
+import SearchIcon from "@material-ui/icons/Search";
+import InputBase from "@material-ui/core/InputBase";
+import { fade } from "@material-ui/core/styles/colorManipulator";
+import { get_a_User_by_email } from "../../services/findreducer";
 import { connect } from "react-redux";
 import { deleteOneFriend } from "../../services/actions";
 import { bindActionCreators } from "redux";
+import { myFirebase, myFirestore } from "../../firebase";
+
 const styles = theme => ({
   section_center: {
     height: "80vh",
@@ -38,68 +40,68 @@ const styles = theme => ({
     marginTop: theme.spacing.unit * 2
   },
   bigAvatar: {
-    margin: 10,
+    margin: 10
   },
   paper: {
     backgroundColor: theme.palette.background.paper,
     boxShadow: theme.shadows[5],
     padding: theme.spacing.unit * 4,
-    outline: "none",
+    outline: "none"
   },
-  dialog:{
-    marginLeft: 240,
+  dialog: {
+    marginLeft: 240
   },
-  dialogh:{
-    display:'flex',
-    justifyContent: 'flex-end'
+  dialogh: {
+    display: "flex",
+    justifyContent: "flex-end"
   },
-  dialogf:{
-    display:'flex',
-    justifyContent: 'center'
+  dialogf: {
+    display: "flex",
+    justifyContent: "center"
   },
-  fbutton:{
+  fbutton: {
     marginRight: 0
   },
   search: {
-    display:'flex',
-    position: 'relative',
+    display: "flex",
+    position: "relative",
     borderRadius: theme.shape.borderRadius,
     backgroundColor: fade(theme.palette.common.white, 0.15),
-    '&:hover': {
-      backgroundColor: fade(theme.palette.common.white, 0.25),
+    "&:hover": {
+      backgroundColor: fade(theme.palette.common.white, 0.25)
     },
     marginRight: theme.spacing.unit * 2,
     marginLeft: 0,
-    width: '100%',
-    [theme.breakpoints.up('sm')]: {
+    width: "100%",
+    [theme.breakpoints.up("sm")]: {
       //marginLeft: theme.spacing.unit * 3,
-      width: 'auto',
-    },
+      width: "auto"
+    }
   },
   searchIcon: {
     width: theme.spacing.unit * 9,
-    height: '100%',
-    position: 'absolute',
-    pointerEvents: 'none',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
+    height: "100%",
+    position: "absolute",
+    pointerEvents: "none",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center"
   },
   inputRoot: {
-    color: 'inherit',
-    width: '100%',
+    color: "inherit",
+    width: "100%"
   },
   inputInput: {
     paddingTop: theme.spacing.unit,
     paddingRight: theme.spacing.unit,
     paddingBottom: theme.spacing.unit,
     paddingLeft: theme.spacing.unit * 10,
-    transition: theme.transitions.create('width'),
-    width: '100%',
-    [theme.breakpoints.up('md')]: {
-      width: 200,
-    },
-  },
+    transition: theme.transitions.create("width"),
+    width: "100%",
+    [theme.breakpoints.up("md")]: {
+      width: 200
+    }
+  }
 });
 
 const mytheme = createMuiTheme({
@@ -108,25 +110,25 @@ const mytheme = createMuiTheme({
       main: "#757475"
     },
     secondary: {
-      main: "#3B86FF",
+      main: "#3B86FF"
     },
     error: {
       main: "#FE938C"
     }
-  },
+  }
 });
 
 class NoConnection extends Component {
   constructor(props) {
     super(props);
-  this.state = {
-    open: false,
-    added: false,
-    semail:"",
-    email:"",
-    friendList:[],
-  };
-}
+    this.state = {
+      open: false,
+      added: false,
+      semail: "",
+      email: "",
+      friendList: []
+    };
+  }
   handleClose = () => {
     this.setState({
       open: false
@@ -137,15 +139,35 @@ class NoConnection extends Component {
       added: true
     });
   };
-   searchHandle=event=>{
-   const email=event.target.value; 
-   
-  }
-   handleDeleteFriend = (friend) =>{
-     this.props.deleteOneFriend(friend)
-   }
-  
-  
+  searchHandle = event => {
+    const email = event.target.value;
+  };
+  handleDeleteFriend = friend => {
+    this.props.deleteOneFriend(friend);
+  };
+
+  handleImport = () => {
+    var user = myFirebase.auth().currentUser;
+    var ref = myFirestore
+      .collection("user")
+      .doc(user.uid)
+      .collection("journeys")
+      .doc(this.props.location.state.id);
+    this.props.friendlist.forEach(f => {
+      ref
+        .collection("contacts")
+        .doc(f.id)
+        .set({ id: f.id, name: f.name, photourl: f.photourl });
+    });
+    this.props.history.push({
+      pathname: "/home/journeycontent",
+      state: {
+        journeyid: this.props.location.state.id,
+        journeyname: this.props.location.state.name
+      }
+    });
+  };
+
   render() {
     const { classes } = this.props;
     return (
@@ -159,7 +181,7 @@ class NoConnection extends Component {
             size="large"
             color="secondary"
             width="100"
-            onClick={()=>this.setState({open:true})}
+            onClick={() => this.setState({ open: true })}
           >
             Import Contacts
           </FormButton>
@@ -170,66 +192,75 @@ class NoConnection extends Component {
             className={classes.dialog}
           >
             {/* <DialogTitle id="simple-dialog-title">Choose Contacts</DialogTitle> */}
-            <div className={classes.paper} >
-            <div className={classes.dialogh}>
-            <div className={classes.search}>
-            <div className={classes.searchIcon}>
-              <SearchIcon />
-            </div>
-            <InputBase
-              placeholder="Search…"
-              classes={{
-                root: classes.inputRoot,
-                input: classes.inputInput,
-              }}
-              onChange={event => {
-                console.log(this.props.location.state.name);
-                console.log(this.props.location.state.id);
-                this.setState({ semail: event.target.value })
-              }}
-            />
-          </div>
-          <Button color="primary"  onClick={()=>{
-                this.setState({ email: this.state.semail });}
-              }>
-        search
-      </Button>
-            <Button color="primary" className={classes.hbutton} onClick={()=>this.setState({added:!this.state.added})}>
+            <div className={classes.paper}>
+              <div className={classes.dialogh}>
+                <div className={classes.search}>
+                  <div className={classes.searchIcon}>
+                    <SearchIcon />
+                  </div>
+                  <InputBase
+                    placeholder="Search…"
+                    classes={{
+                      root: classes.inputRoot,
+                      input: classes.inputInput
+                    }}
+                    onChange={event => {
+                      this.setState({ semail: event.target.value });
+                    }}
+                  />
+                </div>
+                <Button
+                  color="primary"
+                  onClick={() => {
+                    this.setState({ email: this.state.semail });
+                  }}
+                >
+                  search
+                </Button>
+                <Button
+                  color="primary"
+                  className={classes.hbutton}
+                  onClick={() => this.setState({ added: !this.state.added })}
+                >
                   Select all
-            </Button>
-            </div>
-           {this.state.email!=""? (
-            <List>{get_a_User_by_email(this.state.email)}</List>):null}
-              {this.props.friendlist.length!==0? (
-                <List>
-                {this.props.friendlist.map(friend=>(
-                <ListItem button>
-                  <ListItemAvatar>
-                    <Avatar
-                      src="https://bootdey.com/img/Content/avatar/avatar6.png"
-                    />
-                  </ListItemAvatar>
-                  <ListItemText  >{friend.name}</ListItemText>
-                  <ListItemSecondaryAction>
-                    <IconButton onClick={()=>{this.handleDeleteFriend(friend)} }>
-                      {this.state.added? <DoneIcon />: <AddIcon/>}
-                    </IconButton>
-                  </ListItemSecondaryAction>
-              </ListItem>))}
-              </List>):null}
-                
-              <div className={classes.dialogf}>
-              <FormButton
-                className={classes.fbutton}
-                size="small"
-                color="secondary"
-                width="80%"
-                onClick={() => this.props.history.push("/home/journeycontent")}
-              >
-                Import
-              </FormButton>
+                </Button>
               </div>
-              
+              {this.state.email != "" ? (
+                <List>{get_a_User_by_email(this.state.email)}</List>
+              ) : null}
+              {this.props.friendlist.length !== 0 ? (
+                <List>
+                  {this.props.friendlist.map(friend => (
+                    <ListItem button>
+                      <ListItemAvatar>
+                        <Avatar src="https://bootdey.com/img/Content/avatar/avatar6.png" />
+                      </ListItemAvatar>
+                      <ListItemText>{friend.name}</ListItemText>
+                      <ListItemSecondaryAction>
+                        <IconButton
+                          onClick={() => {
+                            this.handleDeleteFriend(friend);
+                          }}
+                        >
+                          {this.state.added ? <DoneIcon /> : <AddIcon />}
+                        </IconButton>
+                      </ListItemSecondaryAction>
+                    </ListItem>
+                  ))}
+                </List>
+              ) : null}
+
+              <div className={classes.dialogf}>
+                <FormButton
+                  className={classes.fbutton}
+                  size="small"
+                  color="secondary"
+                  width="80%"
+                  onClick={this.handleImport}
+                >
+                  Import
+                </FormButton>
+              </div>
             </div>
           </Dialog>
         </div>
@@ -255,9 +286,9 @@ const mapDispatchToProps = dispatch => {
   );
 };
 
-
-
-export default withStyles(styles)(connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(NoConnection));
+export default withStyles(styles)(
+  connect(
+    mapStateToProps,
+    mapDispatchToProps
+  )(NoConnection)
+);
