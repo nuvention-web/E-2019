@@ -18,7 +18,6 @@ export const get_a_User_by_email = (email) => (
         if (loading) return <p>Loading...</p>;
         if (error) return <p>Error :(</p>;
           if(data) {
-            console.log(data)
             if(data.findUser===null)
               return<p>No Result</p>
             else

@@ -24,7 +24,8 @@ import InputBase from '@material-ui/core/InputBase';
 import { fade } from '@material-ui/core/styles/colorManipulator';
 import {get_a_User_by_email} from "../../services/findreducer";
 import { connect } from "react-redux";
-
+import { deleteOneFriend } from "../../services/actions";
+import { bindActionCreators } from "redux";
 const styles = theme => ({
   section_center: {
     height: "80vh",
@@ -136,10 +137,8 @@ class NoConnection extends Component {
    searchHandle=event=>{
    const email=event.target.value;  
   }
-   addHandle=(id)=>{
-    var joined = this.state.myArray.concat(id);
-    this.setState({ friendList: joined });
-    console.log(this.state.friendList);
+   handleDeleteFriend = (friend) =>{
+     this.props.deleteOneFriend(friend)
    }
   
   
@@ -206,7 +205,7 @@ class NoConnection extends Component {
                   </ListItemAvatar>
                   <ListItemText  >{friend.name}</ListItemText>
                   <ListItemSecondaryAction>
-                    <IconButton onClick={()=>{this.setState({added:!this.state.added});} }>
+                    <IconButton onClick={()=>{this.handleDeleteFriend(friend)} }>
                       {this.state.added? <DoneIcon />: <AddIcon/>}
                     </IconButton>
                   </ListItemSecondaryAction>
@@ -241,8 +240,18 @@ const mapStateToProps = state => {
   return { friendlist: state.friendReducer.friendlist };
 };
 
+const mapDispatchToProps = dispatch => {
+  return bindActionCreators(
+    {
+      deleteOneFriend
+    },
+    dispatch
+  );
+};
+
+
 
 export default withStyles(styles)(connect(
   mapStateToProps,
-  null
+  mapDispatchToProps
 )(NoConnection));
