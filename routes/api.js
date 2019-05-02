@@ -4,7 +4,7 @@ const api = express();
 var tsdb = require('../utils').tsdb;
 
 //test the queried function
-api.get('/api/loops/users/heatmap', function(req, res){
+api.get('/loops/users/heatmap', function(req, res){
   options = {
     "metrics": "prerak",
     "start_rel": "1_Y",
