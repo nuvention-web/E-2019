@@ -195,20 +195,7 @@ class NoConnection extends Component {
            {this.state.email!=""? (
             
               <List>
-                <ListItem button>
-                  <ListItemAvatar>
-                    <Avatar
-                      className={classes.bigAvatar}
-                      src="https://bootdey.com/img/Content/avatar/avatar6.png"
-                    />
-                  </ListItemAvatar>
-                  <ListItemText  >{get_a_User_by_email(this.state.email)}</ListItemText>
-                  <ListItemSecondaryAction>
-                    <IconButton onClick={()=>{this.setState({added:!this.state.added});console.log(get_a_User_by_email(this.state.email).key)} }>
-                      {this.state.added? <DoneIcon />: <AddIcon/>}
-                    </IconButton>
-                  </ListItemSecondaryAction>
-                </ListItem>
+                {get_a_User_by_email(this.state.email)}
     </List>):null}
               {/*{this.state.friendList!=""? (
               <List>

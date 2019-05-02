@@ -1,7 +1,7 @@
 import { Query } from "react-apollo";
 import gql from "graphql-tag";
 import React from "react";
-
+import FriendListItem from "../components/connections/listitem";
 const get_a_user = gql`
 query findUser($email: String) {
     findUser(email: $email) {
@@ -23,10 +23,11 @@ export const get_a_User_by_email = (email) => (
               return<p>No Result</p>
             else
               return (
-                <p key={data.findUser.id} value={data.findUser.name}>{data.findUser.name}</p>
+                <FriendListItem data={data.findUser}/>
                
                 )}
   
       }}
     </Query>
   );
+
