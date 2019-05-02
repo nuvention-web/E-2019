@@ -69,8 +69,7 @@ class journeyModal extends Component {
         });
       })
       .then(() => {
-        this.props.history.push("/home/journey")
-        window.location.reload()
+        this.props.history.push({pathname:"/home/noconnection",state: { name: this.state.jname, id: ref.id}})
       });
   };
 
