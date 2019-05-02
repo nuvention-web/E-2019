@@ -117,13 +117,16 @@ const mytheme = createMuiTheme({
 });
 
 class NoConnection extends Component {
-  state = {
+  constructor(props) {
+    super(props);
+  this.state = {
     open: false,
     added: false,
     semail:"",
     email:"",
     friendList:[],
   };
+}
   handleClose = () => {
     this.setState({
       open: false
@@ -135,7 +138,8 @@ class NoConnection extends Component {
     });
   };
    searchHandle=event=>{
-   const email=event.target.value;  
+   const email=event.target.value; 
+   
   }
    handleDeleteFriend = (friend) =>{
      this.props.deleteOneFriend(friend)
@@ -179,6 +183,8 @@ class NoConnection extends Component {
                 input: classes.inputInput,
               }}
               onChange={event => {
+                console.log(this.props.location.state.name);
+                console.log(this.props.location.state.id);
                 this.setState({ semail: event.target.value })
               }}
             />

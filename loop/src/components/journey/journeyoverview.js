@@ -123,7 +123,9 @@ class JourneyOverview extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      isLoading: true
+      isLoading: true,
+      id:"",
+      name:""
     };
     this.listjourney = [];
   }
@@ -142,7 +144,9 @@ class JourneyOverview extends Component {
       }
     });
   }
+  handleJounnry=()=>{
 
+  }
   getJourneys = async (user) => {
     if (user) {
       const result = await myFirestore
@@ -166,7 +170,9 @@ class JourneyOverview extends Component {
       this.listjourney.forEach((item, index) => {
         viewlistjourney.push(
           <Grid item xs={4} key={item.data().id}>
-            <div onClick={() => this.props.history.push("/home/noconnection")}>
+            <div onClick={() => {this.props.history.push({pathname:"/home/noconnection",state: { name
+: item.data().journeyname,id
+: item.data().id }});console.log(item.data().journeyname)}}>
               <Paper className={classes.paper}>
                 <Typography component="p" color="primary">
                   {item.data().journeyname}
