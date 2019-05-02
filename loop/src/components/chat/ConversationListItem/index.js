@@ -41,7 +41,8 @@ const styles = theme => ({
   },
   chip: {
     fontSize: 12,
-    marginLeft: theme.spacing.unit * 0.5
+    marginLeft: theme.spacing.unit * 0.5,
+    marginTop: theme.spacing.unit * 0.5
   }
 });
 
