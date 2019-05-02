@@ -15,7 +15,7 @@ module.exports = function (app) {
         "tags": {
           "type": ["human"]
         },
-        "group_by": "type"
+        "group_tag": "type"
      }
       tsdb.queryTS(options, function(err, res2){
         result = res2;//the result from the KairosDB and the data is of format of KairosDB

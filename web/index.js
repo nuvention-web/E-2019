@@ -4,6 +4,7 @@ var uuid = require('uuid');
 
 // Setup Core Route Handlers
 var apiRoute = require('../routes/api');
+var apiUploadRoute = require('../routes/apiUpload');
 
 // WEB CONSTRUCTOR
 module.exports = function Web(app) {
@@ -38,6 +39,7 @@ module.exports = function Web(app) {
 
   // Map the Core Route Handlers
   web.use('/api', apiRoute(app))
+  web.use('/api', apiUploadRoute(app))
 
   // No path found
   web.use(function(req, res, next) {
