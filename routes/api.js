@@ -3,15 +3,12 @@ var format = require('string-template');
 const api = express();
 var tsdb = require('../utils').tsdb;
 
-//test the queried function
-
 module.exports = function (app) {
     return new express.Router()
     .get('/loops/users/heatmap', getHeatMap);
 
 
     function getHeatMap(req, res, next) {
-        console.log('1')
       options = {
         "metric": "prerak",
         "start_rel": "1_Y",
@@ -21,13 +18,9 @@ module.exports = function (app) {
         "group_by": "type"
      }
       tsdb.queryTS(options, function(err, res2){
-          console.log('2')
-          console.log(res2);
-          console.log(err);
         result = res2;//the result from the KairosDB and the data is of format of KairosDB
         res.send(result)
       });
-        console.log('3')
     }
 
 
@@ -50,5 +43,3 @@ module.exports = function (app) {
     // })
 
 };
-
-
