@@ -25,7 +25,7 @@ function queryTS(options, callback) {
                 body.start_relative = {
                     value: options.start_rel.split('_')[0]
                 }
-                switch(start_rel.split('_')[1]) {
+                switch(options.start_rel.split('_')[1]) {
                     case 'Y':
                         body.start_relative.unit = 'years';
                         break;
