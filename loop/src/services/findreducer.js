@@ -17,9 +17,15 @@ export const get_a_User_by_email = (email) => (
       {({ loading, error, data }) => {
         if (loading) return <p>Loading...</p>;
         if (error) return <p>Error :(</p>;
-          if(data) console.log(data)
-        return (
-          <p key={data.findUser.id} value={data.findUser.name}>{data.findUser.name}</p>)
+          if(data) {
+            console.log(data)
+            if(data.findUser===null)
+              return<p>No Result</p>
+            else
+              return (
+                <p key={data.findUser.id} value={data.findUser.name}>{data.findUser.name}</p>
+               
+                )}
   
       }}
     </Query>
