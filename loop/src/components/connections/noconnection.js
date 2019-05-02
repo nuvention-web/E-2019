@@ -123,7 +123,7 @@ class NoConnection extends Component {
     super(props);
     this.state = {
       open: false,
-      added: false,
+      added: true,
       semail: "",
       email: "",
       friendList: []
@@ -159,6 +159,12 @@ class NoConnection extends Component {
         .doc(f.id)
         .set({ id: f.id, name: f.name, photourl: f.photourl });
     });
+    this.props.friendlist.forEach(f =>{
+      let stranger_id = f.id+"-stra"
+      var friendref = myFirestore.collection("user").doc(f.id).collection("journeys").doc(stranger_id)
+      friendref.set({id: stranger_id,journeyname: "Stranger"})
+      friendref.collection("contacts").doc(user.uid).set({id: user.uid, name: user.displayName, photourl: user.photoURL?user.photoURL:""})
+    })
     this.props.history.push({
       pathname: "/home/journeycontent",
       state: {
@@ -191,7 +197,6 @@ class NoConnection extends Component {
             aria-labelledby="simple-dialog-title"
             className={classes.dialog}
           >
-            {/* <DialogTitle id="simple-dialog-title">Choose Contacts</DialogTitle> */}
             <div className={classes.paper}>
               <div className={classes.dialogh}>
                 <div className={classes.search}>

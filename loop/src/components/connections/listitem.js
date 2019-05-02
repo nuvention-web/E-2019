@@ -16,9 +16,9 @@ class FriendListItem extends Component {
     added: false
   };
 
-  handleclick = () => {
-    if (this.props.friendlist.some(i => i.id === this.props.data.id)) {
-      console.log("are you going to delete this friend?");
+  handleclick = (id) => {
+    if (this.props.friendlist.some(i => i.id === id)) {
+        console.log("are you trying to delete?")
     } else {
       this.props.updateFriendList(this.props.data);
     }
@@ -31,8 +31,8 @@ class FriendListItem extends Component {
         </ListItemAvatar>
         <ListItemText>{this.props.data.name}</ListItemText>
         <ListItemSecondaryAction>
-          <IconButton onClick={this.handleclick}>
-            {this.state.added ? <DoneIcon /> : <AddIcon />}
+          <IconButton onClick={()=>this.handleclick(this.props.data.id)}>
+            {this.state.added? <DoneIcon /> : <AddIcon />}
           </IconButton>
         </ListItemSecondaryAction>
       </ListItem>

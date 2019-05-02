@@ -251,7 +251,6 @@ class Home extends React.Component {
         .doc(user.uid)
         .collection("journeys")
         .get();
-      console.log(result.docs);
       if (result.docs.length > 0) {
         this.props.updateJourneyStatus(false)
       }

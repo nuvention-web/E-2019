@@ -188,6 +188,7 @@ class JourneyOverview extends Component {
   renderJourney = classes => {
     if (this.listjourney.length > 0) {
       let viewlistjourney = [];
+      this.listjourney = this.listjourney.filter(l=>l.data().journeyname !== "Stranger")
       this.listjourney.forEach((item, index) => {
         viewlistjourney.push(
           <Grid item xs={4} key={item.data().id}>
