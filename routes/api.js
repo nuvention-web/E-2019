@@ -13,6 +13,7 @@ api.get('/loops/users/heatmap', function(req, res){
     },
     "group_by": "type"
  }
+ console.log('it is called')
   tsdb.queryTS(options, function(err, res2){
     result = res2;//the result from the KairosDB and the data is of format of KairosDB
     res.json(result)
