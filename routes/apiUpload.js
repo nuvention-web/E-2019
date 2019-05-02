@@ -18,10 +18,11 @@ for(i = 0; i < receiverid.length; i++){
   }
   dataObject.push(eachItem)
 }
+
+
 module.exports = function (app) {
     return new express.Router()
     .get('/loops/users/heatmap2', getHeatMap);
-
 
     function getHeatMap(req, res, next) {
       options = dataObject
