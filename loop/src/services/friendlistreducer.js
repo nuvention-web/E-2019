@@ -8,7 +8,8 @@ const friendReducer = (state = INITIAL_DATA, action) => {
   switch (action.type) {
     case UPDATE_FRIENDS_LIST:
       return {
-        friendlist: state.friendlist.push(action.id)
+        ...state,
+        friendlist: [...state.friendlist, action.id]
       };
     default:
       return state;
