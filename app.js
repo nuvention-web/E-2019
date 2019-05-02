@@ -3,6 +3,7 @@ var bformat = require('bunyan-format');
 // Setup Core Route Handlers
 var web = require('./web');
 var utils = require('./utils');
+// const api = require('./routes/api.js');
 
 var app = {};
 

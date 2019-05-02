@@ -18,12 +18,16 @@ api.get('/api/loops/users/heatmap', function(req, res){
     res.json(result)
   })
 })
+
+
 //function transfering JSON data queried from KairosDB
 //to JSON format that front end can read
 // function transformer(data) {
 // heat_data = [];
 // return heat_data
 // }
+
+
 // by getting the data with parameters userid, journey, and relative_start_time
 // the client end can get the data of that is readable for the heatmap.
 // api.get('/api/loops/users/heatmap/:userid/:journey/:rel_start_time', function(req, res){
@@ -32,6 +36,7 @@ api.get('/api/loops/users/heatmap', function(req, res){
 // res.json(transformer())
 // })
 // })
+
 module.exports = function (app) {
 return new express.Router();
 };
