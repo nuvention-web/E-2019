@@ -18,7 +18,7 @@ function queryTS(options, callback) {
         if(options.start_rel || options.start_time || options.end_rel || options.end_time || options.group_tag) {
             if(options.group_tag) {
                 body.metrics[0].group_by = [{
-                    "name": "tag", "tags": ['options.group_tag']
+                    "name": "tag", "tags": [options.group_tag]
                 }];
             }
             if(options.start_rel) {
