@@ -40,5 +40,6 @@ function startServer() {
   var listner = webInstance.listen(port, function() {
     var port = listner.address().port;
     app.syslog.info('Listening: port ' + port);
+    console.log("Server is listening");
   });
 }

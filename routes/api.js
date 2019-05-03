@@ -7,7 +7,7 @@ const querystring = require('querystring');
 module.exports = function (app) {
     return new express.Router()
     .get('/loops/users/heatmap', getHeatMap)
-    .get('/loops/users/data-upload/', dataUpload);
+    .post('/loops/users/data-upload/', dataUpload);
 
     function dataUpload(req, res, next) {
       req.log.info('Inside dataUpload function.');
@@ -41,7 +41,7 @@ module.exports = function (app) {
         "metric": "prerak",
         "start_rel": "1_Y",
         "tags": {
-          "type": ["human"]
+          "type": ["human","dog"]
         },
         "group_tag": "type"
       };
