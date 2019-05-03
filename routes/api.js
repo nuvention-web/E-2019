@@ -2,31 +2,32 @@ var express = require('express');
 var format = require('string-template');
 const api = express();
 var tsdb = require('../utils').tsdb;
+const querystring = require('querystring');
 
 module.exports = function (app) {
     return new express.Router()
     .get('/loops/users/heatmap', getHeatMap)
-    .get('/loops/users/heatmap2', getHeatMap2);
+    .get('/loops/users/data-upload/', dataUpload);
 
-    function getHeatMap2(req, res, next) {
-      req.log.info('Inside getHeatMap2 function.');
-      var senderid = '000001'
-      var timestamp = '1556764900000'
-      var receiverid = ['000091', '000092', '000093']
+    function dataUpload(req, res, next) {
+      req.log.info('Inside dataUpload function.');
+      var senderids = req.query.senderid
+      var timestamps = req.query.timestamp
+      var receiverids = JSON.parse(req.query.receiverid)
       var dataObject = []
       var i = 0;
-      for(i = 0; i < receiverid.length; i++){
+      for(i = 0; i < receiverids.length; i++){
         var eachItem ={}
-        eachItem.name = senderid;
-        eachItem.datapoints = [[timestamp, 1]]
+        eachItem.name = senderids;
+        eachItem.datapoints = [[timestamps, 1]]
         eachItem.tags = {
-          "receiver": receiverid[i]
+          "receiver": receiverids[i]
         }
         dataObject.push(eachItem)
       }
 
       options = dataObject
-      // res.json(dataObject)
+      // res.send(dataObject)
 
       tsdb.addTS(options, function(err, res2){
         result = res2;//the result from the KairosDB and the data is of format of KairosDB
