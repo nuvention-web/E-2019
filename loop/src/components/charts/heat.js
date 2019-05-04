@@ -8,9 +8,12 @@ import axios from "axios";
 import { myFirestore, myFirebase } from "../../firebase";
 import gql from "graphql-tag";
 import { graphql } from "react-apollo";
-import { updateHeatMapData} from "../../services/actions"
+import { updateHeatMapData, getUserinfo } from "../../services/actions";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
+import { compose } from 'react-apollo';
+import { withApollo } from 'react-apollo';
+
 // Resolves charts dependancy
 ReactFC.fcRoot(FusionCharts, Charts, FusionTheme);
 
@@ -24,12 +27,11 @@ let dataSource = {
     placexaxislabelsontop: "1",
     mapbycategory: "0",
     showlegend: "1",
-    plottooltext:
-      "<b>$displayValue</b>‘s touchpoints are <b>$value</b>",
+    plottooltext: "<b>$displayValue</b>‘s touchpoints are <b>$value</b>",
     valuefontcolor: "#262A44"
   },
   rows: {},
-  columns:{},
+  columns: {},
   dataset: [],
   colorrange: {
     gradient: "1",
@@ -41,7 +43,7 @@ let dataSource = {
       {
         code: "#69A2FF",
         minvalue: "0",
-        maxvalue: "10",
+        maxvalue: "10"
       },
       {
         code: "#DCE8F4",
@@ -72,94 +74,90 @@ class HeatMap extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      datasource : {},
-      loading: true,
-      
+      datasource: {},
+      loading: true
     };
-    this.contacts = []
+    this.contacts = [];
   }
   componentDidMount() {
-    console.log(this.props)
-      this.getContactsName()
-      // console.log(this.props.data)
-      if(this.props.data.findContactsId){
-       
-        this.getData()
+    myFirebase.auth().onAuthStateChanged(user => {
+      if (user) {
+        this.props.getUserinfo({
+          id: user.uid,
+          name: user.displayName,
+          photourl: user.photoURL ? user.photoURL : ""
+        });
       }
+    });
+
+    if (this.props.data.findContactsId&&this.props.data.findContacts) {
+      this.getData();
+    }
   }
   componentDidUpdate(prevProps, prevState) {
     if (prevProps.data !== this.props.data) {
-      this.getData()
+      this.setState({ loading: true });
+      this.getData();
     }
   }
 
-  getContactsName = async () =>{
-    var user = myFirebase.auth().currentUser;
-    if(user){
-      const contacts= await myFirestore
-      .collection("user")
-      .doc(user.uid)
-      .collection("journeys")
-      .doc(this.props.journeyid)
-      .collection("contacts")
-      .get();
-  if (contacts.docs.length>0){
-   this.contacts = contacts.docs.reduce((a,c) => {
-     a.push(c.data().name)
-     return a;
-   }, [])
-}
-    }
-    
-}
-
-  getData(){
-    let contacts = this.contacts
-    let result = dataSource;
-    // console.log(this.props.datasource)
-    if(this.props.data.findContactsId&&this.props.user.id){
-      // console.log(this.props.data.findContactsId)
-      axios
-      .post(
-        `https://loop-backend-server.herokuapp.com/api/loops/users/heatmap`,
-        {
-          senderid: this.props.user.id,
-          timerange: "1_Y",
-          journeyFriends: this.props.data.findContactsId
-        }
-      )
-      .then(res => {
-        result["rows"] = res.data.rows;
-        result["columns"] = res.data.columns;
-        dataSource["rows"] = res.data.rows;
-        dataSource["columns"] = res.data.columns;
-        let d = res.data.dataset;
-        if (contacts.length>0){
-          for(let i = 0;i<contacts.length;i++){
-            d[0]["data"][i]["displayvalue"] = contacts[i]
+  getData = async () => {
+    let contacts = this.props.data.findContacts;
+    if (contacts && this.props.user.id) {
+      let journeyFriends = contacts.reduce((a,c)=>{
+        a.push(c.id)
+        return a;
+      },[]);
+      await axios
+        .post(
+          `https://loop-backend-server.herokuapp.com/api/loops/users/heatmap`,
+          {
+            senderid: this.props.user.id,
+            timerange: "1_Y",
+            journeyFriends: journeyFriends
           }
-          dataSource["dataset"] = d;
-          result["dataset"] = d;
-          this.props.updateHeatMapData(result);
-          this.setState({loading: false}); 
-        }
-        
-      });
+        )
+        .then(res => {
+          // let result = dataSource;
+          // result["rows"] = res.data.rows;
+          // result["columns"] = res.data.columns;
+          // result["dataset"] = res.data.dataset;
+          dataSource["rows"] = res.data.rows;
+          dataSource["columns"] = res.data.columns;
+          let d = res.data.dataset;
+          if (contacts.length > 0) {
+            for (let i = 0; i < contacts.length; i++) {
+              d[0]["data"][i]["displayvalue"] = contacts[i].name;
+            }
+            dataSource["dataset"] = d;
+            // result["dataset"] = d;
+            //this.props.updateHeatMapData(result);
+            this.setState({ loading: false });
+            //console.log(dataSource);
+          }
+        });
     }
-      
   };
 
+  renderMap() {
+    let viewMap = [];
+    if (!this.state.loading) {
+      viewMap.push(
+        <ReactFC
+          type="heatmap"
+          width="100%"
+          dataFormat="JSON"
+          dataSource={dataSource}
+        />
+      );
+      return viewMap;
+    } else {
+      return null;
+    }
+  }
+
   render() {
-    return (
-      <div>
-      {!this.state.loading||(this.props.dataSource && Object.keys(this.props.dataSource).length!==0)? (<ReactFC
-        type="heatmap"
-        width="100%"
-        dataFormat="JSON"
-        dataSource={this.props.datasource}
-      />): null}</div>
-      
-    );
+    return <div>{this.renderMap()}</div>;
   }
 }
 const mapStateToProps = state => {
@@ -169,28 +167,37 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
   return bindActionCreators(
     {
-      updateHeatMapData
+      updateHeatMapData,
+      getUserinfo
     },
     dispatch
   );
-}
+};
 
-export default (connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(graphql(
-  gql`
-    query ($journeyid: String, $userid: String) {
-      findContactsId(journeyid: $journeyid, userid: $userid)
-    }
-  `,
-  {
-    options: props => ({
-      variables: {
-        journeyid: props.journeyid,
-        userid: props.user.id
-      },
-      fetchPolicy:'no-cache'
-    })
-  }
-)(HeatMap)));
+export default 
+  compose(
+    connect(
+      mapStateToProps,
+      mapDispatchToProps
+    ),
+    (graphql(
+      gql`
+        query findContacts($journey_id: String, $user_id: String) {
+          findContacts(journeyid: $journey_id, userid: $user_id) {
+            id
+            name
+            photourl
+          }
+        }
+      `,
+      {
+        alias: 'withList',
+        options: props => ({
+          variables: {
+            journey_id: props.journeyid,
+            user_id: props.user.id
+          }
+        })
+      }
+    )),
+    )(HeatMap);

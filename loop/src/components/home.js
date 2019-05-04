@@ -419,14 +419,14 @@ class Home extends React.Component {
                   <ListItemText primary={"Chat Rooms"} />
                 </ListItem>
               </List>
-              <List>
+              {/* <List>
                 <ListItem button key={"Calendar"}>
                   <ListItemIcon>
                     <CalendarTodayIcon style={{ fontSize: 22 }} />
                   </ListItemIcon>
                   <ListItemText primary={"Calendar"} />
                 </ListItem>
-              </List>
+              </List> */}
             </Drawer>
           </MuiThemeProvider>
         </nav>

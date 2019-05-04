@@ -129,9 +129,15 @@ class NoConnection extends Component {
       added: true,
       semail: "",
       email: "",
-      friendList: []
+      friendList: [],
+      totalContacts: 0
     };
   }
+
+  componentDidMount(){
+    this.getJourneyInfo()
+  }
+
   handleClose = () => {
     this.setState({
       open: false
@@ -148,14 +154,29 @@ class NoConnection extends Component {
   handleDeleteFriend = friend => {
     this.props.deleteOneFriend(friend);
   };
-
+  getJourneyInfo = async () =>{
+    var user = myFirebase.auth().currentUser;
+    var journey = await myFirestore
+    .collection("user")
+    .doc(user.uid)
+    .collection("journeys")
+    .doc(this.props.location.state.id)
+    .get()
+    if (journey){
+      let tmp = journey.data().totalContacts;
+      this.setState({totalContacts: tmp})
+    }
+  }
   handleImport = () => {
     var user = myFirebase.auth().currentUser;
     var ref = myFirestore
-      .collection("user")
-      .doc(user.uid)
-      .collection("journeys")
-      .doc(this.props.location.state.id);
+    .collection("user")
+    .doc(user.uid)
+    .collection("journeys")
+    .doc(this.props.location.state.id);
+    ref.update({
+      totalContacts: this.state.totalContacts + this.props.friendlist.length
+    })
     this.props.friendlist.forEach(f => {
       ref
         .collection("contacts")
