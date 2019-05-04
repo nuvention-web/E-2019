@@ -207,7 +207,7 @@ class JourneyContent extends Component {
                   </Typography>
                   <div className={classes.papercontent}>
                     <div className={classes.papercaption}>
-                      <Typography variant="h6">0</Typography>
+                      <Typography variant="h6">{this.props.location.state.journeytotalContacts}</Typography>
                     </div>
                   </div>
                 </Paper>

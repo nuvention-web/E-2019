@@ -165,7 +165,7 @@ class JourneyOverview extends Component {
     }
   };
 
-  checkConnection = async(journeyid, journeyname) => {
+  checkConnection = async(journeyid, journeyname, journeytotalContacts) => {
     var user = myFirebase.auth().currentUser;
     const contacts = await myFirestore
       .collection("user")
@@ -178,7 +178,7 @@ class JourneyOverview extends Component {
       this.setState({ contactsEmpty: false });
       this.props.history.push({
         pathname: "/home/journeycontent",
-        state: { journeyname: journeyname, journeyid: journeyid, userid: user.uid}
+        state: { journeyname: journeyname, journeyid: journeyid, userid: user.uid, journeytotalContacts: journeytotalContacts}
       });
     } else {
       this.props.history.push({
@@ -195,14 +195,14 @@ class JourneyOverview extends Component {
       this.listjourney.forEach((item, index) => {
         viewlistjourney.push(
           <Grid item xs={4} key={item.data().id}>
-            <div onClick={()=>this.checkConnection(item.data().id, item.data().journeyname)}>
+            <div onClick={()=>this.checkConnection(item.data().id, item.data().journeyname, item.data().totalContacts)}>
               <Paper className={classes.paper}>
                 <Typography component="p" color="primary">
                   {item.data().journeyname}
                 </Typography>
                 <div className={classes.papercontent_bar}>
                   <div className={classes.papercaption}>
-                    <Typography variant="h6">0</Typography>
+                    <Typography variant="h6">{item.data().totalContacts}</Typography>
                   </div>
                   <div className={classes.progressbar}>
                     <SemiCircleProgressBar
