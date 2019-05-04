@@ -18,6 +18,9 @@ import { bindActionCreators } from "redux";
 import JourneyModal from "./createjourney";
 
 const mytheme = createMuiTheme({
+  typography: {
+    useNextVariants: true,
+  },
   palette: {
     primary: {
       main: "#757475"

@@ -56,6 +56,9 @@ import { bindActionCreators } from "redux";
 const drawerWidth = 240;
 
 const mytheme = createMuiTheme({
+  typography: {
+    useNextVariants: true,
+  },
   palette: {
     primary: {
       main: "#4281A4"
@@ -91,9 +94,6 @@ const mytheme = createMuiTheme({
     MuiListItemIcon: {
       root: {
         color: "#9596aa"
-      },
-      secondary: {
-        color: "#8092c9"
       }
     }
   }
@@ -376,7 +376,7 @@ class Home extends React.Component {
                   onClick={this.checkUserJourneyOverview}
                 >
                   <ListItemIcon>
-                    <HomeIcon color="#9596aa" />
+                    <HomeIcon />
                   </ListItemIcon>
                   <ListItemText primary={"Overview"} />
                 </ListItem>

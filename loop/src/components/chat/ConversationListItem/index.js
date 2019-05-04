@@ -18,6 +18,9 @@ import {
 import { Typography } from "@material-ui/core";
 
 const mytheme = createMuiTheme({
+  typography: {
+    useNextVariants: true,
+  },
   overrides: {
     MuiChip: {
       root: {},

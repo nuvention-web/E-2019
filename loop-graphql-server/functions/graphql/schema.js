@@ -9,7 +9,8 @@ type User {
   photourl: String
 }
 type Query {
-  findUser(email:String): User
+  findUser(email:String): User,
+  findContactsId(journeyid:String, userid:String): [String],
   helloword: String
 }
 `;

@@ -11,6 +11,9 @@ import ForgetPassword from "./components/forgetpassword"
 import { Route, IndexRoute, Redirect, Switch, BrowserRouter as Router } from "react-router-dom";
 
 const theme = createMuiTheme({
+  typography: {
+    useNextVariants: true,
+  },
   palette: {
     secondary: {
       main: '#4281A4',

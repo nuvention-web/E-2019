@@ -105,6 +105,9 @@ const styles = theme => ({
 });
 
 const mytheme = createMuiTheme({
+  typography: {
+    useNextVariants: true,
+  },
   palette: {
     primary: {
       main: "#757475"

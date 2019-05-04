@@ -1,12 +1,16 @@
-import React from 'react';
+import React from "react";
 
-import FusionCharts from 'fusioncharts';
-import Charts from 'fusioncharts/fusioncharts.powercharts';
-import FusionTheme from 'fusioncharts/themes/fusioncharts.theme.fusion';
-import ReactFC from 'react-fusioncharts';
+import FusionCharts from "fusioncharts";
+import Charts from "fusioncharts/fusioncharts.powercharts";
+import FusionTheme from "fusioncharts/themes/fusioncharts.theme.fusion";
+import ReactFC from "react-fusioncharts";
+import axios from "axios";
+import { myFirestore, myFirebase } from "../../firebase";
+import gql from "graphql-tag";
+import { graphql } from "react-apollo";
+
 // Resolves charts dependancy
 ReactFC.fcRoot(FusionCharts, Charts, FusionTheme);
-
 
 const dataSource = {
   chart: {
@@ -1090,7 +1094,36 @@ const dataSource = {
   }
 };
 
-export default class HeatMap extends React.Component {
+class HeatMap extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      datasource : {}
+    };
+  }
+  componentDidMount() {
+      
+  }
+  componentDidUpdate(prevProps, prevState) {
+    if (prevProps.data !== this.props.data) {
+      this.getData()
+    }
+  }
+
+  getData(){
+      axios
+      .get(
+        `https://loop-backend-server.herokuapp.com/api/loops/users/heatmap`,
+        {
+          senderid: this.props.userid,
+          timerange: "1_Y",
+          journeyFriends: this.props.data.findContactsId
+        }
+      )
+      .then(res => {
+        this.setState({datasource: res.data});
+      });
+  }
   render() {
     return (
       <ReactFC
@@ -1102,3 +1135,19 @@ export default class HeatMap extends React.Component {
     );
   }
 }
+
+export default graphql(
+  gql`
+    query ($journeyid: String, $userid: String) {
+      findContactsId(journeyid: $journeyid, userid: $userid)
+    }
+  `,
+  {
+    options: props => ({
+      variables: {
+        journeyid: props.journeyid,
+        userid: props.userid
+      }
+    })
+  }
+)(HeatMap);

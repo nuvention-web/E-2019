@@ -37,7 +37,11 @@ const styles = theme => ({
   }
 });
 
-const mytheme = createMuiTheme({});
+const mytheme = createMuiTheme({
+  typography: {
+    useNextVariants: true,
+  },
+});
 
 class Nojourney extends Component {
   constructor(props) {

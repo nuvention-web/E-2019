@@ -25,6 +25,9 @@ import Select from "@material-ui/core/Select";
 import NativeSelect from "@material-ui/core/NativeSelect";
 import InputBase from "@material-ui/core/InputBase";
 const mytheme = createMuiTheme({
+  typography: {
+    useNextVariants: true,
+  },
   palette: {
     primary: {
       main: "#757475"
@@ -306,7 +309,7 @@ class ConnectionDetails extends Component {
               </Grid>
               <Grid item xs>
                 <Paper className={classes.paper}>
-                  <Typography component="p" color="primary">
+                  <Typography variant="body1" color="primary">
                     Overall Avg. Response Rate
                   </Typography>
                   <div className={classes.papercontent_bar}>
@@ -316,7 +319,7 @@ class ConnectionDetails extends Component {
                         percentage={20}
                         stroke="#FFDA83"
                         diameter={135}
-                        strokeWidth="20"
+                        strokeWidth={20}
                         background="#F0F2F8"
                         showPercentValue
                       />
@@ -327,7 +330,7 @@ class ConnectionDetails extends Component {
 
               <Grid item xs>
                 <Paper className={classes.paper}>
-                  <Typography component="p" color="primary">
+                  <Typography variant="body1" color="primary">
                     Total Connections
                   </Typography>
                   <div className={classes.papercontent}>
@@ -342,7 +345,7 @@ class ConnectionDetails extends Component {
           <div className={classes.maincharts}>
             <Paper className={classes.paper}>
               <div className={classes.timelineheader}>
-                <Typography component="p" color="primary">
+                <Typography variant="body1" color="primary">
                   TimeLine
                 </Typography>
                 <form autoComplete="off">
@@ -375,7 +378,7 @@ class ConnectionDetails extends Component {
               <Grid item xs>
                 <Paper className={classes.paper}>
                   <div className={classes.timelineheader}>
-                    <Typography component="p" color="primary">
+                    <Typography variant="body1" color="primary">
                       Touchpoint
                     </Typography>
                     <form autoComplete="off">
@@ -410,7 +413,7 @@ class ConnectionDetails extends Component {
               </Grid>
               <Grid item xs>
                 <Paper className={classes.paper}>
-                  <Typography component="p" color="primary">
+                  <Typography variant="body1" color="primary">
                     Reminder
                   </Typography>
                   <div className={classes.papercontent_reminder}>

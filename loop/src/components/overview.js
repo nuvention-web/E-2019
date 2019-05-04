@@ -23,6 +23,9 @@ import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 
 const mytheme = createMuiTheme({
+  typography: {
+    useNextVariants: true,
+  },
   palette: {
     primary: {
       main: "#757475"
@@ -171,6 +174,8 @@ class Overview extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      userid:"",
+      journeyid:""
     };
   }
   handleDelete = () => {
@@ -184,6 +189,7 @@ class Overview extends Component {
     myFirebase.auth().onAuthStateChanged(user => {
       if (user) {
         this.getJourneys(user);
+        this.setState({userid : user.uid})
       }
     });
   }
@@ -197,6 +203,7 @@ class Overview extends Component {
       if (result.docs.length == 0){
         this.props.history.push("/home/nojourney")
       }else{
+        this.setState({journeyid: result.docs[0].data().id})
         this.props.updateJourneyStatus(false);
       }
     } else {
@@ -227,7 +234,7 @@ class Overview extends Component {
                         percentage={20}
                         stroke="#FF8373"
                         diameter={135}
-                        strokeWidth="20"
+                        strokeWidth={20}
                         background="#F0F2F8"
                         showPercentValue
                       />
@@ -269,10 +276,10 @@ class Overview extends Component {
                   <Typography component="p" color="primary">
                     HeatMap
                   </Typography>
-                  <Button color="secondary" className={classes.hbutton}>
+                  {/* <Button color="secondary" className={classes.hbutton}>
                     Overall
-                  </Button>
-                  <Button color="primary" className={classes.hbutton}>
+                  </Button> */}
+                  <Button color="secondary" className={classes.hbutton}>
                     Kellog
                   </Button>
                   <Button color="primary" className={classes.hbutton}>
@@ -301,7 +308,8 @@ class Overview extends Component {
               </div>
 
               <div style={{ padding: 20 }}>
-                <HeatMap />
+              {this.state.journeyid!==""&&this.state.userid!==""? (<HeatMap journeyid={this.state.journeyid} userid={this.state.userid}/>):null}
+                
               </div>
             </Paper>
           </div>

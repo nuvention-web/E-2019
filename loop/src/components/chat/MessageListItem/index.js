@@ -19,6 +19,9 @@ import Chip from "@material-ui/core/Chip";
 import { MuiThemeProvider, createMuiTheme } from "@material-ui/core/styles";
 
 const mytheme = createMuiTheme({
+  typography: {
+    useNextVariants: true,
+  },
   overrides: {
     MuiChip: {
       root: {},
@@ -328,7 +331,7 @@ class MessageListItem extends Component {
         >
           <div className={classes.paper}>
             <div className={classes.dialogh}>
-              <Typography variant="p">Add this person to journey:</Typography>
+              <Typography variant="body1">Add this person to journey:</Typography>
             </div>
             <MuiThemeProvider theme={mytheme}>
               <div className={classes.chips}>

@@ -7,6 +7,7 @@ import Button from "@material-ui/core/Button";
 import { withStyles } from "@material-ui/core/styles";
 import moment from "moment";
 import { myFirestore, myFirebase } from "../../../firebase";
+import axios from "axios";
 
 const styles = theme => ({
   button: {
@@ -32,13 +33,10 @@ class Compose extends Component {
     this.touserdata = this.props.data;
   }
 
-  
-
-  onSendMessage = (content) => {
+  onSendMessage = content => {
     var user = myFirebase.auth().currentUser;
-    if (!user)
-      return;
-    
+    if (!user) return;
+
     if (content.trim() === "") {
       return;
     }
@@ -51,7 +49,7 @@ class Compose extends Component {
       fromId: user.uid,
       toId: this.touserdata.id,
       timestamp: timestamp,
-      message: content.trim(),
+      message: content.trim()
     };
 
     myFirestore
@@ -61,20 +59,33 @@ class Compose extends Component {
       .doc(timestamp)
       .set(itemMessage)
       .then(() => {
+        axios
+          .post(
+            `https://loop-backend-server.herokuapp.com/api/loops/users/data-upload`,
+            {
+              senderid: user.uid,
+              timestamp: timestamp,
+              receiverid: [this.touserdata.id]
+            }
+          )
+          .then(res => {
+            console.log(res);
+            console.log(res.data);
+          });
         this.setState({
           inputValue: ""
         });
       })
       .catch(err => {
-        console.log(err)
+        console.log(err);
       });
   };
 
   onKeyboardPress = event => {
-    if (event.key === 'Enter') {
-      this.onSendMessage(this.state.inputValue, 0)
+    if (event.key === "Enter") {
+      this.onSendMessage(this.state.inputValue, 0);
     }
-  }
+  };
 
   render() {
     const { classes } = this.props;
@@ -88,7 +99,7 @@ class Compose extends Component {
           placeholder="type your message here..."
           value={this.state.inputValue}
           onChange={event => {
-            this.setState({ inputValue: event.target.value })
+            this.setState({ inputValue: event.target.value });
           }}
           onKeyPress={this.onKeyboardPress}
         />

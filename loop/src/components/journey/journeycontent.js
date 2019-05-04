@@ -15,6 +15,9 @@ import LeftArrowIcon from "@material-ui/icons/KeyboardBackspace";
 import HeatMap from "../charts/heat";
 
 const mytheme = createMuiTheme({
+  typography: {
+    useNextVariants: true,
+  },
   palette: {
     primary: {
       main: "#757475"
@@ -159,7 +162,7 @@ class JourneyContent extends Component {
             <Grid container spacing={24}>
               <Grid item xs={4}>
                 <Paper className={classes.paper}>
-                  <Typography component="p" color="primary">
+                  <Typography variant="body1" color="primary">
                     Overall Avg. Response Rate
                   </Typography>
                   <div className={classes.papercontent_bar}>
@@ -179,7 +182,7 @@ class JourneyContent extends Component {
               </Grid>
               <Grid item xs={4}>
                 <Paper className={classes.paper}>
-                  <Typography component="p" color="primary">
+                  <Typography variant="body1" color="primary">
                     Total Touchpoint
                   </Typography>
                   <div className={classes.papercontent}>
@@ -191,7 +194,7 @@ class JourneyContent extends Component {
               </Grid>
               <Grid item xs={4}>
                 <Paper className={classes.paper}>
-                  <Typography component="p" color="primary">
+                  <Typography variant="body1" color="primary">
                     Total Connections
                   </Typography>
                   <div className={classes.papercontent}>
@@ -205,7 +208,7 @@ class JourneyContent extends Component {
           </div>
           <div className={classes.maincharts}>
             <Paper className={classes.paper}>
-              <Typography component="p" color="primary">
+              <Typography variant="body1" color="primary">
                 HeatMap
               </Typography>
               <div style={{ padding: 20 }}>
@@ -215,7 +218,7 @@ class JourneyContent extends Component {
           </div>
           <div className={classes.reminder}>
             <Paper className={classes.paper}>
-              <Typography component="p" color="primary">
+              <Typography variant="body1" color="primary">
                 Reminder
               </Typography>
               <div className={classes.papercontent_reminder}>

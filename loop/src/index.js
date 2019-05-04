@@ -3,7 +3,6 @@ import ReactDOM from "react-dom";
 import "./index.css";
 import App from "./App";
 import Home from "./components/home";
-import Main from "./components/homec";
 import * as serviceWorker from "./serviceWorker";
 import {
   Route,
