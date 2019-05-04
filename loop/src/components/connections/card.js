@@ -22,7 +22,7 @@ import { fade } from "@material-ui/core/styles/colorManipulator";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import Pagination from "material-ui-flat-pagination";
 import { myFirebase, myFirestore } from "../../firebase";
-import { updateJourneyStatus,getUserinfo } from "../../services/actions";
+import { updateJourneyStatus, getUserinfo } from "../../services/actions";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import gql from "graphql-tag";
@@ -30,7 +30,7 @@ import { graphql } from "react-apollo";
 
 const mytheme = createMuiTheme({
   typography: {
-    useNextVariants: true,
+    useNextVariants: true
   },
   palette: {
     primary: {
@@ -63,19 +63,16 @@ const mytheme = createMuiTheme({
       }
     },
     MuiChip: {
-      root:{
-        
-      },
+      root: {},
       outlinedPrimary: {
         color: "#3B86FF",
-        borderColor: "#3B86FF",
-        
+        borderColor: "#3B86FF"
       },
-      clickable:{
+      clickable: {
         "&:hover, &:active, &:focus": {
           backgroundColor: "#3B86FF !important",
-          color: "#fff",
-        },
+          color: "#fff"
+        }
       }
     },
     MuiIconButton: {
@@ -83,16 +80,16 @@ const mytheme = createMuiTheme({
         color: "#CECFD0"
       }
     },
-    MuiFlatPageButton:{
-      root:{
+    MuiFlatPageButton: {
+      root: {
         backgroundColor: "#fff",
         marginRight: 10,
         "&:hover": {
           backgroundColor: "#3B86FF",
           color: "#fff"
-        },
+        }
       },
-      rootCurrent:{
+      rootCurrent: {
         backgroundColor: "#3B86FF",
         color: "#fff"
       }
@@ -171,7 +168,6 @@ const styles = theme => ({
     justifyContent: "space-around"
   },
   connectionfooter: {
-    marginLeft: 65 + theme.spacing.unit * 1
   },
   button: {
     marginRight: theme.spacing.unit * 4
@@ -220,7 +216,7 @@ const styles = theme => ({
     width: "100%"
   },
   inputInput: {
-    paddingTop: theme.spacing.unit*1.2,
+    paddingTop: theme.spacing.unit * 1.2,
     paddingRight: theme.spacing.unit,
     paddingBottom: theme.spacing.unit,
     paddingLeft: theme.spacing.unit * 10,
@@ -231,7 +227,7 @@ const styles = theme => ({
     },
     color: theme.palette.common.black
   },
-  pagination:{
+  pagination: {
     position: "fixed",
     bottom: 15,
     right: 15
@@ -239,87 +235,90 @@ const styles = theme => ({
 });
 
 class Card extends Component {
-    constructor(props) {
-        super(props);
-        this.state = { offset: 0, clicked: false };
-      }
-      render() {
-        const { classes } = this.props;
-        return (
-            <Grid container spacing={24}>
-           
-                {this.props.data.map(contact=>(<Grid item xs={4}><div
-                onClick={() =>{
-                   
-                    this.props.history.push({pathname:"/home/connectiondetails",state: {
-                        
-                        username: contact.name
-                      }
-                   });
-                   
-                    }
+  constructor(props) {
+    super(props);
+    this.state = { offset: 0, clicked: false };
+  }
+  render() {
+    const { classes } = this.props;
+    return (
+      <Grid container spacing={24}>
+        {this.props.data.map(contact => (
+          <Grid item xs={4}>
+            <div
+              onClick={() => {
+                this.props.history.push({
+                  pathname: "/home/connectiondetails",
+                  state: {
+                    username: contact.name
                   }
-                ><Paper className={classes.paper}>
-<div className={classes.connectioncontent}>
-  <Avatar
-    alt="Tony Stark"
-    src="https://bootdey.com/img/Content/avatar/avatar6.png"
-    className={classes.bigAvatar}
-  />
-  <div className={classes.connectioncaption}>
-    <div className={classes.connectionheader}>
-      <Typography variant="h6">{contact.name}</Typography>
-      <div className={classes.connectionicon}>
-     
-        <IconButton
-          className={classes.headerbutton}
-          aria-label="edit"
-        >
-          <EditIcon className={classes.conicon} />
-        </IconButton>
-        <IconButton
-          className={classes.headerbutton}
-          aria-label="clear"
-        >
-          <ClearIcon className={classes.conicon} />
-        </IconButton>
-      </div>
-    </div>
-    
-  </div>
-</div>
-<Divider />
-<div className={classes.connectionfooter}>
-  <IconButton
-    className={classes.button}
-    aria-label="instagram"
-    color="primary"
-  >
-    <FontAwesomeIcon icon={["fab", "instagram"]} />
-  </IconButton>
-  <IconButton
-    className={classes.button}
-    aria-label="twitter"
-    color="primary"
-  >
-    <FontAwesomeIcon icon={["fab", "twitter"]} />
-  </IconButton>
-  <IconButton
-    className={classes.button}
-    aria-label="facebook"
-    color="primary"
-  >
-    <FontAwesomeIcon icon={["fab", "facebook"]} />
-  </IconButton>
-  <IconButton
-    className={classes.button}
-    aria-label="email"
-    color="primary"
-  >
-    <EmailIcon />
-  </IconButton>
-</div>
-</Paper></div></Grid> ))}
-         </Grid>
-);}}
-export default withStyles(styles)(Card)
+                });
+              }}
+            >
+              <Paper className={classes.paper}>
+                <div className={classes.connectioncontent}>
+                  <Avatar
+                    alt="Tony Stark"
+                    src="https://bootdey.com/img/Content/avatar/avatar6.png"
+                    className={classes.bigAvatar}
+                  />
+                  <div className={classes.connectioncaption}>
+                    <div className={classes.connectionheader}>
+                      <Typography variant="h6">{contact.name}</Typography>
+                      <div className={classes.connectionicon}>
+                        <IconButton
+                          className={classes.headerbutton}
+                          aria-label="edit"
+                        >
+                          <EditIcon className={classes.conicon} />
+                        </IconButton>
+                        <IconButton
+                          className={classes.headerbutton}
+                          aria-label="clear"
+                        >
+                          <ClearIcon className={classes.conicon} />
+                        </IconButton>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <Divider />
+                <div className={classes.connectionfooter}>
+                  <IconButton
+                    className={classes.button}
+                    aria-label="instagram"
+                    color="primary"
+                  >
+                    <FontAwesomeIcon icon={["fab", "instagram"]} />
+                  </IconButton>
+                  <IconButton
+                    className={classes.button}
+                    aria-label="twitter"
+                    color="primary"
+                  >
+                    <FontAwesomeIcon icon={["fab", "twitter"]} />
+                  </IconButton>
+                  <IconButton
+                    className={classes.button}
+                    aria-label="facebook"
+                    color="primary"
+                  >
+                    <FontAwesomeIcon icon={["fab", "facebook"]} />
+                  </IconButton>
+                  <IconButton
+                    className={classes.button}
+                    aria-label="email"
+                    color="primary"
+                  >
+                    <EmailIcon />
+                  </IconButton>
+                </div>
+              </Paper>
+            </div>
+          </Grid>
+        ))}
+      </Grid>
+    );
+  }
+}
+export default withStyles(styles)(Card);
