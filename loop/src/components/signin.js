@@ -64,8 +64,10 @@ class SignIn extends React.Component {
   componentDidMount() {
     myFirebase.auth().onAuthStateChanged(user => {
       if (user) {
-        this.props.history.push("/home");
-        console.log("user is logged");
+        this.props.history.push({pathname: "/home", state:{
+          userid: user.uid
+        }});
+        console.log("????");
       }
     });
   }
@@ -77,7 +79,9 @@ class SignIn extends React.Component {
       .auth()
       .signInWithEmailAndPassword(email, password)
       .then(user => {
-        this.props.history.push("/home");
+        this.props.history.push({pathname: "/home", state:{
+          userid: user.uid
+        }});
       })
       .catch(error => {
         console.log(error);

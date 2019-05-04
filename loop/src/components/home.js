@@ -42,7 +42,7 @@ import connectiondetails from "./connections/connectiondetails";
 import nojourney from "./journey/nojourny";
 import noconnection from "./connections/noconnection";
 import Chat from "./chat";
-import { myFirebase,myFirestore } from "../firebase";
+import { myFirebase, myFirestore } from "../firebase";
 import ClickAwayListener from "@material-ui/core/ClickAwayListener";
 import Grow from "@material-ui/core/Grow";
 import Paper from "@material-ui/core/Paper";
@@ -57,7 +57,7 @@ const drawerWidth = 240;
 
 const mytheme = createMuiTheme({
   typography: {
-    useNextVariants: true,
+    useNextVariants: true
   },
   palette: {
     primary: {
@@ -205,6 +205,7 @@ class Home extends React.Component {
       open: true,
       switch: false,
       openAccount: false,
+      userid: ""
     };
   }
 
@@ -228,19 +229,25 @@ class Home extends React.Component {
   };
 
   checkUserJourney = () => {
-    if (this.props.empty){
-      console.log("wth")
-      this.props.history.push("/home/nojourney")
-    }else{
-      this.props.history.push("/home/journey")
+    if (this.props.empty) {
+      console.log("wth");
+      this.props.history.push("/home/nojourney");
+    } else {
+      this.props.history.push("/home/journey");
     }
   };
 
   checkUserJourneyOverview = () => {
-    if (this.props.empty){
-      this.props.history.push("/home/nojourney")
-    }else{
-      this.props.history.push("/home/overview")
+    var user = firebase.auth().currentUser;
+    if (this.props.empty) {
+      this.props.history.push("/home/nojourney");
+    } else {
+      this.props.history.push({
+        pathname: "/home/overview",
+        state: {
+          userid: user.uid
+        }
+      });
     }
   };
 
@@ -252,7 +259,7 @@ class Home extends React.Component {
         .collection("journeys")
         .get();
       if (result.docs.length > 0) {
-        this.props.updateJourneyStatus(false)
+        this.props.updateJourneyStatus(false);
       }
     } else {
       console.log("failed");
@@ -262,6 +269,7 @@ class Home extends React.Component {
   componentDidMount = () => {
     myFirebase.auth().onAuthStateChanged(user => {
       if (user) {
+        this.setState({userid: user.uid})
         this.getJourneys(user);
       } else {
         this.props.history.push("/app/signin");
@@ -433,7 +441,8 @@ class Home extends React.Component {
         <main className={classNames(classes.content)}>
           <div className={classes.drawerHeaderHeight} />
           <Switch>
-            <Redirect exact from={`/home`} to={`/home/overview`} />
+            {this.state.userid?(<Redirect exact from={`/home`} to={{pathname:`/home/overview`, state: {userid: this.state.userid} }} />
+):null}
             <Route path="/home/overview" component={Overview} />
             <Route path="/home/nojourney" component={nojourney} />
             <Route path="/home/journey" component={Journeyoverview} />
@@ -459,7 +468,6 @@ Home.propTypes = {
   theme: PropTypes.object.isRequired
 };
 
-
 const mapStateToProps = state => {
   return { empty: state.modalReducer.empty };
 };
@@ -473,7 +481,9 @@ const mapDispatchToProps = dispatch => {
   );
 };
 
-export default withStyles(styles, { withTheme: true })(connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(Home));
+export default withStyles(styles, { withTheme: true })(
+  connect(
+    mapStateToProps,
+    mapDispatchToProps
+  )(Home)
+);

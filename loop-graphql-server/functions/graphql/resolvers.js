@@ -48,5 +48,44 @@ module.exports = {
         return result;
       });
     },
+    findContacts(obj, args, context, info) {
+      const userid = args.userid;
+      const journeyid = args.journeyid;
+      let result = [];
+      return store
+      .collection("user")
+      .doc(userid)
+      .collection("journeys")
+      .doc(journeyid)
+      .collection("contacts")
+      .get()
+      .then((querySnapshot)=>{
+        let docs = querySnapshot.docs;
+        result=[...docs];
+        result = result.reduce((a,c)=>{
+          a.push({id: c.data().id,name:c.data().name, photourl: c.data().photourl})
+          return a
+        },[])
+        return result;
+      });
+    },
+    findUsersJourney(obj, args, context, info){
+      const userid = args.userid;
+      let result = []
+      return store
+      .collection("user")
+      .doc(userid)
+      .collection("journeys")
+      .get()
+      .then((querySnapshot)=>{
+        let docs = querySnapshot.docs;
+        result=[...docs]
+        result = result.reduce((a,c)=>{
+          a.push({id:c.data().id,name:c.data().journeyname})
+          return a
+        },[])
+        return result;
+      }) 
+    }
   }
 };

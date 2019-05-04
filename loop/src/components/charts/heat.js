@@ -14,7 +14,7 @@ import { bindActionCreators } from "redux";
 // Resolves charts dependancy
 ReactFC.fcRoot(FusionCharts, Charts, FusionTheme);
 
-const dataSource = {
+let dataSource = {
   chart: {
     theme: "fusion",
     valuefontsize: "12",
@@ -82,6 +82,7 @@ class HeatMap extends React.Component {
       this.getContactsName()
       // console.log(this.props.data)
       if(this.props.data.findContactsId){
+       
         this.getData()
       }
   }
@@ -113,7 +114,10 @@ class HeatMap extends React.Component {
 
   getData(){
     let contacts = this.contacts
-    if(this.state.loading&&this.props.data.findContactsId){
+    let result = dataSource;
+    console.log(this.props.datasource)
+    if(this.props.data.findContactsId){
+      console.log(this.props.data.findContactsId)
       axios
       .post(
         `https://loop-backend-server.herokuapp.com/api/loops/users/heatmap`,
@@ -124,7 +128,6 @@ class HeatMap extends React.Component {
         }
       )
       .then(res => {
-        let result = {}
         result["rows"] = res.data.rows;
         result["columns"] = res.data.columns;
         dataSource["rows"] = res.data.rows;
@@ -136,6 +139,7 @@ class HeatMap extends React.Component {
           }
           dataSource["dataset"] = d;
           result["dataset"] = d;
+          this.props.updateHeatMapData(result);
           this.setState({loading: false}); 
         }
         
@@ -147,18 +151,18 @@ class HeatMap extends React.Component {
   render() {
     return (
       <div>
-      {!this.state.loading? (<ReactFC
+      {!this.state.loading||(this.props.dataSource && Object.keys(this.props.dataSource).length!==0)? (<ReactFC
         type="heatmap"
         width="100%"
         dataFormat="JSON"
-        dataSource={dataSource}
+        dataSource={this.props.datasource}
       />): null}</div>
       
     );
   }
 }
 const mapStateToProps = state => {
-  return { data: state.dataReducer.data };
+  return { datasource: state.dataReducer.data };
 };
 
 const mapDispatchToProps = dispatch => {

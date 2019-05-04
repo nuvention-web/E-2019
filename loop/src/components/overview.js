@@ -20,7 +20,8 @@ import { myFirebase, myFirestore } from "../firebase";
 import { updateJourneyStatus } from "../services/actions";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-
+import gql from "graphql-tag";
+import { graphql } from "react-apollo";
 const mytheme = createMuiTheme({
   typography: {
     useNextVariants: true,
@@ -127,7 +128,7 @@ const styles = theme => ({
     flexDirection: "row"
   },
   hbutton: {
-    marginTop: -theme.spacing.unit * 1.3,
+    marginTop: -theme.spacing.unit * 0.7,
     marginLeft: theme.spacing.unit * 1,
     fontSize: 12
   }
@@ -174,7 +175,8 @@ class Overview extends Component {
     super(props);
     this.state = {
       userid:"",
-      journeyid:""
+      journeyid:"",
+      journeylist: []
     };
   }
   handleDelete = () => {
@@ -192,6 +194,15 @@ class Overview extends Component {
       }
     });
   }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (prevProps.data !== this.props.data) {
+      // this.setState({
+      //   journeylist: 
+      // })
+    }
+  }
+
   getJourneys = async user => {
     if (user) {
       const result = await myFirestore
@@ -275,15 +286,24 @@ class Overview extends Component {
                   <Typography component="p" color="primary">
                     HeatMap
                   </Typography>
+                  {this.props.data.findUsersJourney?(
+                    <div>
+                      {this.props.data.findUsersJourney.map((v,i)=>{
+                        if (v.name==="Stranger") return null;
+                        return(
+                        <Button color={i===0?"secondary": "primary"} className={classes.hbutton}>
+                        {v.name}
+                      </Button>)
+                      })}
+                    </div>
+                  ):null}
                   {/* <Button color="secondary" className={classes.hbutton}>
                     Overall
                   </Button> */}
-                  <Button color="secondary" className={classes.hbutton}>
-                    Kellog
-                  </Button>
+{/*                   
                   <Button color="primary" className={classes.hbutton}>
                     Project Manager
-                  </Button>
+                  </Button> */}
                 </div>
                 <form autoComplete="off">
                   <FormControl>
@@ -374,4 +394,20 @@ const mapDispatchToProps = dispatch => {
 export default withStyles(styles)(connect(
   mapStateToProps,
   mapDispatchToProps
-)(Overview));
+)(graphql(
+  gql`
+    query ($userid: String) {
+      findUsersJourney(userid: $userid){
+        id,
+        name
+      }
+    }
+  `,
+  {
+    options: props => ({
+      variables: {
+        userid: props.location.state.userid
+      }
+})
+  }
+)(Overview)));

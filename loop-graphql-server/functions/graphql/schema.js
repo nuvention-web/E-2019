@@ -8,9 +8,15 @@ type User {
   name: String
   photourl: String
 }
+type Journey {
+  id: String
+  name: String
+}
 type Query {
   findUser(email:String): User,
   findContactsId(journeyid:String, userid:String): [String],
+  findContacts(journeyid:String, userid:String): [User],
+  findUsersJourney(userid:String) : [Journey]
   helloword: String
 }
 `;
