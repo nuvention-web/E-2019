@@ -24,7 +24,7 @@ import InputBase from "@material-ui/core/InputBase";
 import { fade } from "@material-ui/core/styles/colorManipulator";
 import { get_a_User_by_email } from "../../services/findreducer";
 import { connect } from "react-redux";
-import { deleteOneFriend } from "../../services/actions";
+import { deleteOneFriend, emptyFriendList } from "../../services/actions";
 import { bindActionCreators } from "redux";
 import { myFirebase, myFirestore } from "../../firebase";
 
@@ -175,6 +175,7 @@ class NoConnection extends Component {
         journeyname: this.props.location.state.name
       }
     });
+    this.props.emptyFriendList();
   };
 
   render() {
@@ -288,6 +289,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
   return bindActionCreators(
     {
+      emptyFriendList,
       deleteOneFriend
     },
     dispatch
