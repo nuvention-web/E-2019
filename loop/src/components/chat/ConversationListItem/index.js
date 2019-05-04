@@ -9,7 +9,9 @@ import firebase from "firebase";
 import { myFirestore, myFirebase } from "../../../firebase";
 import Chip from "@material-ui/core/Chip";
 import PropTypes from "prop-types";
-
+import Snackbar from '@material-ui/core/Snackbar';
+import IconButton from '@material-ui/core/IconButton';
+import CloseIcon from '@material-ui/icons/Close';
 import {
   withStyles,
   MuiThemeProvider,
@@ -58,7 +60,7 @@ class ConversationListItem extends Component {
       messages: [],
       contactsEmpty : [],
       clickedstra:false,
-      alert: ""
+      alert: false
     };
     this.listUser = [];
     this.listjourneys = [];
@@ -82,6 +84,14 @@ class ConversationListItem extends Component {
 
   handleUserChange = (id) => {
     this.getMessage(id)
+  };
+
+  handleClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    this.setState({ alert: false });
   };
 
   getEachJourney = async () => {
@@ -112,7 +122,7 @@ class ConversationListItem extends Component {
         this.setState({clickedstra: false})
       }
       this.setState({
-        alert: "Empty journey!"
+        alert: true
       })
     }
     if (listuser.docs.length > 0) {
@@ -202,7 +212,6 @@ class ConversationListItem extends Component {
           <div className="conversation-list">
             <ConversationSearch />
             <MuiThemeProvider theme={mytheme}>
-            <p style={{color: "#000", fontSize: 15}}>{this.state.alert}</p>
               <div className={classes.chips}>
                 {this.renderListJourneyName(classes)}
               </div>
@@ -214,6 +223,30 @@ class ConversationListItem extends Component {
           </div>
         </div>
         <div className="content">{this.renderFirstMessaging()}</div>
+        <Snackbar
+          anchorOrigin={{
+            vertical: 'bottom',
+            horizontal: 'right',
+          }}
+          open={this.state.alert}
+          autoHideDuration={6000}
+          onClose={this.handleClose}
+          ContentProps={{
+            'aria-describedby': 'message-id',
+          }}
+          message={<span id="message-id">Empty journey!</span>}
+          action={[
+            <IconButton
+              key="close"
+              aria-label="Close"
+              color="inherit"
+              className={classes.close}
+              onClick={this.handleClose}
+            >
+              <CloseIcon />
+            </IconButton>,
+          ]}
+        />
       </div>
     );
   }
