@@ -115,9 +115,9 @@ class HeatMap extends React.Component {
   getData(){
     let contacts = this.contacts
     let result = dataSource;
-    console.log(this.props.datasource)
+    // console.log(this.props.datasource)
     if(this.props.data.findContactsId){
-      console.log(this.props.data.findContactsId)
+      // console.log(this.props.data.findContactsId)
       axios
       .post(
         `https://loop-backend-server.herokuapp.com/api/loops/users/heatmap`,
