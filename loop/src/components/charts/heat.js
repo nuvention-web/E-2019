@@ -34,12 +34,14 @@ const dataSource = {
   colorrange: {
     gradient: "1",
     minvalue: "0",
-    code: "#FCFBFF",
+    startlabel: "Coldest",
+    endlabel: "Hottest",
+    code: "#69A2FF",
     color: [
       {
         code: "#69A2FF",
         minvalue: "0",
-        maxvalue: "10"
+        maxvalue: "10",
       },
       {
         code: "#DCE8F4",
@@ -49,7 +51,8 @@ const dataSource = {
       {
         code: "#FCD32A",
         minvalue: "20",
-        maxvalue: "30"
+        maxvalue: "30",
+        displayValue: "Warm"
       },
       {
         code: "#FEB0BA",
@@ -78,9 +81,9 @@ class HeatMap extends React.Component {
   componentDidMount() {
       this.getContactsName()
       // console.log(this.props.data)
-      // if(this.props.data.findContactsId){
-      //   this.getData()
-      // }
+      if(this.props.data.findContactsId){
+        this.getData()
+      }
   }
   componentDidUpdate(prevProps, prevState) {
     if (prevProps.data !== this.props.data) {
