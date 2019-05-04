@@ -275,34 +275,13 @@ class ConnectionDetails extends Component {
                     />
                     <div className={classes.connectioncaption}>
                       <div className={classes.connectionheader}>
-                        <Typography variant="h6">David Lee</Typography>
+                        <Typography variant="h6">{this.props.location.state.username}</Typography>
                         <div className={classes.connectionicon}>
-                          <Chip
-                            label="Kellogg"
-                            className={classes.chip}
-                            variant="outlined"
-                            color="primary"
-                          />
-                          <Chip
-                            label="Project Manager"
-                            className={classes.chip}
-                            variant="outlined"
-                            color="primary"
-                          />
+                       
+                      
                         </div>
                       </div>
-                      <Typography
-                        variant="caption"
-                        className={classes.connectiondes}
-                      >
-                        United States
-                      </Typography>
-                      <Typography
-                        variant="caption"
-                        className={classes.connectiondes}
-                      >
-                        Mobile : 871.567.4877
-                      </Typography>
+                      
                     </div>
                   </div>
                 </Paper>

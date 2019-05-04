@@ -226,13 +226,7 @@ class NoConnection extends Component {
                 >
                   search
                 </Button>
-                <Button
-                  color="primary"
-                  className={classes.hbutton}
-                  onClick={() => this.setState({ added: !this.state.added })}
-                >
-                  Select all
-                </Button>
+        
               </div>
               {this.state.email != "" ? (
                 <List>{get_a_User_by_email(this.state.email)}</List>

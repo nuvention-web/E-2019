@@ -6,6 +6,7 @@ import {
   MuiThemeProvider,
   createMuiTheme
 } from "@material-ui/core/styles";
+import Button from '@material-ui/core/Button';
 import Paper from "@material-ui/core/Paper";
 import Grid from "@material-ui/core/Grid";
 import Avatar from "@material-ui/core/Avatar";
@@ -21,7 +22,25 @@ import SearchIcon from "@material-ui/icons/Search";
 import { fade } from "@material-ui/core/styles/colorManipulator";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import Pagination from "material-ui-flat-pagination";
-
+import { myFirebase, myFirestore } from "../../firebase";
+import { updateJourneyStatus,getUserinfo } from "../../services/actions";
+import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
+import gql from "graphql-tag";
+import { graphql } from "react-apollo";
+import Card from "./card.js";
+import {get_userByJourney} from "../../services/connectionReducer";
+import DoneIcon from "@material-ui/icons/Done";
+import { get_a_User_by_email } from "../../services/findreducer";
+import { deleteOneFriend, emptyFriendList } from "../../services/actions";
+import Dialog from "@material-ui/core/Dialog";
+import AddIcon from "@material-ui/icons/Add";
+import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
+import List from "@material-ui/core/List";
+import ListItem from "@material-ui/core/ListItem";
+import ListItemAvatar from "@material-ui/core/ListItemAvatar";
+import ListItemText from "@material-ui/core/ListItemText";
+import FormButton from "../../modules/form/FormButton";
 const mytheme = createMuiTheme({
   typography: {
     useNextVariants: true,
@@ -229,15 +248,94 @@ const styles = theme => ({
     position: "fixed",
     bottom: 15,
     right: 15
+  },
+  dialog: {
+    marginLeft: 240
+  },
+  dialogh: {
+    display: "flex",
+    justifyContent: "flex-end"
+  },
+  dialogf: {
+    display: "flex",
+    justifyContent: "center"
+  },
+  fbutton: {
+    marginRight: 0
+  },
+  search: {
+    display: "flex",
+    position: "relative",
+    borderRadius: theme.shape.borderRadius,
+    backgroundColor: fade(theme.palette.common.white, 0.15),
+    "&:hover": {
+      backgroundColor: fade(theme.palette.common.white, 0.25)
+    },
+    marginRight: theme.spacing.unit * 2,
+    marginLeft: 0,
+    width: "100%",
+    [theme.breakpoints.up("sm")]: {
+      //marginLeft: theme.spacing.unit * 3,
+      width: "auto"
+    }
+  },
+  searchIcon: {
+    width: theme.spacing.unit * 9,
+    height: "100%",
+    position: "absolute",
+    pointerEvents: "none",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center"
+  },
+  inputRoot: {
+    color: "inherit",
+    width: "100%"
+  },
+  inputInput: {
+    paddingTop: theme.spacing.unit,
+    paddingRight: theme.spacing.unit,
+    paddingBottom: theme.spacing.unit,
+    paddingLeft: theme.spacing.unit * 10,
+    transition: theme.transitions.create("width"),
+    width: "100%",
+    [theme.breakpoints.up("md")]: {
+      width: 200
+    }
   }
 });
 
 class Connection extends Component {
   constructor(props) {
     super(props);
-    this.state = { offset: 0, clicked: false };
+    this.state = { 
+      offset: 0,
+      clicked: false,
+      journeyId:"",
+      loading:false,
+      open:false,
+      added: true,
+      semail: "",
+      email: "",
+      friendList: [],
+     };
   }
-
+  componentDidMount() {
+    myFirebase.auth().onAuthStateChanged(user => {
+      if (user) {
+        this.props.getUserinfo({id: user.uid, name: user.displayName, photourl: user.photoURL? user.photoURL:""})
+      }
+    });
+  
+  }
+  componentDidUpdate(prevProps, prevState) {
+    if (prevProps.data !== this.props.data) {
+      console.log(this.props.data);
+      if(this.props.data.findUsersJourney)
+        this.setState({journeyId:this.props.data.findUsersJourney[0].id,loading:true}); 
+    }
+  
+  }
   handleDelete = () => {
     alert("You clicked the delete icon."); // eslint-disable-line no-alert
   };
@@ -246,10 +344,28 @@ class Connection extends Component {
     this.setState({ offset });
   }
 
-  handleChipClick() {
-    console.log("s")
+  handleChipClick=(id)=>{
+    this.setState({ journeyId: id });
   }
-
+  handleClose = () => {
+    this.setState({
+      open: false
+    });
+  };
+  handleAdded = () => {
+    this.setState({
+      added: true
+    });
+  };
+  searchHandle = event => {
+    const email = event.target.value;
+  };
+  handleDeleteFriend = friend => {
+    this.props.deleteOneFriend(friend);
+  };
+  handleImport = () => {
+    
+  };
   render() {
     const { classes } = this.props;
     return (
@@ -260,22 +376,20 @@ class Connection extends Component {
               <Typography gutterBottom variant="h5">
                 Connections
               </Typography>
+              {this.props.data.findUsersJourney&&this.state.loading===true?(
               <div className={classes.chips}>
+               {this.props.data.findUsersJourney.map((v,i)=>{
+                        if (v.name==="Stranger") return null;
+                        return(
                 <Chip
-                  label="Kellogg"
+                  label={v.name}
                   className={classes.chip}
-                  onClick={this.handleChipClick}
+                  onClick={()=>this.handleChipClick(v.id)}
                   variant="outlined"
-                  color="primary"
-                />
-                <Chip
-                  label="Project Manager"
-                  className={classes.chip}
-                  onClick={this.handleChipClick}
-                  variant="outlined"
-                  color="primary"
-                />
-              </div>
+                  color={i===0?"secondary": "primary"}
+                />)})}
+               
+              </div>):null}
             </div>
 
             <div className={classes.search}>
@@ -291,108 +405,83 @@ class Connection extends Component {
               />
             </div>
           </div>
-
-          <div className={classes.skillset}>
-            <Grid container spacing={24}>
-              <Grid item xs>
-                <div
-                  onClick={() =>
-                    this.props.history.push("/home/connectiondetails")
-                  }
+          <Button variant="outlined" color="primary" className={classes.button}  onClick={() => this.setState({ open: true })}>
+        Add a contact
+      </Button>
+      <Dialog
+            open={this.state.open}
+            onClose={this.handleClose}
+            aria-labelledby="simple-dialog-title"
+            className={classes.dialog}
+          >
+            <div className={classes.paper}>
+              <div className={classes.dialogh}>
+                <div className={classes.search}>
+                  <div className={classes.searchIcon}>
+                    <SearchIcon />
+                  </div>
+                  <InputBase
+                    placeholder="Search…"
+                    classes={{
+                      root: classes.inputRoot,
+                      input: classes.inputInput
+                    }}
+                    onChange={event => {
+                      this.setState({ semail: event.target.value });
+                    }}
+                  />
+                </div>
+                <Button
+                  color="primary"
+                  onClick={() => {
+                    this.setState({ email: this.state.semail });
+                  }}
                 >
-                  <Paper className={classes.paper}>
-                    <div className={classes.connectioncontent}>
-                      <Avatar
-                        alt="Tony Stark"
-                        src="https://bootdey.com/img/Content/avatar/avatar6.png"
-                        className={classes.bigAvatar}
-                      />
-                      <div className={classes.connectioncaption}>
-                        <div className={classes.connectionheader}>
-                          <Typography variant="h6">David Lee</Typography>
-                          <div className={classes.connectionicon}>
-                            <Chip
-                              label="Kellogg"
-                              className={classes.chip}
-                              variant="outlined"
-                              color="primary"
-                            />
-                            <Chip
-                              label="Project Manager"
-                              className={classes.chip}
-                              variant="outlined"
-                              color="primary"
-                            />
-                            <IconButton
-                              className={classes.headerbutton}
-                              aria-label="edit"
-                            >
-                              <EditIcon className={classes.conicon} />
-                            </IconButton>
-                            <IconButton
-                              className={classes.headerbutton}
-                              aria-label="clear"
-                            >
-                              <ClearIcon className={classes.conicon} />
-                            </IconButton>
-                          </div>
-                        </div>
-                        <Typography
-                          variant="caption"
-                          className={classes.connectiondes}
+                  search
+                </Button>
+        
+              </div>
+              {this.state.email != "" ? (
+                <List>{get_a_User_by_email(this.state.email)}</List>
+              ) : null}
+              {this.props.friendlist.length !== 0 ? (
+                <List>
+                  {this.props.friendlist.map(friend => (
+                    <ListItem button>
+                      <ListItemAvatar>
+                        <Avatar src="https://bootdey.com/img/Content/avatar/avatar6.png" />
+                      </ListItemAvatar>
+                      <ListItemText>{friend.name}</ListItemText>
+                      <ListItemSecondaryAction>
+                        <IconButton
+                          onClick={() => {
+                            this.handleDeleteFriend(friend);
+                          }}
                         >
-                          United States
-                        </Typography>
-                        <Typography
-                          variant="caption"
-                          className={classes.connectiondes}
-                        >
-                          Mobile : 871.567.4877
-                        </Typography>
-                      </div>
-                    </div>
-                    <Divider />
-                    <div className={classes.connectionfooter}>
-                      <IconButton
-                        className={classes.button}
-                        aria-label="instagram"
-                        color="primary"
-                      >
-                        <FontAwesomeIcon icon={["fab", "instagram"]} />
-                      </IconButton>
-                      <IconButton
-                        className={classes.button}
-                        aria-label="twitter"
-                        color="primary"
-                      >
-                        <FontAwesomeIcon icon={["fab", "twitter"]} />
-                      </IconButton>
-                      <IconButton
-                        className={classes.button}
-                        aria-label="facebook"
-                        color="primary"
-                      >
-                        <FontAwesomeIcon icon={["fab", "facebook"]} />
-                      </IconButton>
-                      <IconButton
-                        className={classes.button}
-                        aria-label="email"
-                        color="primary"
-                      >
-                        <EmailIcon />
-                      </IconButton>
-                    </div>
-                  </Paper>
-                </div>
-              </Grid>
-              <Grid item xs>
-                <div>
-                  {/* <Paper className={classes.paper}>
-                   
-                  </Paper> */}
-                </div>
-              </Grid>
-            </Grid>
+                          {this.state.added ? <DoneIcon /> : <AddIcon />}
+                        </IconButton>
+                      </ListItemSecondaryAction>
+                    </ListItem>
+                  ))}
+                </List>
+              ) : null}
+
+              <div className={classes.dialogf}>
+                <FormButton
+                  className={classes.fbutton}
+                  size="small"
+                  color="secondary"
+                  width="80%"
+                  onClick={this.handleImport}
+                >
+                  Import
+                </FormButton>
+              </div>
+            </div>
+          </Dialog>
+          <div className={classes.skillset}>
+                 {this.props.data.findUsersJourney&&this.props.user.id?get_userByJourney(this.state.journeyId,this.props.user.id,this.props.history):null}
+               
           </div>
           <CssBaseline />
           <div className={classes.pagination}>
@@ -413,4 +502,40 @@ Connection.propTypes = {
   classes: PropTypes.object.isRequired
 };
 
-export default withStyles(styles)(Connection);
+
+
+const mapStateToProps = state => {
+  return { empty: state.modalReducer.empty, user: state.userReducer.user,friendlist: state.friendReducer.friendlist };
+};
+
+const mapDispatchToProps = dispatch => {
+  return bindActionCreators(
+    {
+      getUserinfo,
+      emptyFriendList,
+      deleteOneFriend
+    },
+    dispatch
+  );
+}
+
+export default withStyles(styles)(connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(graphql(
+  gql`
+    query ($userid: String) {
+      findUsersJourney(userid: $userid){
+        id,
+        name
+      }
+    }
+  `,
+  {
+    options: props => ({
+      variables: {
+        userid: props.user.id
+      }
+})
+  }
+)(Connection)));
