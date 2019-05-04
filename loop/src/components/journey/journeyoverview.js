@@ -178,7 +178,7 @@ class JourneyOverview extends Component {
       this.setState({ contactsEmpty: false });
       this.props.history.push({
         pathname: "/home/journeycontent",
-        state: { journeyname: journeyname, journeyid: journeyid}
+        state: { journeyname: journeyname, journeyid: journeyid, userid: user.uid}
       });
     } else {
       this.props.history.push({

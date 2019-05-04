@@ -30,7 +30,6 @@ class Compose extends Component {
       isLoading: true,
       inputValue: ""
     };
-    this.touserdata = this.props.data;
   }
 
   onSendMessage = content => {
@@ -47,7 +46,7 @@ class Compose extends Component {
 
     const itemMessage = {
       fromId: user.uid,
-      toId: this.touserdata.id,
+      toId: this.props.data.id,
       timestamp: timestamp,
       message: content.trim()
     };
@@ -65,7 +64,7 @@ class Compose extends Component {
             {
               senderid: user.uid,
               timestamp: timestamp,
-              receiverid: [this.touserdata.id]
+              receiverid: [this.props.data.id]
             }
           )
           .then(res => {

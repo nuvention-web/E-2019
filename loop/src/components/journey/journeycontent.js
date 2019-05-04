@@ -16,7 +16,7 @@ import HeatMap from "../charts/heat";
 
 const mytheme = createMuiTheme({
   typography: {
-    useNextVariants: true,
+    useNextVariants: true
   },
   palette: {
     primary: {
@@ -131,6 +131,10 @@ const styles = theme => ({
 });
 
 class JourneyContent extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {};
+  }
   handleDelete = () => {
     alert("You clicked the delete icon."); // eslint-disable-line no-alert
   };
@@ -139,7 +143,7 @@ class JourneyContent extends Component {
     alert("You clicked the label."); // eslint-disable-line no-alert
   };
 
-  componentDidMount(){
+  componentDidMount() {
     // console.log(this.props.location.state.journeyname)
   }
 
@@ -149,7 +153,11 @@ class JourneyContent extends Component {
       <MuiThemeProvider theme={mytheme}>
         <div className={classes.section2}>
           <div className={classes.sectionheader}>
-            <IconButton color="primary" className={classes.backbutton} onClick={()=>this.props.history.push("/home/Journey")}>
+            <IconButton
+              color="primary"
+              className={classes.backbutton}
+              onClick={() => this.props.history.push("/home/Journey")}
+            >
               <LeftArrowIcon style={{ fontSize: 20 }} />
             </IconButton>
 
@@ -212,7 +220,13 @@ class JourneyContent extends Component {
                 HeatMap
               </Typography>
               <div style={{ padding: 20 }}>
-              <HeatMap />
+                {this.props.location.state.journeyid !== "" &&
+                this.props.location.state.userid !== "" ? (
+                  <HeatMap
+                    journeyid={this.props.location.state.journeyid}
+                    userid={this.props.location.state.userid}
+                  />
+                ) : null}
               </div>
             </Paper>
           </div>
