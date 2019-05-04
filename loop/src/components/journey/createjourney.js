@@ -60,7 +60,7 @@ class journeyModal extends Component {
       .collection("journeys")
       .doc();
     ref
-      .set({ id: ref.id, journeyname: this.state.jname })
+      .set({ id: ref.id, journeyname: this.state.jname, totalContacts: 0 })
       .then(() => {
         // fetch the doc again and show its data
         this.props.updateJourneyStatus(false)

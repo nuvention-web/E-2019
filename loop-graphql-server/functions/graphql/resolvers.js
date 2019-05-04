@@ -86,6 +86,19 @@ module.exports = {
         },[])
         return result;
       }) 
+    },
+    totalAllContacts(obj, args, context, info){
+      const userid = args.userid;
+      let ref = store
+      .collection("user")
+      .doc(userid)
+      .collection("journeys")
+      return ref
+      .select()
+      .get()
+      .then((querySnapshot)=>{
+        return querySnapshot.docs.length;
+      })
     }
   }
 };
