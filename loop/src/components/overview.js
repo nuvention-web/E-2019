@@ -17,7 +17,7 @@ import Select from "@material-ui/core/Select";
 import NativeSelect from "@material-ui/core/NativeSelect";
 import InputBase from "@material-ui/core/InputBase";
 import { myFirebase, myFirestore } from "../firebase";
-import { updateJourneyStatus } from "../services/actions";
+import { updateJourneyStatus,getUserinfo } from "../services/actions";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import gql from "graphql-tag";
@@ -174,7 +174,6 @@ class Overview extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      userid:"",
       journeyid:"",
       journeylist: []
     };
@@ -189,8 +188,8 @@ class Overview extends Component {
   componentDidMount() {
     myFirebase.auth().onAuthStateChanged(user => {
       if (user) {
+        this.props.getUserinfo({id: user.uid, name: user.displayName, photourl: user.photoURL? user.photoURL:""})
         this.getJourneys(user);
-        this.setState({userid : user.uid})
       }
     });
   }
@@ -297,13 +296,6 @@ class Overview extends Component {
                       })}
                     </div>
                   ):null}
-                  {/* <Button color="secondary" className={classes.hbutton}>
-                    Overall
-                  </Button> */}
-{/*                   
-                  <Button color="primary" className={classes.hbutton}>
-                    Project Manager
-                  </Button> */}
                 </div>
                 <form autoComplete="off">
                   <FormControl>
@@ -327,7 +319,7 @@ class Overview extends Component {
               </div>
 
               <div style={{ padding: 20 }}>
-              {this.state.journeyid!==""&&this.state.userid!==""? (<HeatMap journeyid={this.state.journeyid} userid={this.state.userid}/>):null}
+              {this.state.journeyid!==""?(<HeatMap journeyid={this.state.journeyid} />):null}
                 
               </div>
             </Paper>
@@ -379,13 +371,14 @@ Overview.propTypes = {
 };
 
 const mapStateToProps = state => {
-  return { empty: state.modalReducer.empty };
+  return { empty: state.modalReducer.empty, user: state.userReducer.user };
 };
 
 const mapDispatchToProps = dispatch => {
   return bindActionCreators(
     {
-      updateJourneyStatus
+      updateJourneyStatus,
+      getUserinfo
     },
     dispatch
   );
@@ -406,7 +399,7 @@ export default withStyles(styles)(connect(
   {
     options: props => ({
       variables: {
-        userid: props.location.state.userid
+        userid: props.user.id
       }
 })
   }

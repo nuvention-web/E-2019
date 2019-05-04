@@ -79,6 +79,7 @@ class HeatMap extends React.Component {
     this.contacts = []
   }
   componentDidMount() {
+    console.log(this.props)
       this.getContactsName()
       // console.log(this.props.data)
       if(this.props.data.findContactsId){
@@ -116,13 +117,13 @@ class HeatMap extends React.Component {
     let contacts = this.contacts
     let result = dataSource;
     // console.log(this.props.datasource)
-    if(this.props.data.findContactsId){
+    if(this.props.data.findContactsId&&this.props.user.id){
       // console.log(this.props.data.findContactsId)
       axios
       .post(
         `https://loop-backend-server.herokuapp.com/api/loops/users/heatmap`,
         {
-          senderid: this.props.userid,
+          senderid: this.props.user.id,
           timerange: "1_Y",
           journeyFriends: this.props.data.findContactsId
         }
@@ -162,7 +163,7 @@ class HeatMap extends React.Component {
   }
 }
 const mapStateToProps = state => {
-  return { datasource: state.dataReducer.data };
+  return { datasource: state.dataReducer.data, user: state.userReducer.user };
 };
 
 const mapDispatchToProps = dispatch => {
@@ -187,7 +188,7 @@ export default (connect(
     options: props => ({
       variables: {
         journeyid: props.journeyid,
-        userid: props.userid
+        userid: props.user.id
       },
       fetchPolicy:'no-cache'
     })

@@ -23,6 +23,9 @@ import { Link as RouterLink } from "react-router-dom";
 import firebase from "firebase";
 import { myFirebase } from "../firebase";
 import { FormErrors } from "./formErrors";
+import { getUserinfo } from "../services/actions";
+import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
 
 const styles = theme => ({
   form: {
@@ -64,10 +67,9 @@ class SignIn extends React.Component {
   componentDidMount() {
     myFirebase.auth().onAuthStateChanged(user => {
       if (user) {
-        this.props.history.push({pathname: "/home", state:{
-          userid: user.uid
-        }});
-        console.log("????");
+        this.props.getUserinfo({id: user.uid, name: user.displayName, photourl: user.photoURL? user.photoURL:""})
+        console.log(this.props.user)
+        this.props.history.push( "/home");
       }
     });
   }
@@ -79,9 +81,8 @@ class SignIn extends React.Component {
       .auth()
       .signInWithEmailAndPassword(email, password)
       .then(user => {
-        this.props.history.push({pathname: "/home", state:{
-          userid: user.uid
-        }});
+        this.props.getUserinfo({id: user.uid, name: user.displayName, photourl: user.photoURL})
+        this.props.history.push("/home");
       })
       .catch(error => {
         console.log(error);
@@ -227,7 +228,23 @@ SignIn.propTypes = {
   classes: PropTypes.object.isRequired
 };
 
+const mapStateToProps = state => {
+  return { user: state.userReducer.user };
+};
+
+const mapDispatchToProps = dispatch => {
+  return bindActionCreators(
+    {
+      getUserinfo
+    },
+    dispatch
+  );
+}
+
 export default compose(
   withRoot,
   withStyles(styles)
-)(SignIn);
+)(connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(SignIn));

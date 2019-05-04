@@ -5,6 +5,7 @@ export const UPDATE_FRIENDS_LIST = "UPDATE_FRIENDS_LIST"
 export const DELETE_ONE_FRIENDS = "DELETE_ONE_FRIENDS"
 export const HEATMAP_DATA = "HEATMAP_DATA"
 export const EMPTY_FRIENDS_LIST = "EMPTY_FRIENDS_LIST"
+export const USER_INFO = "USER_INFO"
 
 export const updateModalStatus = (show) => ({
   type: UPDATE_MODAL_STATUS,
@@ -34,6 +35,11 @@ export const getUser = (email) => ({
   type: GET_USER,
   email
 });
+
+export const getUserinfo = (user) =>({
+  type: USER_INFO,
+  user
+})
 
 
 export const updateHeatMapData = (data) => ({
