@@ -89,15 +89,22 @@ module.exports = {
     },
     totalAllContacts(obj, args, context, info){
       const userid = args.userid;
-      let ref = store
+      let result = 0;
+      return store
       .collection("user")
       .doc(userid)
       .collection("journeys")
-      return ref
-      .select()
       .get()
       .then((querySnapshot)=>{
-        return querySnapshot.docs.length;
+        let docs = querySnapshot.docs
+        let tmp = [...docs]
+        result = tmp.reduce((a,c)=>{
+          if (c.data().journeyname!=="Stranger"){
+            a+=c.data().totalContacts;
+          }
+          return a
+        },0);
+        return result;
       })
     }
   }

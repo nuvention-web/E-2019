@@ -22,6 +22,8 @@ import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import gql from "graphql-tag";
 import { graphql } from "react-apollo";
+import TotalConnection from "./connections/totalConnection";
+
 const mytheme = createMuiTheme({
   typography: {
     useNextVariants: true,
@@ -265,16 +267,7 @@ class Overview extends Component {
                 </Paper>
               </Grid>
               <Grid item xs={4}>
-                <Paper className={classes.paper}>
-                  <Typography component="p" color="primary">
-                    Total Connections
-                  </Typography>
-                  <div className={classes.papercontent}>
-                    <div className={classes.papercaption}>
-                      <Typography variant="h6">480</Typography>
-                    </div>
-                  </div>
-                </Paper>
+              {this.props.user.id? (<TotalConnection userid={this.props.user.id}/>) : null}
               </Grid>
             </Grid>
           </div>
