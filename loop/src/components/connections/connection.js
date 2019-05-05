@@ -32,7 +32,7 @@ import Card from "./card.js";
 import {get_userByJourney} from "../../services/connectionReducer";
 import DoneIcon from "@material-ui/icons/Done";
 import { get_a_User_by_email } from "../../services/findreducer";
-import { deleteOneFriend, emptyFriendList } from "../../services/actions";
+import { deleteOneFriend, emptyFriendList,updateModalStatus } from "../../services/actions";
 import Dialog from "@material-ui/core/Dialog";
 import AddIcon from "@material-ui/icons/Add";
 import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
@@ -41,6 +41,7 @@ import ListItem from "@material-ui/core/ListItem";
 import ListItemAvatar from "@material-ui/core/ListItemAvatar";
 import ListItemText from "@material-ui/core/ListItemText";
 import FormButton from "../../modules/form/FormButton";
+import ImportContact from "./import"
 const mytheme = createMuiTheme({
   typography: {
     useNextVariants: true,
@@ -332,7 +333,7 @@ class Connection extends Component {
     if (prevProps.data !== this.props.data) {
       console.log(this.props.data);
       if(this.props.data.findUsersJourney)
-        this.setState({journeyId:this.props.data.findUsersJourney[0].id,loading:true}); 
+        this.setState({journeyId:this.props.data.findUsersJourney[0].id,journeyname:this.props.data.findUsersJourney[0].journeyname,loading:true}); 
     }
   
   }
@@ -344,8 +345,8 @@ class Connection extends Component {
     this.setState({ offset });
   }
 
-  handleChipClick=(id)=>{
-    this.setState({ journeyId: id });
+  handleChipClick=(id,name)=>{
+    this.setState({ journeyId: id,journeyname:name });
   }
   handleClose = () => {
     this.setState({
@@ -405,80 +406,10 @@ class Connection extends Component {
               />
             </div>
           </div>
-          <Button variant="outlined" color="primary" className={classes.button}  onClick={() => this.setState({ open: true })}>
+          <Button variant="outlined" color="primary" className={classes.button}  onClick={() =>{console.log("sss");this.props.updateModalStatus(true)}}>
         Add a contact
       </Button>
-      <Dialog
-            open={this.state.open}
-            onClose={this.handleClose}
-            aria-labelledby="simple-dialog-title"
-            className={classes.dialog}
-          >
-            <div className={classes.paper}>
-              <div className={classes.dialogh}>
-                <div className={classes.search}>
-                  <div className={classes.searchIcon}>
-                    <SearchIcon />
-                  </div>
-                  <InputBase
-                    placeholder="Search…"
-                    classes={{
-                      root: classes.inputRoot,
-                      input: classes.inputInput
-                    }}
-                    onChange={event => {
-                      this.setState({ semail: event.target.value });
-                    }}
-                  />
-                </div>
-                <Button
-                  color="primary"
-                  onClick={() => {
-                    this.setState({ email: this.state.semail });
-                  }}
-                >
-                  search
-                </Button>
-        
-              </div>
-              {this.state.email != "" ? (
-                <List>{get_a_User_by_email(this.state.email)}</List>
-              ) : null}
-              {this.props.friendlist.length !== 0 ? (
-                <List>
-                  {this.props.friendlist.map(friend => (
-                    <ListItem button>
-                      <ListItemAvatar>
-                        <Avatar src="https://bootdey.com/img/Content/avatar/avatar6.png" />
-                      </ListItemAvatar>
-                      <ListItemText>{friend.name}</ListItemText>
-                      <ListItemSecondaryAction>
-                        <IconButton
-                          onClick={() => {
-                            this.handleDeleteFriend(friend);
-                          }}
-                        >
-                          {this.state.added ? <DoneIcon /> : <AddIcon />}
-                        </IconButton>
-                      </ListItemSecondaryAction>
-                    </ListItem>
-                  ))}
-                </List>
-              ) : null}
-
-              <div className={classes.dialogf}>
-                <FormButton
-                  className={classes.fbutton}
-                  size="small"
-                  color="secondary"
-                  width="80%"
-                  onClick={this.handleImport}
-                >
-                  Import
-                </FormButton>
-              </div>
-            </div>
-          </Dialog>
+      <ImportContact key={this.state.journeyId} history={this.props.history} journeyid={this.state.journeyId} journeyname={this.state.journeyname}/>
           <div className={classes.skillset}>
                  {this.props.data.findUsersJourney&&this.props.user.id?get_userByJourney(this.state.journeyId,this.props.user.id,this.props.history):null}
                
@@ -505,7 +436,7 @@ Connection.propTypes = {
 
 
 const mapStateToProps = state => {
-  return { empty: state.modalReducer.empty, user: state.userReducer.user,friendlist: state.friendReducer.friendlist };
+  return { empty: state.modalReducer.empty, user: state.userReducer.user,friendlist: state.friendReducer.friendlist, show: state.modalReducer.show };
 };
 
 const mapDispatchToProps = dispatch => {
@@ -513,7 +444,8 @@ const mapDispatchToProps = dispatch => {
     {
       getUserinfo,
       emptyFriendList,
-      deleteOneFriend
+      deleteOneFriend,
+      updateModalStatus
     },
     dispatch
   );

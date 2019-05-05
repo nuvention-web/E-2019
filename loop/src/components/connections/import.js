@@ -1,0 +1,308 @@
+import React, { Component } from "react";
+import PropTypes from "prop-types";
+import {
+  withStyles,
+  MuiThemeProvider,
+  createMuiTheme
+} from "@material-ui/core/styles";
+import Typography from "@material-ui/core/Typography";
+import FormButton from "../../modules/form/FormButton";
+import Avatar from "@material-ui/core/Avatar";
+import List from "@material-ui/core/List";
+import ListItem from "@material-ui/core/ListItem";
+import ListItemAvatar from "@material-ui/core/ListItemAvatar";
+import ListItemText from "@material-ui/core/ListItemText";
+import DialogTitle from "@material-ui/core/DialogTitle";
+import Dialog from "@material-ui/core/Dialog";
+import AddIcon from "@material-ui/icons/Add";
+import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
+import IconButton from "@material-ui/core/IconButton";
+import Button from "@material-ui/core/Button";
+import DoneIcon from "@material-ui/icons/Done";
+import SearchIcon from "@material-ui/icons/Search";
+import InputBase from "@material-ui/core/InputBase";
+import { fade } from "@material-ui/core/styles/colorManipulator";
+import { get_a_User_by_email } from "../../services/findreducer";
+import { connect } from "react-redux";
+import { deleteOneFriend, emptyFriendList,updateModalStatus} from "../../services/actions";
+import { bindActionCreators } from "redux";
+import { myFirebase, myFirestore } from "../../firebase";
+
+const styles = theme => ({
+  section_center: {
+    height: "80vh",
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    justifyContent: "center"
+  },
+  journeybutton: {
+    marginTop: theme.spacing.unit * 2
+  },
+  bigAvatar: {
+    margin: 10
+  },
+  paper: {
+    backgroundColor: theme.palette.background.paper,
+    boxShadow: theme.shadows[5],
+    padding: theme.spacing.unit * 4,
+    outline: "none"
+  },
+  dialog: {
+    marginLeft: 240
+  },
+  dialogh: {
+    display: "flex",
+    justifyContent: "flex-end"
+  },
+  dialogf: {
+    display: "flex",
+    justifyContent: "center"
+  },
+  fbutton: {
+    marginRight: 0
+  },
+  search: {
+    display: "flex",
+    position: "relative",
+    borderRadius: theme.shape.borderRadius,
+    backgroundColor: fade(theme.palette.common.white, 0.15),
+    "&:hover": {
+      backgroundColor: fade(theme.palette.common.white, 0.25)
+    },
+    marginRight: theme.spacing.unit * 2,
+    marginLeft: 0,
+    width: "100%",
+    [theme.breakpoints.up("sm")]: {
+      //marginLeft: theme.spacing.unit * 3,
+      width: "auto"
+    }
+  },
+  searchIcon: {
+    width: theme.spacing.unit * 9,
+    height: "100%",
+    position: "absolute",
+    pointerEvents: "none",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center"
+  },
+  inputRoot: {
+    color: "inherit",
+    width: "100%"
+  },
+  inputInput: {
+    paddingTop: theme.spacing.unit,
+    paddingRight: theme.spacing.unit,
+    paddingBottom: theme.spacing.unit,
+    paddingLeft: theme.spacing.unit * 10,
+    transition: theme.transitions.create("width"),
+    width: "100%",
+    [theme.breakpoints.up("md")]: {
+      width: 200
+    }
+  }
+});
+
+const mytheme = createMuiTheme({
+  typography: {
+    useNextVariants: true,
+  },
+  palette: {
+    primary: {
+      main: "#757475"
+    },
+    secondary: {
+      main: "#3B86FF"
+    },
+    error: {
+      main: "#FE938C"
+    }
+  }
+});
+
+class ImportContact extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      added: true,
+      semail: "",
+      email: "",
+      friendList: [],
+      totalContacts: 0
+    };
+  }
+
+  componentDidMount(){
+    this.getJourneyInfo()
+  }
+
+  handleClose = () => {
+     this.props.updateModalStatus(false)
+  };
+  handleAdded = () => {
+    this.setState({
+      added: true
+    });
+  };
+  searchHandle = event => {
+    const email = event.target.value;
+  };
+  handleDeleteFriend = friend => {
+    this.props.deleteOneFriend(friend);
+  };
+  getJourneyInfo = async () =>{
+    var user = myFirebase.auth().currentUser;
+    if(user&&this.props.journeyid){
+        var journey = await myFirestore
+        .collection("user")
+        .doc(user.uid)
+        .collection("journeys")
+        .doc(this.props.journeyid)
+        .get()
+        if (journey){
+          let tmp = journey.data().totalContacts;
+          this.setState({totalContacts: tmp})
+        }
+    }
+    
+    
+  }
+  handleImport = () => {
+    var user = myFirebase.auth().currentUser;
+    if(user&&this.props.journeyid){var ref = myFirestore
+        .collection("user")
+        .doc(user.uid)
+        .collection("journeys")
+        .doc(this.props.journeyid);
+        ref.update({
+          totalContacts: this.state.totalContacts + this.props.friendlist.length
+        })
+        this.props.friendlist.forEach(f => {
+          ref
+            .collection("contacts")
+            .doc(f.id)
+            .set({ id: f.id, name: f.name, photourl: f.photourl });
+        });
+        this.props.friendlist.forEach(f =>{
+          let stranger_id = f.id+"-stra"
+          var friendref = myFirestore.collection("user").doc(f.id).collection("journeys").doc(stranger_id)
+          friendref.set({id: stranger_id,journeyname: "Stranger"})
+          friendref.collection("contacts").doc(user.uid).set({id: user.uid, name: user.displayName, photourl: user.photoURL?user.photoURL:""})
+        })
+        this.props.history.push({
+          pathname: "/home/journeycontent",
+          state: {
+            journeyid: this.props.journeyid,
+            journeyname: this.props.journeyname,
+          }
+        });
+        this.props.emptyFriendList();
+      this.props.updateModalStatus(false)}
+    
+  };
+
+  render() {
+    const { classes } = this.props;
+    return (
+          <Dialog
+            open={this.props.show}
+            onClose={this.handleClose}
+            aria-labelledby="simple-dialog-title"
+            className={classes.dialog}
+          >
+            <div className={classes.paper}>
+              <div className={classes.dialogh}>
+                <div className={classes.search}>
+                  <div className={classes.searchIcon}>
+                    <SearchIcon />
+                  </div>
+                  <InputBase
+                    placeholder="Search…"
+                    classes={{
+                      root: classes.inputRoot,
+                      input: classes.inputInput
+                    }}
+                    onChange={event => {
+                      this.setState({ semail: event.target.value });
+                    }}
+                  />
+                </div>
+                <Button
+                  color="primary"
+                  onClick={() => {
+                    this.setState({ email: this.state.semail });
+                  }}
+                >
+                  search
+                </Button>
+        
+              </div>
+              {this.state.email != "" ? (
+                <List>{get_a_User_by_email(this.state.email)}</List>
+              ) : null}
+              {this.props.friendlist.length !== 0 ? (
+                <List>
+                  {this.props.friendlist.map(friend => (
+                    <ListItem button>
+                      <ListItemAvatar>
+                        <Avatar src="https://bootdey.com/img/Content/avatar/avatar6.png" />
+                      </ListItemAvatar>
+                      <ListItemText>{friend.name}</ListItemText>
+                      <ListItemSecondaryAction>
+                        <IconButton
+                          onClick={() => {
+                            this.handleDeleteFriend(friend);
+                          }}
+                        >
+                          {this.state.added ? <DoneIcon /> : <AddIcon />}
+                        </IconButton>
+                      </ListItemSecondaryAction>
+                    </ListItem>
+                  ))}
+                </List>
+              ) : null}
+
+              <div className={classes.dialogf}>
+                <FormButton
+                  className={classes.fbutton}
+                  size="small"
+                  color="secondary"
+                  width="80%"
+                  onClick={this.handleImport}
+                >
+                  Import
+                </FormButton>
+              </div>
+            </div>
+          </Dialog>
+       
+    );
+  }
+}
+
+ImportContact.propTypes = {
+  classes: PropTypes.object.isRequired
+};
+
+const mapStateToProps = state => {
+  return { friendlist: state.friendReducer.friendlist,show:state.modalReducer.show };
+};
+
+const mapDispatchToProps = dispatch => {
+  return bindActionCreators(
+    {
+      emptyFriendList,
+      deleteOneFriend,
+      updateModalStatus
+    },
+    dispatch
+  );
+};
+
+export default withStyles(styles)(
+  connect(
+    mapStateToProps,
+    mapDispatchToProps
+  )(ImportContact)
+);

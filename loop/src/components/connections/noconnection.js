@@ -24,10 +24,10 @@ import InputBase from "@material-ui/core/InputBase";
 import { fade } from "@material-ui/core/styles/colorManipulator";
 import { get_a_User_by_email } from "../../services/findreducer";
 import { connect } from "react-redux";
-import { deleteOneFriend, emptyFriendList } from "../../services/actions";
+import {updateModalStatus } from "../../services/actions";
 import { bindActionCreators } from "redux";
 import { myFirebase, myFirestore } from "../../firebase";
-
+import ImportContact from "./import"
 const styles = theme => ({
   section_center: {
     height: "80vh",
@@ -126,78 +126,13 @@ class NoConnection extends Component {
     super(props);
     this.state = {
       open: false,
-      added: true,
-      semail: "",
-      email: "",
-      friendList: [],
-      totalContacts: 0
+      
     };
   }
 
-  componentDidMount(){
-    this.getJourneyInfo()
-  }
+ 
 
-  handleClose = () => {
-    this.setState({
-      open: false
-    });
-  };
-  handleAdded = () => {
-    this.setState({
-      added: true
-    });
-  };
-  searchHandle = event => {
-    const email = event.target.value;
-  };
-  handleDeleteFriend = friend => {
-    this.props.deleteOneFriend(friend);
-  };
-  getJourneyInfo = async () =>{
-    var user = myFirebase.auth().currentUser;
-    var journey = await myFirestore
-    .collection("user")
-    .doc(user.uid)
-    .collection("journeys")
-    .doc(this.props.location.state.id)
-    .get()
-    if (journey){
-      let tmp = journey.data().totalContacts;
-      this.setState({totalContacts: tmp})
-    }
-  }
-  handleImport = () => {
-    var user = myFirebase.auth().currentUser;
-    var ref = myFirestore
-    .collection("user")
-    .doc(user.uid)
-    .collection("journeys")
-    .doc(this.props.location.state.id);
-    ref.update({
-      totalContacts: this.state.totalContacts + this.props.friendlist.length
-    })
-    this.props.friendlist.forEach(f => {
-      ref
-        .collection("contacts")
-        .doc(f.id)
-        .set({ id: f.id, name: f.name, photourl: f.photourl });
-    });
-    this.props.friendlist.forEach(f =>{
-      let stranger_id = f.id+"-stra"
-      var friendref = myFirestore.collection("user").doc(f.id).collection("journeys").doc(stranger_id)
-      friendref.set({id: stranger_id,journeyname: "Stranger"})
-      friendref.collection("contacts").doc(user.uid).set({id: user.uid, name: user.displayName, photourl: user.photoURL?user.photoURL:""})
-    })
-    this.props.history.push({
-      pathname: "/home/journeycontent",
-      state: {
-        journeyid: this.props.location.state.id,
-        journeyname: this.props.location.state.name
-      }
-    });
-    this.props.emptyFriendList();
-  };
+  
 
   render() {
     const { classes } = this.props;
@@ -212,81 +147,11 @@ class NoConnection extends Component {
             size="large"
             color="secondary"
             width="100"
-            onClick={() => this.setState({ open: true })}
+            onClick={() =>this.props.updateModalStatus(true)}
           >
             Import Contacts
           </FormButton>
-          <Dialog
-            open={this.state.open}
-            onClose={this.handleClose}
-            aria-labelledby="simple-dialog-title"
-            className={classes.dialog}
-          >
-            <div className={classes.paper}>
-              <div className={classes.dialogh}>
-                <div className={classes.search}>
-                  <div className={classes.searchIcon}>
-                    <SearchIcon />
-                  </div>
-                  <InputBase
-                    placeholder="Search…"
-                    classes={{
-                      root: classes.inputRoot,
-                      input: classes.inputInput
-                    }}
-                    onChange={event => {
-                      this.setState({ semail: event.target.value });
-                    }}
-                  />
-                </div>
-                <Button
-                  color="primary"
-                  onClick={() => {
-                    this.setState({ email: this.state.semail });
-                  }}
-                >
-                  search
-                </Button>
-        
-              </div>
-              {this.state.email != "" ? (
-                <List>{get_a_User_by_email(this.state.email)}</List>
-              ) : null}
-              {this.props.friendlist.length !== 0 ? (
-                <List>
-                  {this.props.friendlist.map(friend => (
-                    <ListItem button>
-                      <ListItemAvatar>
-                        <Avatar src="https://bootdey.com/img/Content/avatar/avatar6.png" />
-                      </ListItemAvatar>
-                      <ListItemText>{friend.name}</ListItemText>
-                      <ListItemSecondaryAction>
-                        <IconButton
-                          onClick={() => {
-                            this.handleDeleteFriend(friend);
-                          }}
-                        >
-                          {this.state.added ? <DoneIcon /> : <AddIcon />}
-                        </IconButton>
-                      </ListItemSecondaryAction>
-                    </ListItem>
-                  ))}
-                </List>
-              ) : null}
-
-              <div className={classes.dialogf}>
-                <FormButton
-                  className={classes.fbutton}
-                  size="small"
-                  color="secondary"
-                  width="80%"
-                  onClick={this.handleImport}
-                >
-                  Import
-                </FormButton>
-              </div>
-            </div>
-          </Dialog>
+          <ImportContact key={this.props.location.state.id} history={this.props.history} journeyid={this.props.location.state.id} journeyname={this.props.location.state.name}/>
         </div>
       </MuiThemeProvider>
     );
@@ -298,14 +163,13 @@ NoConnection.propTypes = {
 };
 
 const mapStateToProps = state => {
-  return { friendlist: state.friendReducer.friendlist };
+  return { show: state.modalReducer.show };
 };
 
 const mapDispatchToProps = dispatch => {
   return bindActionCreators(
     {
-      emptyFriendList,
-      deleteOneFriend
+      updateModalStatus
     },
     dispatch
   );
