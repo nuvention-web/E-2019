@@ -6,7 +6,7 @@ import {
   MuiThemeProvider,
   createMuiTheme
 } from "@material-ui/core/styles";
-import Button from '@material-ui/core/Button';
+import Button from "@material-ui/core/Button";
 import Paper from "@material-ui/core/Paper";
 import Grid from "@material-ui/core/Grid";
 import Avatar from "@material-ui/core/Avatar";
@@ -23,16 +23,20 @@ import { fade } from "@material-ui/core/styles/colorManipulator";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import Pagination from "material-ui-flat-pagination";
 import { myFirebase, myFirestore } from "../../firebase";
-import { updateJourneyStatus,getUserinfo } from "../../services/actions";
+import { updateJourneyStatus, getUserinfo } from "../../services/actions";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import gql from "graphql-tag";
 import { graphql } from "react-apollo";
 import Card from "./card.js";
-import {get_userByJourney} from "../../services/connectionReducer";
+import { get_userByJourney } from "../../services/connectionReducer";
 import DoneIcon from "@material-ui/icons/Done";
 import { get_a_User_by_email } from "../../services/findreducer";
-import { deleteOneFriend, emptyFriendList,updateModalStatus } from "../../services/actions";
+import {
+  deleteOneFriend,
+  emptyFriendList,
+  updateModalStatus
+} from "../../services/actions";
 import Dialog from "@material-ui/core/Dialog";
 import AddIcon from "@material-ui/icons/Add";
 import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
@@ -41,10 +45,10 @@ import ListItem from "@material-ui/core/ListItem";
 import ListItemAvatar from "@material-ui/core/ListItemAvatar";
 import ListItemText from "@material-ui/core/ListItemText";
 import FormButton from "../../modules/form/FormButton";
-import ImportContact from "./import"
+import ImportContact from "./import";
 const mytheme = createMuiTheme({
   typography: {
-    useNextVariants: true,
+    useNextVariants: true
   },
   palette: {
     primary: {
@@ -77,19 +81,16 @@ const mytheme = createMuiTheme({
       }
     },
     MuiChip: {
-      root:{
-        
-      },
+      root: {},
       outlinedPrimary: {
         color: "#3B86FF",
-        borderColor: "#3B86FF",
-        
+        borderColor: "#3B86FF"
       },
-      clickable:{
+      clickable: {
         "&:hover, &:active, &:focus": {
           backgroundColor: "#3B86FF !important",
-          color: "#fff",
-        },
+          color: "#fff"
+        }
       }
     },
     MuiIconButton: {
@@ -97,16 +98,16 @@ const mytheme = createMuiTheme({
         color: "#CECFD0"
       }
     },
-    MuiFlatPageButton:{
-      root:{
+    MuiFlatPageButton: {
+      root: {
         backgroundColor: "#fff",
         marginRight: 10,
         "&:hover": {
           backgroundColor: "#3B86FF",
           color: "#fff"
-        },
+        }
       },
-      rootCurrent:{
+      rootCurrent: {
         backgroundColor: "#3B86FF",
         color: "#fff"
       }
@@ -234,7 +235,7 @@ const styles = theme => ({
     width: "100%"
   },
   inputInput: {
-    paddingTop: theme.spacing.unit*1.2,
+    paddingTop: theme.spacing.unit * 1.2,
     paddingRight: theme.spacing.unit,
     paddingBottom: theme.spacing.unit,
     paddingLeft: theme.spacing.unit * 10,
@@ -245,7 +246,7 @@ const styles = theme => ({
     },
     color: theme.palette.common.black
   },
-  pagination:{
+  pagination: {
     position: "fixed",
     bottom: 15,
     right: 15
@@ -309,33 +310,39 @@ const styles = theme => ({
 class Connection extends Component {
   constructor(props) {
     super(props);
-    this.state = { 
+    this.state = {
       offset: 0,
       clicked: false,
-      journeyId:"",
-      loading:false,
-      open:false,
+      journeyId: "",
+      loading: false,
+      open: false,
       added: true,
       semail: "",
       email: "",
-      friendList: [],
-     };
+      friendList: []
+    };
   }
   componentDidMount() {
     myFirebase.auth().onAuthStateChanged(user => {
       if (user) {
-        this.props.getUserinfo({id: user.uid, name: user.displayName, photourl: user.photoURL? user.photoURL:""})
+        this.props.getUserinfo({
+          id: user.uid,
+          name: user.displayName,
+          photourl: user.photoURL ? user.photoURL : ""
+        });
       }
     });
-  
   }
   componentDidUpdate(prevProps, prevState) {
     if (prevProps.data !== this.props.data) {
       console.log(this.props.data);
-      if(this.props.data.findUsersJourney)
-        this.setState({journeyId:this.props.data.findUsersJourney[0].id,journeyname:this.props.data.findUsersJourney[0].journeyname,loading:true}); 
+      if (this.props.data.findUsersJourney)
+        this.setState({
+          journeyId: this.props.data.findUsersJourney[0].id,
+          journeyname: this.props.data.findUsersJourney[0].journeyname,
+          loading: true
+        });
     }
-  
   }
   handleDelete = () => {
     alert("You clicked the delete icon."); // eslint-disable-line no-alert
@@ -345,9 +352,9 @@ class Connection extends Component {
     this.setState({ offset });
   }
 
-  handleChipClick=(id,name)=>{
-    this.setState({ journeyId: id,journeyname:name });
-  }
+  handleChipClick = (id, name) => {
+    this.setState({ journeyId: id, journeyname: name });
+  };
   handleClose = () => {
     this.setState({
       open: false
@@ -364,9 +371,7 @@ class Connection extends Component {
   handleDeleteFriend = friend => {
     this.props.deleteOneFriend(friend);
   };
-  handleImport = () => {
-    
-  };
+  handleImport = () => {};
   render() {
     const { classes } = this.props;
     return (
@@ -377,52 +382,60 @@ class Connection extends Component {
               <Typography gutterBottom variant="h5">
                 Connections
               </Typography>
-              {this.props.data.findUsersJourney&&this.state.loading===true?(
-              <div className={classes.chips}>
-               {this.props.data.findUsersJourney.map((v,i)=>{
-                        if (v.name==="Stranger") return null;
-                        return(
-                <Chip
-                  label={v.name}
-                  className={classes.chip}
-                  onClick={()=>this.handleChipClick(v.id)}
-                  variant="outlined"
-                  color={i===0?"secondary": "primary"}
-                />)})}
-               
-              </div>):null}
+              {this.props.data.findUsersJourney &&
+              this.state.loading === true ? (
+                <div className={classes.chips}>
+                  {this.props.data.findUsersJourney.map((v, i) => {
+                    if (v.name === "Stranger") return null;
+                    return (
+                      <Chip
+                        label={v.name}
+                        className={classes.chip}
+                        onClick={() => this.handleChipClick(v.id)}
+                        variant="outlined"
+                        color={i === 0 ? "secondary" : "primary"}
+                      />
+                    );
+                  })}
+                </div>
+              ) : null}
             </div>
-
-            <div className={classes.search}>
-              <div className={classes.searchIcon}>
-                <SearchIcon />
-              </div>
-              <InputBase
-                placeholder="Search Name..."
-                classes={{
-                  root: classes.inputRoot,
-                  input: classes.inputInput
-                }}
-              />
-            </div>
+            <Button
+              variant="outlined"
+              color="primary"
+              className={classes.button}
+              onClick={() => {
+                this.props.updateModalStatus(true);
+              }}
+            >
+              Add a contact
+            </Button>
           </div>
-          <Button variant="outlined" color="primary" className={classes.button}  onClick={() =>{console.log("sss");this.props.updateModalStatus(true)}}>
-        Add a contact
-      </Button>
-      <ImportContact key={this.state.journeyId} history={this.props.history} journeyid={this.state.journeyId} journeyname={this.state.journeyname}/>
+
+          <ImportContact
+            key={this.state.journeyId}
+            history={this.props.history}
+            journeyid={this.state.journeyId}
+            journeyname={this.state.journeyname}
+          />
           <div className={classes.skillset}>
-                 {this.props.data.findUsersJourney&&this.props.user.id?get_userByJourney(this.state.journeyId,this.props.user.id,this.props.history):null}
-               
+            {this.props.data.findUsersJourney && this.props.user.id
+              ? get_userByJourney(
+                  this.state.journeyId,
+                  this.props.user.id,
+                  this.props.history
+                )
+              : null}
           </div>
           <CssBaseline />
           <div className={classes.pagination}>
-        <Pagination
-          limit={10}
-          offset={this.state.offset}
-          total={100}
-          onClick={(e, offset) => this.handleClick(offset)}
-        />
-        </div>
+            <Pagination
+              limit={10}
+              offset={this.state.offset}
+              total={100}
+              onClick={(e, offset) => this.handleClick(offset)}
+            />
+          </div>
         </div>
       </MuiThemeProvider>
     );
@@ -433,10 +446,13 @@ Connection.propTypes = {
   classes: PropTypes.object.isRequired
 };
 
-
-
 const mapStateToProps = state => {
-  return { empty: state.modalReducer.empty, user: state.userReducer.user,friendlist: state.friendReducer.friendlist, show: state.modalReducer.show };
+  return {
+    empty: state.modalReducer.empty,
+    user: state.userReducer.user,
+    friendlist: state.friendReducer.friendlist,
+    show: state.modalReducer.show
+  };
 };
 
 const mapDispatchToProps = dispatch => {
@@ -449,25 +465,29 @@ const mapDispatchToProps = dispatch => {
     },
     dispatch
   );
-}
+};
 
-export default withStyles(styles)(connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(graphql(
-  gql`
-    query ($userid: String) {
-      findUsersJourney(userid: $userid){
-        id,
-        name
+export default withStyles(styles)(
+  connect(
+    mapStateToProps,
+    mapDispatchToProps
+  )(
+    graphql(
+      gql`
+        query($userid: String) {
+          findUsersJourney(userid: $userid) {
+            id
+            name
+          }
+        }
+      `,
+      {
+        options: props => ({
+          variables: {
+            userid: props.user.id
+          }
+        })
       }
-    }
-  `,
-  {
-    options: props => ({
-      variables: {
-        userid: props.user.id
-      }
-})
-  }
-)(Connection)));
+    )(Connection)
+  )
+);
