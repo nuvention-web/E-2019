@@ -6,10 +6,16 @@ export const DELETE_ONE_FRIENDS = "DELETE_ONE_FRIENDS"
 export const HEATMAP_DATA = "HEATMAP_DATA"
 export const EMPTY_FRIENDS_LIST = "EMPTY_FRIENDS_LIST"
 export const USER_INFO = "USER_INFO"
+export const UPDATE_TOUCH_POINTS = "UPDATE_TOUCH_POINTS"
 
 export const updateModalStatus = (show) => ({
   type: UPDATE_MODAL_STATUS,
   show
+});
+
+export const updateTouchPoints = (value) => ({
+  type: UPDATE_TOUCH_POINTS,
+  value
 });
 
 export const updateJourneyStatus = (empty) => ({

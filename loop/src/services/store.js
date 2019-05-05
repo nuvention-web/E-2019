@@ -3,10 +3,12 @@ import modalReducer from "./reducers.js";
 import friendReducer from "./friendlistreducer";
 import dataReducer from "./datareducer";
 import userReducer from "./userreducer"
+import tpReducer from "./tpReducer"
 
 export default combineReducers({
     modalReducer,
     friendReducer,
     dataReducer,
-    userReducer
+    userReducer,
+    tpReducer
 });

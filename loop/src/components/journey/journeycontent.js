@@ -13,6 +13,7 @@ import SemiCircleProgressBar from "react-progressbar-semicircle";
 import { IconButton } from "@material-ui/core";
 import LeftArrowIcon from "@material-ui/icons/KeyboardBackspace";
 import HeatMap from "../charts/heat";
+import { connect } from "react-redux";
 
 const mytheme = createMuiTheme({
   typography: {
@@ -195,7 +196,7 @@ class JourneyContent extends Component {
                   </Typography>
                   <div className={classes.papercontent}>
                     <div className={classes.papercaption}>
-                      <Typography variant="h6">0</Typography>
+                      <Typography variant="h6">{this.props.tpvalue}</Typography>
                     </div>
                   </div>
                 </Paper>
@@ -274,5 +275,12 @@ class JourneyContent extends Component {
 JourneyContent.propTypes = {
   classes: PropTypes.object.isRequired
 };
+const mapStateToProps = state => {
+  return { tpvalue: state.tpReducer.value};
+};
 
-export default withStyles(styles)(JourneyContent);
+export default withStyles(styles)(
+  connect(
+    mapStateToProps,
+    null
+  )(JourneyContent));

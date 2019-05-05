@@ -170,7 +170,7 @@ const styles = theme => ({
   connectionfooter: {
   },
   button: {
-    marginRight: theme.spacing.unit * 4
+    marginRight: theme.spacing.unit * 1
   },
   headerbutton: {
     marginTop: -theme.spacing.unit * 1,
@@ -250,7 +250,8 @@ class Card extends Component {
                 this.props.history.push({
                   pathname: "/home/connectiondetails",
                   state: {
-                    username: contact.name
+                    username: contact.name,
+                    id: contact.id
                   }
                 });
               }}

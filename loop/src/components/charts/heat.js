@@ -8,7 +8,7 @@ import axios from "axios";
 import { myFirestore, myFirebase } from "../../firebase";
 import gql from "graphql-tag";
 import { graphql } from "react-apollo";
-import { updateHeatMapData, getUserinfo } from "../../services/actions";
+import { updateHeatMapData, getUserinfo, updateTouchPoints } from "../../services/actions";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { compose } from 'react-apollo';
@@ -131,6 +131,8 @@ class HeatMap extends React.Component {
             }
             dataSource["dataset"] = d;
             // result["dataset"] = d;
+            this.getTotaltp(d[0]["data"])
+            // console.log(d[0]["data"][0].value);
             //this.props.updateHeatMapData(result);
             this.setState({ loading: false });
             //console.log(dataSource);
@@ -139,11 +141,20 @@ class HeatMap extends React.Component {
     }
   };
 
+  getTotaltp(d){
+    let tp = d.reduce((a,c)=>{
+      a+=Number(c.value)
+      return a
+    },0)
+    this.props.updateTouchPoints(tp)
+  }
+
   renderMap() {
     let viewMap = [];
     if (!this.state.loading) {
       viewMap.push(
         <ReactFC
+          key="1"
           type="heatmap"
           width="100%"
           dataFormat="JSON"
@@ -161,14 +172,15 @@ class HeatMap extends React.Component {
   }
 }
 const mapStateToProps = state => {
-  return { datasource: state.dataReducer.data, user: state.userReducer.user };
+  return { datasource: state.dataReducer.data, user: state.userReducer.user, tp: state.tpReducer.value};
 };
 
 const mapDispatchToProps = dispatch => {
   return bindActionCreators(
     {
       updateHeatMapData,
-      getUserinfo
+      getUserinfo,
+      updateTouchPoints
     },
     dispatch
   );

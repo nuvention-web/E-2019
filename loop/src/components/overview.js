@@ -23,6 +23,7 @@ import { bindActionCreators } from "redux";
 import gql from "graphql-tag";
 import { graphql } from "react-apollo";
 import TotalConnection from "./connections/totalConnection";
+import axios from "axios";
 
 const mytheme = createMuiTheme({
   typography: {
@@ -177,7 +178,8 @@ class Overview extends Component {
     super(props);
     this.state = {
       journeyid:"",
-      journeylist: []
+      journeylist: [],
+      touchpoints:0
     };
   }
   handleDelete = () => {
@@ -192,6 +194,7 @@ class Overview extends Component {
       if (user) {
         this.props.getUserinfo({id: user.uid, name: user.displayName, photourl: user.photoURL? user.photoURL:""})
         this.getJourneys(user);
+        this.getTouchpoints(user);
       }
     });
   }
@@ -221,6 +224,21 @@ class Overview extends Component {
       console.log("failed");
     }
   };
+
+  getTouchpoints= async (user) =>{
+    await axios
+    .post(
+      `https://loop-backend-server.herokuapp.com/api/loops/users/touchPoints`,
+      {
+        senderid: user.uid,
+        journeyFriends: []
+      }
+    )
+    .then((res)=>{
+      this.setState({touchpoints: res.data.touchPoints})
+      // console.log(res.data.touchPoints)
+    })
+  }
 
   render() {
     const { classes } = this.props;
@@ -261,7 +279,7 @@ class Overview extends Component {
 
                   <div className={classes.papercontent}>
                     <div className={classes.papercaption}>
-                      <Typography variant="h6">1000</Typography>
+                      <Typography variant="h6">{this.state.touchpoints}</Typography>
                     </div>
                   </div>
                 </Paper>
@@ -283,7 +301,7 @@ class Overview extends Component {
                       {this.props.data.findUsersJourney.map((v,i)=>{
                         if (v.name==="Stranger") return null;
                         return(
-                        <Button color={i===0?"secondary": "primary"} className={classes.hbutton}>
+                        <Button key={i}color={i===0?"secondary": "primary"} className={classes.hbutton}>
                         {v.name}
                       </Button>)
                       })}
@@ -364,7 +382,7 @@ Overview.propTypes = {
 };
 
 const mapStateToProps = state => {
-  return { empty: state.modalReducer.empty, user: state.userReducer.user };
+  return { empty: state.modalReducer.empty, user: state.userReducer.user};
 };
 
 const mapDispatchToProps = dispatch => {

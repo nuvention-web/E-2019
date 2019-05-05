@@ -24,6 +24,9 @@ import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
 import NativeSelect from "@material-ui/core/NativeSelect";
 import InputBase from "@material-ui/core/InputBase";
+import axios from "axios";
+import { myFirebase } from "../../firebase";
+
 const mytheme = createMuiTheme({
   typography: {
     useNextVariants: true,
@@ -232,7 +235,8 @@ const BootstrapInput = withStyles(theme => ({
 
 class ConnectionDetails extends Component {
   state = {
-    time: ""
+    time: "",
+    touchpoints:0
   };
   handleChange = event => {
     this.setState({ time: event.target.value });
@@ -244,6 +248,29 @@ class ConnectionDetails extends Component {
   handleClick = () => {
     alert("You clicked the label."); // eslint-disable-line no-alert
   };
+
+  componentDidMount() {
+    myFirebase.auth().onAuthStateChanged(user => {
+      if (user) {
+        this.getTouchpoints(user);
+      }
+    });
+  }
+
+  getTouchpoints= async (user) =>{
+    await axios
+    .post(
+      `https://loop-backend-server.herokuapp.com/api/loops/users/touchPoints`,
+      {
+        senderid: user.uid,
+        journeyFriends: [this.props.location.state.id]
+      }
+    )
+    .then((res)=>{
+      this.setState({touchpoints: res.data.touchPoints})
+      // console.log(res.data.touchPoints)
+    })
+  }
 
   render() {
     const { classes } = this.props;
@@ -314,7 +341,7 @@ class ConnectionDetails extends Component {
                   </Typography>
                   <div className={classes.papercontent}>
                     <div className={classes.papercaption}>
-                      <Typography variant="h5">30</Typography>
+                      <Typography variant="h5">{this.state.touchpoints}</Typography>
                     </div>
                   </div>
                 </Paper>

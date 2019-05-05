@@ -209,7 +209,7 @@ class JourneyOverview extends Component {
                       percentage={0}
                       stroke="#FF8373"
                       diameter={135}
-                      strokeWidth="20"
+                      strokeWidth={20}
                       background="#F0F2F8"
                       showPercentValue
                     />
