@@ -179,7 +179,8 @@ class Overview extends Component {
     this.state = {
       journeyid:"",
       journeylist: [],
-      touchpoints:0
+      touchpoints:0,
+      avgrsr: 0
     };
   }
   handleDelete = () => {
@@ -195,6 +196,7 @@ class Overview extends Component {
         this.props.getUserinfo({id: user.uid, name: user.displayName, photourl: user.photoURL? user.photoURL:""})
         this.getJourneys(user);
         this.getTouchpoints(user);
+        this.getAvgResponseRate(user)
       }
     });
   }
@@ -236,7 +238,21 @@ class Overview extends Component {
     )
     .then((res)=>{
       this.setState({touchpoints: res.data.touchPoints})
-      // console.log(res.data.touchPoints)
+      console.log()
+    })
+  }
+
+  getAvgResponseRate = (user)=>{
+    axios
+    .post(
+      `https://loop-backend-server.herokuapp.com/api/loops/users/responseRate`,
+      {
+        senderid: user.uid
+      }
+    )
+    .then((res)=>{
+      console.log(res.data.responseRate)
+      this.setState({avgrsr: Math.round(res.data.responseRate * 100)})
     })
   }
 
@@ -260,7 +276,7 @@ class Overview extends Component {
                     <div className={classes.papercaption} />
                     <div className={classes.progressbar}>
                       <SemiCircleProgressBar
-                        percentage={20}
+                        percentage={this.state.avgrsr}
                         stroke="#FF8373"
                         diameter={135}
                         strokeWidth={20}
@@ -274,7 +290,7 @@ class Overview extends Component {
               <Grid item xs={4}>
                 <Paper className={classes.paper}>
                   <Typography component="p" color="primary">
-                    Touchpoint
+                    Touchpoints
                   </Typography>
 
                   <div className={classes.papercontent}>
