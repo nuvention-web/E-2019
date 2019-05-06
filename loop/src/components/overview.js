@@ -24,6 +24,7 @@ import gql from "graphql-tag";
 import { graphql } from "react-apollo";
 import TotalConnection from "./connections/totalConnection";
 import axios from "axios";
+import Chip from "@material-ui/core/Chip";
 
 const mytheme = createMuiTheme({
   typography: {
@@ -180,8 +181,12 @@ class Overview extends Component {
       journeyid:"",
       journeylist: [],
       touchpoints:0,
-      avgrsr: 0
+      avgrsr: 0,
+      
+     
     };
+    this.colors=[];
+    this.color_default=[];
   }
   handleDelete = () => {
     alert("You clicked the delete icon."); // eslint-disable-line no-alert
@@ -198,6 +203,7 @@ class Overview extends Component {
         this.getTouchpoints(user);
         this.getAvgResponseRate(user)
       }
+  
     });
   }
 
@@ -221,6 +227,9 @@ class Overview extends Component {
       }else{
         this.setState({journeyid: result.docs[0].data().id})
         this.props.updateJourneyStatus(false);
+        let arr=Array.from(" ".repeat(result.docs.length)).fill("primary");
+        this.colors=arr;
+        this.color_default = arr
       }
     } else {
       console.log("failed");
@@ -255,6 +264,16 @@ class Overview extends Component {
       this.setState({avgrsr: res.data.responseRate})
     })
   }
+  handleChipClick = (id, index) => {
+    this.setState({journeyid: id});
+    let newcolor = this.color_default;
+    let copy = newcolor.slice();
+    copy[index] = "secondary";
+    
+    this.colors=copy;
+    console.log(this.colors)
+    
+  };
 
   render() {
     const { classes } = this.props;
@@ -317,8 +336,8 @@ class Overview extends Component {
                       {this.props.data.findUsersJourney.map((v,i)=>{
                         if (v.name==="Stranger") return null;
                         return(
-                        <Button key={i}color={i===0?"secondary": "primary"} className={classes.hbutton}
-                        onClick={(event)=>{this.setState({journeyid: v.id})}}>
+                        <Button key={i} color={this.colors[i]} className={classes.hbutton}
+                        onClick={(event)=>{this.handleChipClick(v.id,i) }}>
                         {v.name}
                       </Button>)
                       })}
