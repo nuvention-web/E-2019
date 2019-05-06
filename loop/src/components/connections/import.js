@@ -182,11 +182,29 @@ class ImportContact extends Component {
       ref.update({
         totalContacts: this.state.totalContacts + this.props.friendlist.length
       });
+      let my_stranger_id = user.uid + "-stra";
+      
       this.props.friendlist.forEach(f => {
-        ref
+        let check_r = myFirestore
+          .collection("user")
+          .doc(user.uid)
+          .collection("journeys")
+          .doc(my_stranger_id)
           .collection("contacts")
           .doc(f.id)
-          .set({ id: f.id, name: f.name, photourl: f.photourl });
+        check_r.get()
+          .then((docSnapshot)=>{
+            if (docSnapshot.exists) {
+              console.log("????")
+              check_r.delete();
+            }
+          }).then(()=>{
+            ref
+            .collection("contacts")
+            .doc(f.id)
+            .set({ id: f.id, name: f.name, photourl: f.photourl });
+          });
+       
       });
       this.props.friendlist.forEach(f => {
         let stranger_id = f.id + "-stra";
@@ -205,14 +223,16 @@ class ImportContact extends Component {
             photourl: user.photoURL ? user.photoURL : ""
           });
       });
-      // this.props.history.push({
-      //   pathname: "/home/journeycontent",
-      //   state: {
-      //     journeyid: this.props.journeyid,
-      //     journeyname: this.props.journeyname
-      //   }
-      // });
-      window.location.reload();
+      this.props.history.push({
+        pathname: "/home/journeycontent",
+        state: {
+          journeyid: this.props.journeyid,
+          journeyname: this.props.journeyname,
+          journeytotalContacts: this.props.friendlist.length,
+          newOne: true
+        }
+      });
+      //window.location.reload();
       this.props.emptyFriendList();
       this.props.updateModalStatus(false);
     }else{

@@ -236,7 +236,7 @@ const BootstrapInput = withStyles(theme => ({
 class ConnectionDetails extends Component {
   state = {
     time: "",
-    touchpoints:0
+    touchpoints:0,
   };
   handleChange = event => {
     this.setState({ time: event.target.value });
@@ -271,6 +271,8 @@ class ConnectionDetails extends Component {
       // console.log(res.data.touchPoints)
     })
   }
+
+  
 
   render() {
     const { classes } = this.props;
@@ -337,7 +339,7 @@ class ConnectionDetails extends Component {
               <Grid item xs>
                 <Paper className={classes.paper}>
                   <Typography variant="body1" color="primary">
-                    Total Connections
+                    Total Touchpoints
                   </Typography>
                   <div className={classes.papercontent}>
                     <div className={classes.papercaption}>
@@ -375,7 +377,7 @@ class ConnectionDetails extends Component {
                 </form>
               </div>
               <div style={{ padding: 20 }}>
-                <LineChart />
+                <LineChart friendid={this.props.location.state.id}/>
               </div>
             </Paper>
           </div>

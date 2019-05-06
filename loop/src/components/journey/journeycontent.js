@@ -14,7 +14,9 @@ import { IconButton } from "@material-ui/core";
 import LeftArrowIcon from "@material-ui/icons/KeyboardBackspace";
 import HeatMap from "../charts/heat";
 import { connect } from "react-redux";
-
+import {
+  BrowserRouter as Router
+} from "react-router-dom";
 const mytheme = createMuiTheme({
   typography: {
     useNextVariants: true
@@ -134,7 +136,10 @@ const styles = theme => ({
 class JourneyContent extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      reload: false,
+      tpvalue: 0
+    };
   }
   handleDelete = () => {
     alert("You clicked the delete icon."); // eslint-disable-line no-alert
@@ -145,7 +150,13 @@ class JourneyContent extends Component {
   };
 
   componentDidMount() {
-    // console.log(this.props.location.state.journeyname)
+    if(this.props.location.state.newOne) {
+      if(!this.state.reload){
+        this.forceUpdate()
+        this.setState({reload: true})
+      }
+      
+    }
   }
 
   render() {
@@ -231,7 +242,7 @@ class JourneyContent extends Component {
               </div>
             </Paper>
           </div>
-          <div className={classes.reminder}>
+          {/* <div className={classes.reminder}>
             <Paper className={classes.paper}>
               <Typography variant="body1" color="primary">
                 Reminder
@@ -266,6 +277,7 @@ class JourneyContent extends Component {
               </div>
             </Paper>
           </div>
+        */}
         </div>
       </MuiThemeProvider>
     );

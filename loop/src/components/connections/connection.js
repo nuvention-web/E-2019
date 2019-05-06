@@ -335,8 +335,8 @@ class Connection extends Component {
   }
   componentDidUpdate(prevProps, prevState) {
     if (prevProps.data !== this.props.data) {
-      console.log(this.props.data);
-      if (this.props.data.findUsersJourney)
+      //console.log(this.props.data);
+      if(this.props.data.findUsersJourney&&this.props.data.findUsersJourney[0].journeyname !== "Stranger")
         this.setState({
           journeyId: this.props.data.findUsersJourney[0].id,
           journeyname: this.props.data.findUsersJourney[0].journeyname,

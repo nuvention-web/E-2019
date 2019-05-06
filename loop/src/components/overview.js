@@ -317,7 +317,8 @@ class Overview extends Component {
                       {this.props.data.findUsersJourney.map((v,i)=>{
                         if (v.name==="Stranger") return null;
                         return(
-                        <Button key={i}color={i===0?"secondary": "primary"} className={classes.hbutton}>
+                        <Button key={i}color={i===0?"secondary": "primary"} className={classes.hbutton}
+                        onClick={(event)=>{this.setState({journeyid: v.id})}}>
                         {v.name}
                       </Button>)
                       })}
@@ -352,7 +353,7 @@ class Overview extends Component {
             </Paper>
           </div>
 
-          <div className={classes.reminder}>
+          {/* <div className={classes.reminder}>
             <Paper className={classes.paper}>
               <Typography component="p" color="primary">
                 Reminder
@@ -386,8 +387,10 @@ class Overview extends Component {
                 </div>
               </div>
             </Paper>
-          </div>
-        </div>): null}
+          </div>*/}
+        </div> 
+        
+        ): null}
       </MuiThemeProvider>
      );
   }

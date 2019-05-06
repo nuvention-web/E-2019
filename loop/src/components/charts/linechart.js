@@ -1,9 +1,14 @@
-import React from 'react';
+import React from "react";
 
 import fusioncharts from "fusioncharts";
 import charts from "fusioncharts/fusioncharts.charts";
-import ReactFC from 'react-fusioncharts';
-import FusionTheme from 'fusioncharts/themes/fusioncharts.theme.fusion';
+import ReactFC from "react-fusioncharts";
+import FusionTheme from "fusioncharts/themes/fusioncharts.theme.fusion";
+import { myFirestore, myFirebase } from "../../firebase";
+import axios from "axios";
+import { getUserinfo } from "../../services/actions";
+import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
 ReactFC.fcRoot(fusioncharts, charts, FusionTheme);
 
 // Resolves charts dependancy
@@ -14,7 +19,8 @@ const dataSource = {
     caption: "",
     yaxisname: "",
     anchorradius: "5",
-    plottooltext: "<card>Touchpoint<br /><b>Email</b>:2<br />Response Rate: 50%<br/><b>Social Media</b>: 1<br />Response Rate: 100%<br />Suggestion:<br />Send him an article<br />Invite him for a coffee</card>",
+    plottooltext:
+      "<card><b>Response rate is <b>$value</b></card>",
     showhovereffect: "1",
     showvalues: "0",
     numbersuffix: "%",
@@ -31,43 +37,83 @@ const dataSource = {
     bgColor: "#FFFFFF",
     bgAlpha: "50"
   },
-  data: [
-    {
-      label: "Jan",
-      value: "50"
-    },
-    {
-      label: "Feb",
-      value: "25"
-    },
-    {
-      label: "Mar",
-      value: "50"
-    },
-    {
-      label: "Apr",
-      value: "60"
-    },
-    {
-      label: "May",
-      value: "50"
-    },
-    {
-      label: "Jun",
-      value: "90"
-    },
-  ]
+  data: []
 };
 
-export default class LineChart extends React.Component {
+class LineChart extends React.Component {
+  state = {
+    loadedChart: true
+  };
+
+  componentDidMount() {
+    myFirebase.auth().onAuthStateChanged(user => {
+      if (user) {
+        this.props.getUserinfo({
+          id: user.uid,
+          name: user.displayName,
+          photourl: user.photoURL ? user.photoURL : ""
+        });
+      }
+    });
+    this.getChartData();
+  }
+  getChartData = async () => {
+    console.log(this.props.friendid,this.props.user.id)
+    if(this.props.friendid&&this.props.user.id){
+      await axios
+      .post(
+        `https://loop-backend-server.herokuapp.com/api/loops/users/oneOneResponseRate`,
+        {
+          senderid: this.props.user.id,
+          monthsAgo: 10,
+          receiverid: this.props.friendid
+        }
+      )
+      .then(res => {
+        console.log(res);
+        dataSource["data"] = res.data.monthly;
+        this.setState({ loadedChart: false });
+      });
+    }
+  };
+
+  renderChart() {
+    let viewChart = [];
+    if (!this.state.loadedChart) {
+      console.log("wht")
+      viewChart.push(
+        <ReactFC
+          type="spline"
+          width="100%"
+          dataFormat="JSON"
+          dataSource={dataSource}
+        />
+      );
+      return viewChart;
+    }else{
+      return null;
+    }
+  }
+
   render() {
-    return (
-      <ReactFC
-        type="spline"
-        width='100%'
-        dataFormat="JSON"
-        dataSource={dataSource}
-      />
-    );
+    return <div>{this.renderChart()}</div>;
   }
 }
+
+const mapStateToProps = state => {
+  return { user: state.userReducer.user };
+};
+
+const mapDispatchToProps = dispatch => {
+  return bindActionCreators(
+    {
+      getUserinfo
+    },
+    dispatch
+  );
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(LineChart);
