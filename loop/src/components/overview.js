@@ -252,7 +252,7 @@ class Overview extends Component {
     )
     .then((res)=>{
       console.log(res.data.responseRate)
-      this.setState({avgrsr: Math.round(res.data.responseRate * 100)})
+      this.setState({avgrsr: res.data.responseRate})
     })
   }
 
