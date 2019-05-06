@@ -33,6 +33,8 @@ const routing = (
         <Redirect exact from={`/`} to={`/app`} />
         <Route path="/home" component={Home} />
         <Route path="/app" component={App} />
+        <Route path="/" handler={Home}/>
+        {/* <Route handler={NotFound}/> */}
       </Switch>
     </div>
   </Router>
