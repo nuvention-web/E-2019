@@ -26,7 +26,8 @@ import NativeSelect from "@material-ui/core/NativeSelect";
 import InputBase from "@material-ui/core/InputBase";
 import axios from "axios";
 import { myFirebase } from "../../firebase";
-
+import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
 const mytheme = createMuiTheme({
   typography: {
     useNextVariants: true,
@@ -324,7 +325,7 @@ class ConnectionDetails extends Component {
                     <div className={classes.papercaption} />
                     <div className={classes.progressbar}>
                       <SemiCircleProgressBar
-                        percentage={20}
+                        percentage={this.props.avgrr}
                         stroke="#FFDA83"
                         diameter={135}
                         strokeWidth={20}
@@ -453,4 +454,11 @@ ConnectionDetails.propTypes = {
   classes: PropTypes.object.isRequired
 };
 
-export default withStyles(styles)(ConnectionDetails);
+const mapStateToProps = state => {
+  return { avgrr: state.rrReducer.value };
+};
+
+export default withStyles(styles)(connect(
+  mapStateToProps,
+  null
+)(ConnectionDetails));

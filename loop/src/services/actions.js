@@ -7,6 +7,7 @@ export const HEATMAP_DATA = "HEATMAP_DATA"
 export const EMPTY_FRIENDS_LIST = "EMPTY_FRIENDS_LIST"
 export const USER_INFO = "USER_INFO"
 export const UPDATE_TOUCH_POINTS = "UPDATE_TOUCH_POINTS"
+export const UPDATE_RESPONSE_RATE = "UPDATE_RESPONSE_RATE"
 
 export const updateModalStatus = (show) => ({
   type: UPDATE_MODAL_STATUS,
@@ -15,6 +16,11 @@ export const updateModalStatus = (show) => ({
 
 export const updateTouchPoints = (value) => ({
   type: UPDATE_TOUCH_POINTS,
+  value
+});
+
+export const updateResponseRate = (value) => ({
+  type: UPDATE_RESPONSE_RATE,
   value
 });
 

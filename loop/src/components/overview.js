@@ -17,7 +17,7 @@ import Select from "@material-ui/core/Select";
 import NativeSelect from "@material-ui/core/NativeSelect";
 import InputBase from "@material-ui/core/InputBase";
 import { myFirebase, myFirestore } from "../firebase";
-import { updateJourneyStatus,getUserinfo } from "../services/actions";
+import { updateJourneyStatus, getUserinfo } from "../services/actions";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import gql from "graphql-tag";
@@ -28,7 +28,7 @@ import Chip from "@material-ui/core/Chip";
 
 const mytheme = createMuiTheme({
   typography: {
-    useNextVariants: true,
+    useNextVariants: true
   },
   palette: {
     primary: {
@@ -178,15 +178,13 @@ class Overview extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      journeyid:"",
+      journeyid: "",
       journeylist: [],
-      touchpoints:0,
-      avgrsr: 0,
-      
-     
+      touchpoints: 0,
+      avgrsr: 0
     };
-    this.colors=[];
-    this.color_default=[];
+    this.colors = [];
+    this.color_default = [];
   }
   handleDelete = () => {
     alert("You clicked the delete icon."); // eslint-disable-line no-alert
@@ -198,19 +196,22 @@ class Overview extends Component {
   componentDidMount() {
     myFirebase.auth().onAuthStateChanged(user => {
       if (user) {
-        this.props.getUserinfo({id: user.uid, name: user.displayName, photourl: user.photoURL? user.photoURL:""})
+        this.props.getUserinfo({
+          id: user.uid,
+          name: user.displayName,
+          photourl: user.photoURL ? user.photoURL : ""
+        });
         this.getJourneys(user);
         this.getTouchpoints(user);
-        this.getAvgResponseRate(user)
+        this.getAvgResponseRate(user);
       }
-  
     });
   }
 
   componentDidUpdate(prevProps, prevState) {
     if (prevProps.data !== this.props.data) {
       // this.setState({
-      //   journeylist: 
+      //   journeylist:
       // })
     }
   }
@@ -222,157 +223,168 @@ class Overview extends Component {
         .doc(user.uid)
         .collection("journeys")
         .get();
-      if (result.docs.length == 0){
-        this.props.history.push("/home/nojourney")
-      }else{
-        this.setState({journeyid: result.docs[0].data().id})
+      if (result.docs.length == 0) {
+        this.props.history.push("/home/nojourney");
+      } else {
+        this.setState({ journeyid: result.docs[0].data().id });
         this.props.updateJourneyStatus(false);
-        let arr=Array.from(" ".repeat(result.docs.length)).fill("primary");
-        this.colors=arr;
-        this.color_default = arr
+        let arr = Array.from(" ".repeat(result.docs.length)).fill("primary");
+        this.colors = arr;
+        this.color_default = arr;
       }
     } else {
       console.log("failed");
     }
   };
 
-  getTouchpoints= async (user) =>{
+  getTouchpoints = async user => {
     await axios
-    .post(
-      `https://loop-backend-server.herokuapp.com/api/loops/users/touchPoints`,
-      {
-        senderid: user.uid,
-        journeyFriends: []
-      }
-    )
-    .then((res)=>{
-      this.setState({touchpoints: res.data.touchPoints})
-      console.log()
-    })
-  }
+      .post(
+        `https://loop-backend-server.herokuapp.com/api/loops/users/touchPoints`,
+        {
+          senderid: user.uid,
+          journeyFriends: []
+        }
+      )
+      .then(res => {
+        this.setState({ touchpoints: res.data.touchPoints });
+        console.log();
+      });
+  };
 
-  getAvgResponseRate = (user)=>{
+  getAvgResponseRate = user => {
     axios
-    .post(
-      `https://loop-backend-server.herokuapp.com/api/loops/users/responseRate`,
-      {
-        senderid: user.uid
-      }
-    )
-    .then((res)=>{
-      console.log(res.data.responseRate)
-      this.setState({avgrsr: res.data.responseRate})
-    })
-  }
+      .post(
+        `https://loop-backend-server.herokuapp.com/api/loops/users/responseRate`,
+        {
+          senderid: user.uid
+        }
+      )
+      .then(res => {
+        console.log(res.data.responseRate);
+        this.setState({ avgrsr: res.data.responseRate });
+      });
+  };
   handleChipClick = (id, index) => {
-    this.setState({journeyid: id});
+    this.setState({ journeyid: id });
     let newcolor = this.color_default;
     let copy = newcolor.slice();
     copy[index] = "secondary";
-    
-    this.colors=copy;
-    console.log(this.colors)
-    
+
+    this.colors = copy;
+    console.log(this.colors);
   };
 
   render() {
     const { classes } = this.props;
     return (
-         <MuiThemeProvider theme={mytheme}>
-         {!this.props.empty? (
-        <div className={classes.section2}>
-          <Typography gutterBottom variant="h5">
-            overview
-          </Typography>
-          <div className={classes.skillset}>
-            <Grid container spacing={24}>
-              <Grid item xs={4}>
-                <Paper className={classes.paper}>
-                  <Typography component="p" color="primary">
-                    Overall Avg. Response Rate
-                  </Typography>
-                  <div className={classes.papercontent_bar}>
-                    <div className={classes.papercaption} />
-                    <div className={classes.progressbar}>
-                      <SemiCircleProgressBar
-                        percentage={this.state.avgrsr}
-                        stroke="#FF8373"
-                        diameter={135}
-                        strokeWidth={20}
-                        background="#F0F2F8"
-                        showPercentValue
-                      />
-                    </div>
-                  </div>
-                </Paper>
-              </Grid>
-              <Grid item xs={4}>
-                <Paper className={classes.paper}>
-                  <Typography component="p" color="primary">
-                    Touchpoints
-                  </Typography>
-
-                  <div className={classes.papercontent}>
-                    <div className={classes.papercaption}>
-                      <Typography variant="h6">{this.state.touchpoints}</Typography>
-                    </div>
-                  </div>
-                </Paper>
-              </Grid>
-              <Grid item xs={4}>
-              {this.props.user.id? (<TotalConnection userid={this.props.user.id}/>) : null}
-              </Grid>
-            </Grid>
-          </div>
-          <div className={classes.maincharts}>
-            <Paper className={classes.paper}>
-              <div className={classes.heatmapheader}>
-                <div className={classes.heatmaplefth}>
-                  <Typography component="p" color="primary">
-                    HeatMap
-                  </Typography>
-                  {this.props.data.findUsersJourney?(
-                    <div>
-                      {this.props.data.findUsersJourney.map((v,i)=>{
-                        if (v.name==="Stranger") return null;
-                        return(
-                        <Button key={i} color={this.colors[i]} className={classes.hbutton}
-                        onClick={(event)=>{this.handleChipClick(v.id,i) }}>
-                        {v.name}
-                      </Button>)
-                      })}
-                    </div>
-                  ):null}
-                </div>
-                <form autoComplete="off">
-                  <FormControl>
-                    <NativeSelect
-                      value={10}
-                      onChange={this.handleTime}
-                      input={
-                        <BootstrapInput
-                          name="age"
-                          id="age-customized-native-simple"
+      <MuiThemeProvider theme={mytheme}>
+        {!this.props.empty ? (
+          <div className={classes.section2}>
+            <Typography gutterBottom variant="h5">
+              Overview
+            </Typography>
+            <div className={classes.skillset}>
+              <Grid container spacing={24}>
+                <Grid item xs={4}>
+                  <Paper className={classes.paper}>
+                    <Typography component="p" color="primary">
+                      Overall Avg. Response Rate
+                    </Typography>
+                    <div className={classes.papercontent_bar}>
+                      <div className={classes.papercaption} />
+                      <div className={classes.progressbar}>
+                        <SemiCircleProgressBar
+                          percentage={this.state.avgrsr}
+                          stroke="#FF8373"
+                          diameter={135}
+                          strokeWidth={20}
+                          background="#F0F2F8"
+                          showPercentValue
                         />
-                      }
-                    >
-                      <option value="Last 6 Months" />
-                      <option value={10}>Last Month</option>
-                      <option value={20}>Last 6 Months</option>
-                      <option value={30}>Last Year</option>
-                    </NativeSelect>
-                  </FormControl>
-                </form>
-              </div>
+                      </div>
+                    </div>
+                  </Paper>
+                </Grid>
+                <Grid item xs={4}>
+                  <Paper className={classes.paper}>
+                    <Typography component="p" color="primary">
+                      Touchpoints
+                    </Typography>
 
-              <div style={{ padding: 20 }}>
-              {this.state.journeyid!==""?(<HeatMap journeyid={this.state.journeyid} />):null}
-                
-              </div>
-            </Paper>
-          </div>
+                    <div className={classes.papercontent}>
+                      <div className={classes.papercaption}>
+                        <Typography variant="h6">
+                          {this.state.touchpoints}
+                        </Typography>
+                      </div>
+                    </div>
+                  </Paper>
+                </Grid>
+                <Grid item xs={4}>
+                  {this.props.user.id ? (
+                    <TotalConnection userid={this.props.user.id} />
+                  ) : null}
+                </Grid>
+              </Grid>
+            </div>
+            <div className={classes.maincharts}>
+              <Paper className={classes.paper}>
+                <div className={classes.heatmapheader}>
+                  <div className={classes.heatmaplefth}>
+                    <Typography component="p" color="primary">
+                      HeatMap
+                    </Typography>
+                    {this.props.data.findUsersJourney ? (
+                      <div>
+                        {this.props.data.findUsersJourney.map((v, i) => {
+                          if (v.name === "Stranger") return null;
+                          return (
+                            <Button
+                              key={i}
+                              color={this.colors[i]}
+                              className={classes.hbutton}
+                              onClick={event => {
+                                this.handleChipClick(v.id, i);
+                              }}
+                            >
+                              {v.name}
+                            </Button>
+                          );
+                        })}
+                      </div>
+                    ) : null}
+                  </div>
+                  <form autoComplete="off">
+                    <FormControl>
+                      <NativeSelect
+                        value={10}
+                        onChange={this.handleTime}
+                        input={
+                          <BootstrapInput
+                            name="age"
+                            id="age-customized-native-simple"
+                          />
+                        }
+                      >
+                        <option value="Last 6 Months" />
+                        <option value={10}>Last Month</option>
+                        <option value={20}>Last 6 Months</option>
+                        <option value={30}>Last Year</option>
+                      </NativeSelect>
+                    </FormControl>
+                  </form>
+                </div>
 
-          {/* <div className={classes.reminder}>
+                <div style={{ padding: 20 }}>
+                  {this.state.journeyid !== "" ? (
+                    <HeatMap journeyid={this.state.journeyid} />
+                  ) : null}
+                </div>
+              </Paper>
+            </div>
+
+            {/* <div className={classes.reminder}>
             <Paper className={classes.paper}>
               <Typography component="p" color="primary">
                 Reminder
@@ -407,11 +419,10 @@ class Overview extends Component {
               </div>
             </Paper>
           </div>*/}
-        </div> 
-        
-        ): null}
+          </div>
+        ) : null}
       </MuiThemeProvider>
-     );
+    );
   }
 }
 
@@ -420,7 +431,7 @@ Overview.propTypes = {
 };
 
 const mapStateToProps = state => {
-  return { empty: state.modalReducer.empty, user: state.userReducer.user};
+  return { empty: state.modalReducer.empty, user: state.userReducer.user };
 };
 
 const mapDispatchToProps = dispatch => {
@@ -431,25 +442,29 @@ const mapDispatchToProps = dispatch => {
     },
     dispatch
   );
-}
+};
 
-export default withStyles(styles)(connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(graphql(
-  gql`
-    query ($userid: String) {
-      findUsersJourney(userid: $userid){
-        id,
-        name
+export default withStyles(styles)(
+  connect(
+    mapStateToProps,
+    mapDispatchToProps
+  )(
+    graphql(
+      gql`
+        query($userid: String) {
+          findUsersJourney(userid: $userid) {
+            id
+            name
+          }
+        }
+      `,
+      {
+        options: props => ({
+          variables: {
+            userid: props.user.id
+          }
+        })
       }
-    }
-  `,
-  {
-    options: props => ({
-      variables: {
-        userid: props.user.id
-      }
-})
-  }
-)(Overview)));
+    )(Overview)
+  )
+);

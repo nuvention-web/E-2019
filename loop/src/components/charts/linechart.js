@@ -6,7 +6,7 @@ import ReactFC from "react-fusioncharts";
 import FusionTheme from "fusioncharts/themes/fusioncharts.theme.fusion";
 import { myFirestore, myFirebase } from "../../firebase";
 import axios from "axios";
-import { getUserinfo } from "../../services/actions";
+import { getUserinfo, updateResponseRate } from "../../services/actions";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 ReactFC.fcRoot(fusioncharts, charts, FusionTheme);
@@ -72,15 +72,25 @@ class LineChart extends React.Component {
       .then(res => {
         console.log(res);
         dataSource["data"] = res.data.monthly;
+        this.avgResponseRate(res.data.monthly)
         this.setState({ loadedChart: false });
       });
     }
   };
 
+  avgResponseRate(data){
+    console.log(data)
+    let avgrr = data.reduce((a,c)=>{
+      a = a+Number(c.value)
+      return a
+    },0);
+    avgrr = Math.floor(avgrr/data.length);
+    this.props.updateResponseRate(avgrr);
+  }
+
   renderChart() {
     let viewChart = [];
     if (!this.state.loadedChart) {
-      console.log("wht")
       viewChart.push(
         <ReactFC
           type="spline"
@@ -107,7 +117,8 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
   return bindActionCreators(
     {
-      getUserinfo
+      getUserinfo,
+      updateResponseRate
     },
     dispatch
   );
