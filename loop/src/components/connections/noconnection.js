@@ -27,7 +27,12 @@ import { connect } from "react-redux";
 import {updateModalStatus } from "../../services/actions";
 import { bindActionCreators } from "redux";
 import { myFirebase, myFirestore } from "../../firebase";
-import ImportContact from "./import"
+import ImportContact from "./import";
+import Paper from '@material-ui/core/Paper';
+import { faCentercode } from "@fortawesome/free-brands-svg-icons";
+import Input from '@material-ui/core/Input';
+import FormControlLabel from "@material-ui/core/FormControlLabel";
+import Checkbox from "@material-ui/core/Checkbox";
 const styles = theme => ({
   section_center: {
     height: "80vh",
@@ -101,7 +106,40 @@ const styles = theme => ({
     [theme.breakpoints.up("md")]: {
       width: 200
     }
-  }
+  },
+  paper: {
+    width:400,
+    ...theme.mixins.gutters(),
+    paddingTop: theme.spacing.unit * 2,
+    paddingBottom: theme.spacing.unit * 2,
+    display: "flex",
+    flexDirection: "column",
+    justifyContent:"center",
+    alignItems:"center"
+  },
+  button1: {
+    width:200,
+    marginTop: 64,
+    marginBottom: theme.spacing.unit * 4,
+    marginLeft:64
+  },
+  button2: {
+    width:200,
+    marginTop: theme.spacing.unit * 4,
+    marginBottom: theme.spacing.unit * 4,
+    marginLeft:64
+  },
+  button3: {
+    width:200,
+    marginTop: theme.spacing.unit * 2,
+    marginBottom: theme.spacing.unit * 4,
+    marginLeft:64
+  },
+  input: {
+    width:300,
+    marginTop: theme.spacing.unit * 3,
+    margin: theme.spacing.unit,
+  },
 });
 
 const mytheme = createMuiTheme({
@@ -139,7 +177,7 @@ class NoConnection extends Component {
     return (
       <MuiThemeProvider theme={mytheme}>
         <div className={classes.section_center}>
-          <Typography gutterBottom variant="h5">
+          {/*<Typography gutterBottom variant="h5">
             Seems like you don’t have any contacts yet…
           </Typography>
           <FormButton
@@ -151,7 +189,73 @@ class NoConnection extends Component {
           >
             Import Contacts
           </FormButton>
-          <ImportContact key={this.props.location.state.id} history={this.props.history} journeyid={this.props.location.state.id} journeyname={this.props.location.state.name}/>
+    <ImportContact key={this.props.location.state.id} history={this.props.history} journeyid={this.props.location.state.id} journeyname={this.props.location.state.name}/>*/}
+        <Paper className={classes.paper} elevation={1}>
+        <FormButton
+                  className={classes.button1}
+                  size="small"
+                  color="secondary"
+                  width="80%"
+                  onClick={this.handleSubmit}
+                >
+                  Let's go
+          </FormButton>
+       
+        <Typography component="p">
+         Or add them manually
+        </Typography>
+        <FormButton
+                  className={classes.button2}
+                  size="small"
+                  color="secondary"
+                  width="80%"
+                  onClick={this.handleSubmit}
+                >
+                  Add Manually
+          </FormButton>
+  </Paper>
+      <Paper className={classes.paper} elevation={1}>
+      <Input
+        placeholder="Name"
+        className={classes.input}
+        inputProps={{
+          'aria-label': 'Description',
+        }}
+      />
+      <Input
+        placeholder="Email"
+        className={classes.input}
+        inputProps={{
+          'aria-label': 'Description',
+        }}
+      />
+      <Input
+        placeholder="Mobile"
+        className={classes.input}
+        inputProps={{
+          'aria-label': 'Description',
+        }}
+      />
+        <FormControlLabel
+                  control={<Checkbox value="false" color="primary" onChange={(event) => {
+                    this.setState({ checkedValid: event.target.checked })
+                  }} />}
+                  style={{ display: "flex", marginLeft: -20,marginTop:40 }}
+                  label="Invite his/her via email"
+
+                />        
+       
+       
+        <FormButton
+                  className={classes.button3}
+                  size="small"
+                  color="secondary"
+                  width="80%"
+                  onClick={this.handleSubmit}
+                >
+                  Add Manually
+          </FormButton>
+  </Paper>
         </div>
       </MuiThemeProvider>
     );
