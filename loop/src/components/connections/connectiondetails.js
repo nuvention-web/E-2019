@@ -28,6 +28,8 @@ import axios from "axios";
 import { myFirebase } from "../../firebase";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
+import TextField from '@material-ui/core/TextField';
+import AddIcon from "@material-ui/icons/Add";
 const mytheme = createMuiTheme({
   typography: {
     useNextVariants: true,
@@ -196,7 +198,70 @@ const styles = theme => ({
   root: {
     display: "flex",
     flexWrap: "wrap"
-  }
+  },
+  formControl: {
+    margin: theme.spacing.unit,
+    minWidth: 120,
+  },
+  container: {
+    display: 'flex',
+    flexWrap: 'wrap',
+    marginTop:8,
+    marginLeft:5
+  },
+  textField: {
+    marginLeft: theme.spacing.unit,
+    marginRight: theme.spacing.unit,
+    width: 200,
+  },
+  bootstrapRoot: {
+    'label + &': {
+      marginTop: theme.spacing.unit * 3,
+      
+    },
+    width:1200,
+    height:100,
+    flexGrow: 1,
+  },
+  bootstrapInput: {
+    borderRadius: 4,
+    position: 'relative',
+    backgroundColor: theme.palette.common.white,
+    border: '1px solid #ced4da',
+    fontSize: 16,
+    
+    height:100,
+    padding: '10px 12px',
+    transition: theme.transitions.create(['border-color', 'box-shadow']),
+    // Use the system font instead of the default Roboto font.
+    fontFamily: [
+      '-apple-system',
+      'BlinkMacSystemFont',
+      '"Segoe UI"',
+      'Roboto',
+      '"Helvetica Neue"',
+      'Arial',
+      'sans-serif',
+      '"Apple Color Emoji"',
+      '"Segoe UI Emoji"',
+      '"Segoe UI Symbol"',
+    ].join(','),
+    '&:focus': {
+      borderRadius: 4,
+      borderColor: '#80bdff',
+      boxShadow: '0 0 0 0.2rem rgba(0,123,255,.25)',
+    },
+  },
+  margin: {
+    margin: theme.spacing.unit,
+  },
+  paper_journey_add: {
+    padding: theme.spacing.unit * 4.3,
+    backgroundColor: 'transparent',
+    display: "flex",
+    justifyContent: "center",
+    height:110,
+  },
 });
 const BootstrapInput = withStyles(theme => ({
   root: {
@@ -379,6 +444,79 @@ class ConnectionDetails extends Component {
               </div>
               <div style={{ padding: 20 }}>
                 <LineChart friendid={this.props.location.state.id}/>
+              </div>
+            </Paper>
+          </div>
+          
+          <div className={classes.maincharts}>
+            <Paper className={classes.paper}>
+              <div className={classes.timelineheader}>
+                <Typography variant="body1" color="primary">
+                  Activity Log
+                </Typography>
+              </div>
+
+              <div style={{ paddingLeft: 12,display:"flex", flexWrap: 'wrap',marginTop:10 }}>
+              <Typography component="p" style={{ marginTop:20 }}>
+          Touchpoint Type
+        </Typography>
+              <form className={classes.root} autoComplete="off">
+              <FormControl className={classes.formControl}>
+          <Select
+            value={this.state.age}
+            onChange={this.handleChange}
+            inputProps={{
+              name: 'age',
+              id: 'age-simple',
+            }}
+          >
+            <MenuItem value="">
+              <em>None</em>
+            </MenuItem>
+            <MenuItem value={10}>Ten</MenuItem>
+            <MenuItem value={20}>Twenty</MenuItem>
+            <MenuItem value={30}>Thirty</MenuItem>
+          </Select>
+        </FormControl>
+        <Typography component="p" style={{ marginTop:20,marginLeft:20 }}>
+          Date
+        </Typography>
+        </form>
+        <form className={classes.container} noValidate>
+      <TextField
+        id="date"
+        label=""
+        type="date"
+        defaultValue=""
+        className={classes.textField}
+        InputLabelProps={{
+          shrink: true,
+        }}
+      />
+    </form>
+              </div>
+              <div style={{ paddingLeft: 12,display:"flex", marginTop:30,flexDirection: 'row', flexGrow: 1,width:'100%',marginBottom:50,}}>
+              
+              <Typography component="p" style={{ marginTop:20 }}>
+         Note
+        </Typography>
+              <FormControl className={classes.margin}>
+        
+        <InputBase
+          id="bootstrap-input"
+          defaultValue=""
+          classes={{
+            root: classes.bootstrapRoot,
+            input: classes.bootstrapInput,
+          }}
+        />
+        
+      </FormControl>
+      <Paper className={classes.paper_journey_add}>
+                    <IconButton onClick={this.handleClick}>
+                      <AddIcon style={{ fontSize: 30 }} />
+                    </IconButton>
+                  </Paper>
               </div>
             </Paper>
           </div>
