@@ -37,15 +37,6 @@ import {
   emptyFriendList,
   updateModalStatus
 } from "../../services/actions";
-import Dialog from "@material-ui/core/Dialog";
-import AddIcon from "@material-ui/icons/Add";
-import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
-import List from "@material-ui/core/List";
-import ListItem from "@material-ui/core/ListItem";
-import ListItemAvatar from "@material-ui/core/ListItemAvatar";
-import ListItemText from "@material-ui/core/ListItemText";
-import FormButton from "../../modules/form/FormButton";
-import ImportContact from "./import";
 const mytheme = createMuiTheme({
   typography: {
     useNextVariants: true
@@ -337,10 +328,10 @@ class Connection extends Component {
   componentDidUpdate(prevProps, prevState) {
     if (prevProps.data !== this.props.data) {
       //console.log(this.props.data);
-      if(this.props.data.findUsersJourney&&this.props.data.findUsersJourney[0].journeyname !== "Stranger")
+      if(this.props.data.findUsersJourney&&this.props.data.findUsersJourney[0].name !== "Stranger")
         this.setState({
           journeyId: this.props.data.findUsersJourney[0].id,
-          journeyname: this.props.data.findUsersJourney[0].journeyname,
+          journeyname: this.props.data.findUsersJourney[0].name,
           loading: true
         });
     }
@@ -406,19 +397,15 @@ class Connection extends Component {
               color="primary"
               className={classes.button}
               onClick={() => {
-                this.props.updateModalStatus(true);
+                this.props.history.push({pathname:"/home/addconnection",state:{
+                  journeyid:this.state.journeyId,
+                  journeyname: this.state.journeyname
+                }})
               }}
             >
               Add a contact
             </Button>
           </div>
-
-          <ImportContact
-            key={this.state.journeyId}
-            history={this.props.history}
-            journeyid={this.state.journeyId}
-            journeyname={this.state.journeyname}
-          />
           <div className={classes.skillset}>
             {this.props.data.findUsersJourney && this.props.user.id
               ? get_userByJourney(

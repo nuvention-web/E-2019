@@ -53,24 +53,24 @@ class LineChart extends React.Component {
           name: user.displayName,
           photourl: user.photoURL ? user.photoURL : ""
         });
+        this.getChartData(user.uid);
       }
     });
-    this.getChartData();
+    
   }
-  getChartData = async () => {
-    console.log(this.props.friendid,this.props.user.id)
-    if(this.props.friendid&&this.props.user.id){
+
+  getChartData = async (id) => {
+    if(this.props.friendid&&id){
       await axios
       .post(
         `https://loop-backend-server.herokuapp.com/api/loops/users/oneOneResponseRate`,
         {
-          senderid: this.props.user.id,
+          senderid: id,
           monthsAgo: 10,
           receiverid: this.props.friendid
         }
       )
       .then(res => {
-        console.log(res);
         dataSource["data"] = res.data.monthly;
         this.avgResponseRate(res.data.monthly)
         this.setState({ loadedChart: false });
@@ -79,7 +79,6 @@ class LineChart extends React.Component {
   };
 
   avgResponseRate(data){
-    console.log(data)
     let avgrr = data.reduce((a,c)=>{
       a = a+Number(c.value)
       return a

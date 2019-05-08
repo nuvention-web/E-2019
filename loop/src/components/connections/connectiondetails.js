@@ -28,11 +28,14 @@ import axios from "axios";
 import { myFirebase } from "../../firebase";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import TextField from '@material-ui/core/TextField';
+import TextField from "@material-ui/core/TextField";
 import AddIcon from "@material-ui/icons/Add";
+import gql from "graphql-tag";
+import { graphql } from "react-apollo";
+
 const mytheme = createMuiTheme({
   typography: {
-    useNextVariants: true,
+    useNextVariants: true
   },
   palette: {
     primary: {
@@ -63,8 +66,8 @@ const mytheme = createMuiTheme({
         fontWeight: "bold",
         fontSize: "1rem"
       },
-      h5:{
-        fontWeight: "bold",
+      h5: {
+        fontWeight: "bold"
       }
     },
     MuiChip: {
@@ -183,10 +186,6 @@ const styles = theme => ({
     fontSize: 12,
     marginLeft: theme.spacing.unit * 0.5
   },
-  margin: {
-    marginTop: -theme.spacing.unit * 3,
-    marginLeft: theme.spacing.unit * 33
-  },
   timelineheader: {
     display: "flex",
     flexDirection: "row",
@@ -201,67 +200,67 @@ const styles = theme => ({
   },
   formControl: {
     margin: theme.spacing.unit,
-    minWidth: 120,
+    minWidth: 120
   },
   container: {
-    display: 'flex',
-    flexWrap: 'wrap',
-    marginTop:8,
-    marginLeft:5
+    display: "flex",
+    flexWrap: "wrap",
+    marginTop: 8,
+    marginLeft: 5
   },
   textField: {
     marginLeft: theme.spacing.unit,
     marginRight: theme.spacing.unit,
-    width: 200,
+    // width: 200
   },
   bootstrapRoot: {
-    'label + &': {
-      marginTop: theme.spacing.unit * 3,
-      
+    "label + &": {
+      marginTop: theme.spacing.unit * 3
     },
-    width:1200,
-    height:100,
-    flexGrow: 1,
+    height: 100,
+    flexGrow: 1
   },
   bootstrapInput: {
     borderRadius: 4,
-    position: 'relative',
+    position: "relative",
     backgroundColor: theme.palette.common.white,
-    border: '1px solid #ced4da',
+    border: "1px solid #ced4da",
     fontSize: 16,
-    
-    height:100,
-    padding: '10px 12px',
-    transition: theme.transitions.create(['border-color', 'box-shadow']),
+    height: 60,
+    padding: "10px 12px",
+    transition: theme.transitions.create(["border-color", "box-shadow"]),
     // Use the system font instead of the default Roboto font.
     fontFamily: [
-      '-apple-system',
-      'BlinkMacSystemFont',
+      "-apple-system",
+      "BlinkMacSystemFont",
       '"Segoe UI"',
-      'Roboto',
+      "Roboto",
       '"Helvetica Neue"',
-      'Arial',
-      'sans-serif',
+      "Arial",
+      "sans-serif",
       '"Apple Color Emoji"',
       '"Segoe UI Emoji"',
-      '"Segoe UI Symbol"',
-    ].join(','),
-    '&:focus': {
+      '"Segoe UI Symbol"'
+    ].join(","),
+    "&:focus": {
       borderRadius: 4,
-      borderColor: '#80bdff',
-      boxShadow: '0 0 0 0.2rem rgba(0,123,255,.25)',
-    },
+      borderColor: "#80bdff",
+      boxShadow: "0 0 0 0.2rem rgba(0,123,255,.25)"
+    }
   },
   margin: {
     margin: theme.spacing.unit,
+    width: "100%"
   },
   paper_journey_add: {
-    padding: theme.spacing.unit * 4.3,
-    backgroundColor: 'transparent',
+    marginTop: theme.spacing.unit * 2,
+    backgroundColor: "transparent",
     display: "flex",
     justifyContent: "center",
-    height:110,
-  },
+    alignItems: "center",
+    height: 80,
+    width:80
+  }
 });
 const BootstrapInput = withStyles(theme => ({
   root: {
@@ -300,10 +299,19 @@ const BootstrapInput = withStyles(theme => ({
 }))(InputBase);
 
 class ConnectionDetails extends Component {
-  state = {
-    time: "",
-    touchpoints:0,
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      time: "",
+      touchpoints: 0,
+      notes:"",
+      date: "",
+      type: "",
+      success: false
+    };
+    this.handleSubmit = this.handleSubmit.bind(this);
+  }
+  
   handleChange = event => {
     this.setState({ time: event.target.value });
   };
@@ -316,6 +324,7 @@ class ConnectionDetails extends Component {
   };
 
   componentDidMount() {
+    console.log(this.props.location.state)
     myFirebase.auth().onAuthStateChanged(user => {
       if (user) {
         this.getTouchpoints(user);
@@ -323,22 +332,61 @@ class ConnectionDetails extends Component {
     });
   }
 
-  getTouchpoints= async (user) =>{
-    await axios
-    .post(
-      `https://loop-backend-server.herokuapp.com/api/loops/users/touchPoints`,
-      {
-        senderid: user.uid,
-        journeyFriends: [this.props.location.state.id]
-      }
-    )
-    .then((res)=>{
-      this.setState({touchpoints: res.data.touchPoints})
-      // console.log(res.data.touchPoints)
-    })
+  handleChangeLogType(ev){
+    this.setState({type: ev.target.value })
   }
 
-  
+  handleChangeLogDate(ev){
+    let timestamp = Date.parse(ev.target.value)
+    this.setState({date: timestamp.toString()})
+  }
+
+  handleNotes(ev){
+    this.setState({notes: ev.target.value })
+  }
+
+  handleSubmit(){
+    var user = myFirebase.auth().currentUser;
+    if (
+      user &&
+      this.state.type !== "" &&
+      this.state.date !== "" &&
+      this.props.location.state.id
+    ) {
+      let groupid = user.uid + "-" + this.props.location.state.id;
+      this.props.mutate({
+        variables: {
+          input: {
+            id: groupid,
+            timestamp: this.state.date,
+            notes: this.state.notes,
+            type: this.state.type
+          }
+        }
+      });
+      this.setState({
+        notes: "",
+        date: "",
+        type: "",
+        success: true
+      });
+    }
+  }
+
+  getTouchpoints = async user => {
+    await axios
+      .post(
+        `https://loop-backend-server.herokuapp.com/api/loops/users/touchPoints`,
+        {
+          senderid: user.uid,
+          journeyFriends: [this.props.location.state.id]
+        }
+      )
+      .then(res => {
+        this.setState({ touchpoints: res.data.touchPoints });
+        // console.log(res.data.touchPoints)
+      });
+  };
 
   render() {
     const { classes } = this.props;
@@ -370,13 +418,11 @@ class ConnectionDetails extends Component {
                     />
                     <div className={classes.connectioncaption}>
                       <div className={classes.connectionheader}>
-                        <Typography variant="h6">{this.props.location.state.username}</Typography>
-                        <div className={classes.connectionicon}>
-                       
-                      
-                        </div>
+                        <Typography variant="h6">
+                          {this.props.location.state.username}
+                        </Typography>
+                        <div className={classes.connectionicon} />
                       </div>
-                      
                     </div>
                   </div>
                 </Paper>
@@ -409,11 +455,107 @@ class ConnectionDetails extends Component {
                   </Typography>
                   <div className={classes.papercontent}>
                     <div className={classes.papercaption}>
-                      <Typography variant="h5">{this.state.touchpoints}</Typography>
+                      <Typography variant="h5">
+                        {this.state.touchpoints}
+                      </Typography>
                     </div>
                   </div>
                 </Paper>
               </Grid>
+            </Grid>
+          </div>
+          <div className={classes.log}>
+          <Grid container spacing={24}>
+          <Grid item xs>
+            <Paper className={classes.paper}>
+              <div className={classes.timelineheader}>
+                <Typography variant="body1" color="primary">
+                  Activity Log
+                </Typography>
+              </div>
+
+              <div
+                style={{
+                  paddingLeft: 12,
+                  display: "flex",
+                  flexWrap: "wrap",
+                  marginTop: 10
+                }}
+              >
+                <Typography component="p" style={{ marginTop: 20 }}>
+                  Touchpoint Type
+                </Typography>
+                <form className={classes.root} autoComplete="off">
+                  <FormControl className={classes.formControl}>
+                    <Select
+                      value={this.state.type}
+                      onChange={(ev)=>this.handleChangeLogType(ev)}
+                      inputProps={{
+                        name: "age",
+                        id: "age-simple"
+                      }}
+                    >
+                      <MenuItem value="">
+                        <em>None</em>
+                      </MenuItem>
+                      <MenuItem value="email">Email</MenuItem>
+                      <MenuItem value="chat">Chat</MenuItem>
+                      <MenuItem value="inperson">In-Person</MenuItem>
+                      <MenuItem value="socialmedia">Social-Media</MenuItem>
+                    </Select>
+                  </FormControl>
+                  <Typography
+                    component="p"
+                    style={{ marginTop: 20, marginLeft: 20 }}
+                  >
+                    Date
+                  </Typography>
+                </form>
+                <form className={classes.container} noValidate>
+                  <TextField
+                    id="date"
+                    label=""
+                    type="date"
+                    defaultValue=""
+                    onChange={(ev)=>this.handleChangeLogDate(ev)}
+                    className={classes.textField}
+                    InputLabelProps={{
+                      shrink: true
+                    }}
+                  />
+                </form>
+              </div>
+              <div
+                style={{
+                  paddingLeft: 12,
+                  display: "flex",
+                  flexDirection: "row",
+                  flexGrow: 1,
+                }}
+              >
+                <Typography component="p" style={{ marginTop: 20 }}>
+                  Notes
+                </Typography>
+                <FormControl className={classes.margin}>
+                  <InputBase
+                    id="bootstrap-input"
+                    defaultValue=""
+                    value={this.state.notes}
+                    onChange={(ev)=>this.handleNotes(ev)}
+                    classes={{
+                      root: classes.bootstrapRoot,
+                      input: classes.bootstrapInput
+                    }}
+                  />
+                </FormControl>
+                <Paper className={classes.paper_journey_add}>
+                  <IconButton className={classes.backbutton} onClick={this.handleSubmit}>
+                    <AddIcon style={{ fontSize: 25 }} />
+                  </IconButton>
+                </Paper>
+              </div>
+            </Paper>
+            </Grid>
             </Grid>
           </div>
           <div className={classes.maincharts}>
@@ -443,83 +585,11 @@ class ConnectionDetails extends Component {
                 </form>
               </div>
               <div style={{ padding: 20 }}>
-                <LineChart friendid={this.props.location.state.id}/>
+                <LineChart friendid={this.props.location.state.id} />
               </div>
             </Paper>
           </div>
-          
-          <div className={classes.maincharts}>
-            <Paper className={classes.paper}>
-              <div className={classes.timelineheader}>
-                <Typography variant="body1" color="primary">
-                  Activity Log
-                </Typography>
-              </div>
 
-              <div style={{ paddingLeft: 12,display:"flex", flexWrap: 'wrap',marginTop:10 }}>
-              <Typography component="p" style={{ marginTop:20 }}>
-          Touchpoint Type
-        </Typography>
-              <form className={classes.root} autoComplete="off">
-              <FormControl className={classes.formControl}>
-          <Select
-            value={this.state.age}
-            onChange={this.handleChange}
-            inputProps={{
-              name: 'age',
-              id: 'age-simple',
-            }}
-          >
-            <MenuItem value="">
-              <em>None</em>
-            </MenuItem>
-            <MenuItem value={10}>Ten</MenuItem>
-            <MenuItem value={20}>Twenty</MenuItem>
-            <MenuItem value={30}>Thirty</MenuItem>
-          </Select>
-        </FormControl>
-        <Typography component="p" style={{ marginTop:20,marginLeft:20 }}>
-          Date
-        </Typography>
-        </form>
-        <form className={classes.container} noValidate>
-      <TextField
-        id="date"
-        label=""
-        type="date"
-        defaultValue=""
-        className={classes.textField}
-        InputLabelProps={{
-          shrink: true,
-        }}
-      />
-    </form>
-              </div>
-              <div style={{ paddingLeft: 12,display:"flex", marginTop:30,flexDirection: 'row', flexGrow: 1,width:'100%',marginBottom:50,}}>
-              
-              <Typography component="p" style={{ marginTop:20 }}>
-         Note
-        </Typography>
-              <FormControl className={classes.margin}>
-        
-        <InputBase
-          id="bootstrap-input"
-          defaultValue=""
-          classes={{
-            root: classes.bootstrapRoot,
-            input: classes.bootstrapInput,
-          }}
-        />
-        
-      </FormControl>
-      <Paper className={classes.paper_journey_add}>
-                    <IconButton onClick={this.handleClick}>
-                      <AddIcon style={{ fontSize: 30 }} />
-                    </IconButton>
-                  </Paper>
-              </div>
-            </Paper>
-          </div>
           <div className={classes.reminder}>
             <Grid container spacing={24}>
               <Grid item xs>
@@ -529,7 +599,7 @@ class ConnectionDetails extends Component {
                       Touchpoint
                     </Typography>
                     <form autoComplete="off">
-                      <FormControl >
+                      <FormControl>
                         <NativeSelect
                           value={10}
                           onChange={this.handleTime}
@@ -596,7 +666,15 @@ const mapStateToProps = state => {
   return { avgrr: state.rrReducer.value };
 };
 
-export default withStyles(styles)(connect(
-  mapStateToProps,
-  null
-)(ConnectionDetails));
+export default withStyles(styles)(
+  connect(
+    mapStateToProps,
+    null
+  )(graphql(
+    gql`
+    mutation($input: Log!) {
+      createLog(input: $input)
+      }
+    `
+  )(ConnectionDetails))
+);
