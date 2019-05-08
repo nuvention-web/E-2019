@@ -226,7 +226,9 @@ class Overview extends Component {
       if (result.docs.length == 0) {
         this.props.history.push("/home/nojourney");
       } else {
-        this.setState({ journeyid: result.docs[0].data().id });
+        if(result.docs[0].data().journeyname!=="Stranger"){
+          this.setState({ journeyid: result.docs[0].data().id });
+        }
         this.props.updateJourneyStatus(false);
         let arr = Array.from(" ".repeat(result.docs.length)).fill("primary");
         arr[0] = "secondary"

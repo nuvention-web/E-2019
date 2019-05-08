@@ -407,7 +407,7 @@ class Connection extends Component {
             </Button>
           </div>
           <div className={classes.skillset}>
-            {this.props.data.findUsersJourney && this.props.user.id
+            {this.props.data.findUsersJourney && this.props.user.id&&this.state.journeyId
               ? get_userByJourney(
                   this.state.journeyId,
                   this.props.user.id,
