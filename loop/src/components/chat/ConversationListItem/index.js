@@ -141,23 +141,26 @@ class ConversationListItem extends Component {
     if (this.listUser.length > 0) {
       let viewListUser = [];
       this.listUser.forEach((item, index) => {
-        viewListUser.push(
-          <div
-            className="conversation-list-item"
-            key={item.data().name}
-            onClick={() => this.handleUserChange(item.data().id)}
-          >
-            <img
-              className="conversation-photo"
-              src={item.data().photourl === ""? "https://bootdey.com/img/Content/avatar/avatar4.png": item.data().photourl}
-              alt="conversation"
-            />
-            <div className="conversation-info">
-              <h1 className="conversation-title">{item.data().name}</h1>
-              <p className="conversation-snippet" />
+        if(item.data().type!=="manual"){
+          viewListUser.push(
+            <div
+              className="conversation-list-item"
+              key={item.data().name}
+              onClick={() => this.handleUserChange(item.data().id)}
+            >
+              <img
+                className="conversation-photo"
+                src={item.data().photourl === ""? "https://bootdey.com/img/Content/avatar/avatar4.png": item.data().photourl}
+                alt="conversation"
+              />
+              <div className="conversation-info">
+                <h1 className="conversation-title">{item.data().name}</h1>
+                <p className="conversation-snippet" />
+              </div>
             </div>
-          </div>
-        );
+          );
+        }
+        
       });
       return viewListUser;
     } else {
@@ -187,7 +190,7 @@ class ConversationListItem extends Component {
 
   getMessage = (id) => {
     this.setState({
-      messages: this.listUser.filter(l => l.data().id===id)
+      messages: this.listUser.filter(l => l.data().id===id&&l.data().type!=="manual")
     })
   }
   renderFirstMessaging = () => {
