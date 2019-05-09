@@ -347,7 +347,6 @@ class ConnectionDetails extends Component {
 
   handleSubmit() {
     var user = myFirebase.auth().currentUser;
-    console.log(user,  this.state.type, this.state.date, this.props.location.state.id)
     if (
       user &&
       this.state.type !== "" &&
@@ -377,7 +376,6 @@ class ConnectionDetails extends Component {
         )
         .then(res => {
           console.log(res);
-          console.log(res.data);
         });
       this.setState({
         notes: "",
