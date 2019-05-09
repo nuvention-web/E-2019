@@ -30,6 +30,7 @@ import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import TextField from '@material-ui/core/TextField';
 import AddIcon from "@material-ui/icons/Add";
+import EnhancedTable from "./Table"
 const mytheme = createMuiTheme({
   typography: {
     useNextVariants: true,
@@ -447,7 +448,37 @@ class ConnectionDetails extends Component {
               </div>
             </Paper>
           </div>
-          
+          <div className={classes.maincharts}>
+            <Paper className={classes.paper}>
+              <div className={classes.timelineheader}>
+                <Typography variant="body1" color="primary">
+                  Table
+                </Typography>
+                <form autoComplete="off">
+                  <FormControl className={classes.margin2}>
+                    <NativeSelect
+                      value={10}
+                      onChange={this.handleTime}
+                      input={
+                        <BootstrapInput
+                          name="age"
+                          id="age-customized-native-simple"
+                        />
+                      }
+                    >
+                      <option value="Last 6 Months" />
+                      <option value={10}>Last Month</option>
+                      <option value={20}>Last 6 Months</option>
+                      <option value={30}>Last Year</option>
+                    </NativeSelect>
+                  </FormControl>
+                </form>
+              </div>
+              <div style={{ padding: 20 }}>
+                <EnhancedTable />
+              </div>
+            </Paper>
+          </div>
           <div className={classes.maincharts}>
             <Paper className={classes.paper}>
               <div className={classes.timelineheader}>
