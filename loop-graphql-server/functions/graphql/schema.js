@@ -42,7 +42,7 @@ type Query {
   findContactsId(journeyid:String, userid:String): [String],
   findContacts(journeyid:String, userid:String): [User],
   findUsersJourney(userid:String) : [Journey],
-  totalAllContacts(userid:String): Int
+  totalAllContacts(userid:String): Int,
   helloword: String
 }
 type Mutation {

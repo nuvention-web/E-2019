@@ -114,7 +114,7 @@ module.exports = {
           }, 0);
           return result;
         });
-    }
+    },
   },
   Mutation: {
     updateTPandARR(obj, args, context, info) {
