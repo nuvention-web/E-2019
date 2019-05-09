@@ -33,6 +33,7 @@ import AddIcon from "@material-ui/icons/Add";
 import EnhancedTable from "./Table";
 import gql from "graphql-tag";
 import { graphql } from "react-apollo";
+import Button from "@material-ui/core/Button";
 
 const mytheme = createMuiTheme({
   typography: {
@@ -43,8 +44,7 @@ const mytheme = createMuiTheme({
       main: "#757475"
     },
     secondary: {
-      main: "#EAD2AC",
-      dark: "#E6B89C"
+      main: "#3B86FF"
     },
     error: {
       main: "#FE938C"
@@ -308,7 +308,9 @@ class ConnectionDetails extends Component {
       notes: "",
       date: "",
       type: "",
-      success: false
+      success: false,
+      showTable: false,
+      showTimeline: true
     };
     this.handleSubmit = this.handleSubmit.bind(this);
   }
@@ -339,6 +341,14 @@ class ConnectionDetails extends Component {
   handleChangeLogDate(ev) {
     let timestamp = Date.parse(ev.target.value);
     this.setState({ date: timestamp.toString() });
+  }
+
+  handleClickButton(type){
+    if(type==="timeline"){
+      this.setState({showTimeline: true, showTable: false})
+    }else{
+      this.setState({showTable: true,showTimeline: false })
+    }
   }
 
   handleNotes(ev) {
@@ -575,9 +585,19 @@ class ConnectionDetails extends Component {
           <div className={classes.maincharts}>
             <Paper className={classes.paper}>
               <div className={classes.timelineheader}>
-                <Typography variant="body1" color="primary">
+                <div>
+                <Button
+                    color={this.state.showTimeline? "secondary": "primary"}
+                    onClick={(event)=>this.handleClickButton("timeline")}
+                  >
                   TimeLine
-                </Typography>
+                  </Button>
+                  <Button
+                    color={this.state.showTable? "secondary": "primary"}
+                    onClick={(event)=>this.handleClickButton("table")}
+                  >
+                  Table
+                  </Button></div>
                 <form autoComplete="off">
                   <FormControl className={classes.margin2}>
                     <NativeSelect
@@ -599,7 +619,7 @@ class ConnectionDetails extends Component {
                 </form>
               </div>
               <div style={{ padding: 20 }}>
-                <LineChart friendid={this.props.location.state.id} />
+              {this.state.showTimeline? (<LineChart friendid={this.props.location.state.id} />) : (<EnhancedTable />)}
               </div>
             </Paper>
           </div>

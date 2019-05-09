@@ -178,8 +178,8 @@ module.exports = {
         .collection("logs")
         .doc(input.id)
         .collection("touchpoints")
-        .doc(input.timestamp)
-      return ref.set({notes: input.notes, timestamp: input.timestamp, type: input.type})
+        .doc()
+      return ref.set({id: ref.id, notes: input.notes, timestamp: input.timestamp, type: input.type})
           .then(()=>{
             console.log("Document created")
             return true
