@@ -31,6 +31,7 @@ import {
 } from "../../services/actions";
 import { bindActionCreators } from "redux";
 import { myFirebase, myFirestore } from "../../firebase";
+import Divider from "@material-ui/core/Divider";
 
 const styles = theme => ({
   section_center: {
@@ -57,14 +58,18 @@ const styles = theme => ({
   },
   dialogh: {
     display: "flex",
-    justifyContent: "flex-end"
+    justifyContent: "center"
   },
   dialogf: {
     display: "flex",
+    flexDirection:"column",
+    alignItems:"center",
     justifyContent: "center"
   },
   fbutton: {
-    marginRight: 0
+    marginRight: 0,
+    marginTop: 20,
+    marginBottom: 20
   },
   search: {
     display: "flex",
@@ -84,6 +89,7 @@ const styles = theme => ({
   },
   searchIcon: {
     width: theme.spacing.unit * 9,
+    color: "#000",
     height: "100%",
     position: "absolute",
     pointerEvents: "none",
@@ -92,7 +98,7 @@ const styles = theme => ({
     justifyContent: "center"
   },
   inputRoot: {
-    color: "inherit",
+    color: "#000",
     width: "100%"
   },
   inputInput: {
@@ -141,15 +147,18 @@ class ImportContact extends Component {
     this.getJourneyInfo();
   }
 
-  handleClose = () => {
-    this.props.updateModalStatus(false);
-  };
   handleAdded = () => {
     this.setState({
       added: true,
       loading_total: true
     });
   };
+
+  handleKeypress = event =>{
+    if (event.key === "Enter") {
+      this.setState({email: this.state.semail});
+    }
+  }
   searchHandle = event => {
     const email = event.target.value;
   };
@@ -158,12 +167,13 @@ class ImportContact extends Component {
   };
   getJourneyInfo = async () => {
     var user = myFirebase.auth().currentUser;
-    if (user && this.props.journeyid) {
+    let journeyid = this.props.location.state.journeyid
+    if (user && journeyid) {
       var journey = await myFirestore
         .collection("user")
         .doc(user.uid)
         .collection("journeys")
-        .doc(this.props.journeyid)
+        .doc(journeyid)
         .get();
       if (journey) {
         let tmp = journey.data().totalContacts;
@@ -173,17 +183,18 @@ class ImportContact extends Component {
   };
   handleImport = () => {
     var user = myFirebase.auth().currentUser;
+    let journeyid = this.props.location.state.journeyid
     if (user && !this.state.loading_total) {
       var ref = myFirestore
         .collection("user")
         .doc(user.uid)
         .collection("journeys")
-        .doc(this.props.journeyid);
+        .doc(journeyid);
       ref.update({
         totalContacts: this.state.totalContacts + this.props.friendlist.length
       });
       let my_stranger_id = user.uid + "-stra";
-      
+
       this.props.friendlist.forEach(f => {
         let check_r = myFirestore
           .collection("user")
@@ -191,20 +202,21 @@ class ImportContact extends Component {
           .collection("journeys")
           .doc(my_stranger_id)
           .collection("contacts")
-          .doc(f.id)
-        check_r.get()
-          .then((docSnapshot)=>{
+          .doc(f.id);
+        check_r
+          .get()
+          .then(docSnapshot => {
             if (docSnapshot.exists) {
-              console.log("????")
+              console.log("????");
               check_r.delete();
             }
-          }).then(()=>{
+          })
+          .then(() => {
             ref
-            .collection("contacts")
-            .doc(f.id)
-            .set({ id: f.id, name: f.name, photourl: f.photourl });
+              .collection("contacts")
+              .doc(f.id)
+              .set({ id: f.id, name: f.name, photourl: f.photourl });
           });
-       
       });
       this.props.friendlist.forEach(f => {
         let stranger_id = f.id + "-stra";
@@ -226,8 +238,8 @@ class ImportContact extends Component {
       this.props.history.push({
         pathname: "/home/journeycontent",
         state: {
-          journeyid: this.props.journeyid,
-          journeyname: this.props.journeyname,
+          journeyid: journeyid,
+          journeyname: this.props.location.state.journeyname,
           journeytotalContacts: this.props.friendlist.length,
           newOne: true
         }
@@ -235,20 +247,15 @@ class ImportContact extends Component {
       //window.location.reload();
       this.props.emptyFriendList();
       this.props.updateModalStatus(false);
-    }else{
-      console.log("plz wait")
+    } else {
+      console.log("plz wait");
     }
   };
 
   render() {
     const { classes } = this.props;
     return (
-      <Dialog
-        open={this.props.show}
-        onClose={this.handleClose}
-        aria-labelledby="simple-dialog-title"
-        className={classes.dialog}
-      >
+      <div className={classes.section_center}>
         <div className={classes.paper}>
           <div className={classes.dialogh}>
             <div className={classes.search}>
@@ -256,7 +263,7 @@ class ImportContact extends Component {
                 <SearchIcon />
               </div>
               <InputBase
-                placeholder="Search…"
+                placeholder="Search by email…"
                 classes={{
                   root: classes.inputRoot,
                   input: classes.inputInput
@@ -264,16 +271,16 @@ class ImportContact extends Component {
                 onChange={event => {
                   this.setState({ semail: event.target.value });
                 }}
+                onKeyPress={(event)=>this.handleKeypress(event)}
               />
             </div>
-            <Button
+            {/* <Button
               color="primary"
               onClick={() => {
                 this.setState({ email: this.state.semail });
               }}
             >
-              search
-            </Button>
+            </Button> */}
           </div>
           {this.state.email != "" ? (
             <List>{get_a_User_by_email(this.state.email)}</List>
@@ -308,11 +315,24 @@ class ImportContact extends Component {
               width="80%"
               onClick={this.handleImport}
             >
-              Import
+              Let's go
             </FormButton>
+          <Typography component="p">Or add them manually</Typography>
+          <FormButton
+            className={classes.fbutton}
+            size="small"
+            color="secondary"
+            width="80%"
+            onClick={()=>this.props.history.push({pathname:"/home/importmanually",state:{
+              journeyid:this.props.location.state.journeyid,
+              journeyname: this.props.location.state.journeyname
+            }})}
+          >
+            Add Manually
+          </FormButton>
           </div>
         </div>
-      </Dialog>
+      </div>
     );
   }
 }

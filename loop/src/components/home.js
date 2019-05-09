@@ -53,6 +53,8 @@ import firebase from "firebase";
 import { updateJourneyStatus } from "../services/actions";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
+import importmanual from "./connections/importmanual";
+import importcontact from "./connections/import";
 const drawerWidth = 240;
 
 const mytheme = createMuiTheme({
@@ -436,6 +438,8 @@ class Home extends React.Component {
             <Redirect exact from={`/home`} to={`/home/overview`} />
             <Route path="/home/overview" component={Overview} />
             <Route path="/home/nojourney" component={nojourney} />
+            <Route path="/home/addconnection" component={importcontact} />
+            <Route path="/home/importmanually" component={importmanual} />
             <Route path="/home/journey" component={Journeyoverview} />
             <Route path="/home/journeycontent" component={Journeycontent} />
             <Route path="/home/noconnection" component={noconnection} />

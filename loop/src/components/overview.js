@@ -226,11 +226,14 @@ class Overview extends Component {
       if (result.docs.length == 0) {
         this.props.history.push("/home/nojourney");
       } else {
-        this.setState({ journeyid: result.docs[0].data().id });
+        if(result.docs[0].data().journeyname!=="Stranger"){
+          this.setState({ journeyid: result.docs[0].data().id });
+        }
         this.props.updateJourneyStatus(false);
         let arr = Array.from(" ".repeat(result.docs.length)).fill("primary");
+        arr[0] = "secondary"
         this.colors = arr;
-        this.color_default = arr;
+        this.color_default = Array.from(" ".repeat(result.docs.length)).fill("primary");
       }
     } else {
       console.log("failed");
@@ -248,7 +251,6 @@ class Overview extends Component {
       )
       .then(res => {
         this.setState({ touchpoints: res.data.touchPoints });
-        console.log();
       });
   };
 
@@ -257,12 +259,13 @@ class Overview extends Component {
       .post(
         `https://loop-backend-server.herokuapp.com/api/loops/users/responseRate`,
         {
-          senderid: user.uid
+          senderid: user.uid,
+          journeyFriends: []
         }
       )
       .then(res => {
-        console.log(res.data.responseRate);
-        this.setState({ avgrsr: res.data.responseRate });
+        console.log(res.data)
+        // this.setState({ avgrsr: res.data.responseRate });
       });
   };
   handleChipClick = (id, index) => {
@@ -272,7 +275,6 @@ class Overview extends Component {
     copy[index] = "secondary";
 
     this.colors = copy;
-    console.log(this.colors);
   };
 
   render() {
@@ -315,7 +317,7 @@ class Overview extends Component {
                     <div className={classes.papercontent}>
                       <div className={classes.papercaption}>
                         <Typography variant="h6">
-                          {this.state.touchpoints}
+                          {this.props.tp}
                         </Typography>
                       </div>
                     </div>
@@ -431,7 +433,7 @@ Overview.propTypes = {
 };
 
 const mapStateToProps = state => {
-  return { empty: state.modalReducer.empty, user: state.userReducer.user };
+  return { empty: state.modalReducer.empty, user: state.userReducer.user, tp: state.tpReducer.value };
 };
 
 const mapDispatchToProps = dispatch => {
