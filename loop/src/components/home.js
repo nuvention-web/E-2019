@@ -63,7 +63,7 @@ const mytheme = createMuiTheme({
   },
   palette: {
     primary: {
-      main: "#4281A4"
+      main: "#3B86FF"
     },
     secondary: {
       main: "#FFC06A"
@@ -73,6 +73,11 @@ const mytheme = createMuiTheme({
     }
   },
   overrides: {
+    MuiTypography:{
+      body1:{
+        color: "#4D4F5C"
+      }
+    },
     MuiToolbar: {
       regular: {
         backgroundColor: "#fefcfe"
@@ -121,6 +126,15 @@ const styles = theme => ({
     marginTop: theme.spacing.unit * 1.2,
     width: 45,
     height: 45
+  },
+  username:{
+    display:"flex",
+    justifyContent:"center",
+    alignItems: "center",
+    borderLeft: "1px solid #EBEBF2",
+    paddingLeft: theme.spacing.unit * 2,
+    paddingRight: theme.spacing.unit * 1.2,
+    
   },
   menuButton: {
     marginLeft: 12,
@@ -207,7 +221,8 @@ class Home extends React.Component {
       open: true,
       switch: false,
       openAccount: false,
-      userid: ""
+      userid: "",
+      username:""
     };
   }
 
@@ -265,6 +280,7 @@ class Home extends React.Component {
     myFirebase.auth().onAuthStateChanged(user => {
       if (user) {
         this.getJourneys(user);
+        this.setState({username: user.displayName})
       } else {
         this.props.history.push("/app/signin");
       }
@@ -296,10 +312,13 @@ class Home extends React.Component {
               <div className={classes.grow} />
               <div className={classes.sectionDesktop}>
                 <IconButton className={classes.iconbtn}>
-                  <Badge badgeContent={17} color="secondary">
-                    <NotificationsIcon />
+                  <Badge badgeContent={0} color="primary">
+                    <NotificationsIcon style={{fontSize: 20}}/>
                   </Badge>
                 </IconButton>
+                <div className={classes.username}>
+                  <Typography variant="body1">{this.state.username}</Typography>
+                </div>
                 <IconButton
                   buttonRef={node => {
                     this.anchorEl = node;
