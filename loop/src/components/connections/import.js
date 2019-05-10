@@ -62,8 +62,8 @@ const styles = theme => ({
   },
   dialogf: {
     display: "flex",
-    flexDirection:"column",
-    alignItems:"center",
+    flexDirection: "column",
+    alignItems: "center",
     justifyContent: "center"
   },
   fbutton: {
@@ -154,11 +154,11 @@ class ImportContact extends Component {
     });
   };
 
-  handleKeypress = event =>{
+  handleKeypress = event => {
     if (event.key === "Enter") {
-      this.setState({email: this.state.semail});
+      this.setState({ email: this.state.semail });
     }
-  }
+  };
   searchHandle = event => {
     const email = event.target.value;
   };
@@ -167,7 +167,7 @@ class ImportContact extends Component {
   };
   getJourneyInfo = async () => {
     var user = myFirebase.auth().currentUser;
-    let journeyid = this.props.location.state.journeyid
+    let journeyid = this.props.location.state.journeyid;
     if (user && journeyid) {
       var journey = await myFirestore
         .collection("user")
@@ -183,7 +183,7 @@ class ImportContact extends Component {
   };
   handleImport = () => {
     var user = myFirebase.auth().currentUser;
-    let journeyid = this.props.location.state.journeyid
+    let journeyid = this.props.location.state.journeyid;
     if (user && !this.state.loading_total) {
       var ref = myFirestore
         .collection("user")
@@ -271,7 +271,7 @@ class ImportContact extends Component {
                 onChange={event => {
                   this.setState({ semail: event.target.value });
                 }}
-                onKeyPress={(event)=>this.handleKeypress(event)}
+                onKeyPress={event => this.handleKeypress(event)}
               />
             </div>
             {/* <Button
@@ -290,7 +290,13 @@ class ImportContact extends Component {
               {this.props.friendlist.map(friend => (
                 <ListItem button>
                   <ListItemAvatar>
-                    <Avatar src="https://bootdey.com/img/Content/avatar/avatar6.png" />
+                    <Avatar
+                      src={
+                        friend.photourl
+                          ? friend.photourl
+                          : "https://bootdey.com/img/Content/avatar/avatar6.png"
+                      }
+                    />
                   </ListItemAvatar>
                   <ListItemText>{friend.name}</ListItemText>
                   <ListItemSecondaryAction>
@@ -317,19 +323,24 @@ class ImportContact extends Component {
             >
               Let's go
             </FormButton>
-          <Typography component="p">Or add them manually</Typography>
-          <FormButton
-            className={classes.fbutton}
-            size="small"
-            color="secondary"
-            width="80%"
-            onClick={()=>this.props.history.push({pathname:"/home/importmanually",state:{
-              journeyid:this.props.location.state.journeyid,
-              journeyname: this.props.location.state.journeyname
-            }})}
-          >
-            Add Manually
-          </FormButton>
+            <Typography component="p">Or add them manually</Typography>
+            <FormButton
+              className={classes.fbutton}
+              size="small"
+              color="secondary"
+              width="80%"
+              onClick={() =>
+                this.props.history.push({
+                  pathname: "/home/importmanually",
+                  state: {
+                    journeyid: this.props.location.state.journeyid,
+                    journeyname: this.props.location.state.journeyname
+                  }
+                })
+              }
+            >
+              Add Manually
+            </FormButton>
           </div>
         </div>
       </div>

@@ -19,8 +19,8 @@ module.exports = {
             id: userRecord.toJSON().uid,
             name: userRecord.toJSON().displayName,
             email: userRecord.toJSON().email,
-            photourl: userRecord.toJSON().photourl
-              ? userRecord.toJSON().photourl
+            photourl: userRecord.toJSON().photoURL
+              ? userRecord.toJSON().photoURL
               : "",
             type: "loop"
           };

@@ -195,7 +195,7 @@ const styles = theme => ({
   chip: {
     fontSize: 12,
     marginLeft: theme.spacing.unit * 0.5,
-    marginTop:theme.spacing.unit * 0.5
+    marginTop: theme.spacing.unit * 0.5
   },
   search: {
     position: "relative",
@@ -311,7 +311,8 @@ class Connection extends Component {
       added: true,
       semail: "",
       email: "",
-      friendList: []
+      friendList: [],
+      dontchange: false
     };
   }
   componentDidMount() {
@@ -328,12 +329,19 @@ class Connection extends Component {
   componentDidUpdate(prevProps, prevState) {
     if (prevProps.data !== this.props.data) {
       //console.log(this.props.data);
-      if(this.props.data.findUsersJourney&&this.props.data.findUsersJourney[0].name !== "Stranger")
-        this.setState({
-          journeyId: this.props.data.findUsersJourney[0].id,
-          journeyname: this.props.data.findUsersJourney[0].name,
-          loading: true
-        });
+      if (!this.state.dontchange) {
+        if (
+          this.props.data.findUsersJourney &&
+          this.props.data.findUsersJourney.length !== 0 &&
+          this.props.data.findUsersJourney[0].name !== "Stranger"
+        ) {
+          this.setState({
+            journeyId: this.props.data.findUsersJourney[0].id,
+            journeyname: this.props.data.findUsersJourney[0].name,
+            loading: true
+          });
+        }
+      }
     }
   }
   handleDelete = () => {
@@ -345,7 +353,7 @@ class Connection extends Component {
   }
 
   handleChipClick = (id, name) => {
-    this.setState({ journeyId: id, journeyname: name });
+    this.setState({ journeyId: id, journeyname: name, dontchange: true });
   };
   handleClose = () => {
     this.setState({
@@ -398,17 +406,22 @@ class Connection extends Component {
               color="primary"
               className={classes.button}
               onClick={() => {
-                this.props.history.push({pathname:"/home/addconnection",state:{
-                  journeyid:this.state.journeyId,
-                  journeyname: this.state.journeyname
-                }})
+                this.props.history.push({
+                  pathname: "/home/addconnection",
+                  state: {
+                    journeyid: this.state.journeyId,
+                    journeyname: this.state.journeyname
+                  }
+                });
               }}
             >
               Add a contact
             </Button>
           </div>
           <div className={classes.skillset}>
-            {this.props.data.findUsersJourney && this.props.user.id&&this.state.journeyId
+            {this.props.data.findUsersJourney &&
+            this.props.user.id &&
+            this.state.journeyId
               ? get_userByJourney(
                   this.state.journeyId,
                   this.props.user.id,

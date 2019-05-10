@@ -260,7 +260,7 @@ class Card extends Component {
                 <div className={classes.connectioncontent}>
                   <Avatar
                     alt="Tony Stark"
-                    src="https://bootdey.com/img/Content/avatar/avatar6.png"
+                    src={contact.photourl? contact.photourl:"https://bootdey.com/img/Content/avatar/avatar6.png"}
                     className={classes.bigAvatar}
                   />
                   <div className={classes.connectioncaption}>

@@ -16,23 +16,30 @@ class FriendListItem extends Component {
     added: false
   };
 
-  handleclick = (id) => {
+  handleclick = id => {
     if (this.props.friendlist.some(i => i.id === id)) {
-        console.log("are you trying to delete?")
+      console.log("are you trying to delete?");
     } else {
       this.props.updateFriendList(this.props.data);
     }
   };
+
   render() {
     return (
       <ListItem button>
         <ListItemAvatar>
-          <Avatar src="https://bootdey.com/img/Content/avatar/avatar6.png" />
+          <Avatar
+            src={
+              this.props.data.photourl
+                ? this.props.data.photourl
+                : "https://bootdey.com/img/Content/avatar/avatar6.png"
+            }
+          />
         </ListItemAvatar>
         <ListItemText>{this.props.data.name}</ListItemText>
         <ListItemSecondaryAction>
-          <IconButton onClick={()=>this.handleclick(this.props.data.id)}>
-            {this.state.added? <DoneIcon /> : <AddIcon />}
+          <IconButton onClick={() => this.handleclick(this.props.data.id)}>
+            {this.state.added ? <DoneIcon /> : <AddIcon />}
           </IconButton>
         </ListItemSecondaryAction>
       </ListItem>

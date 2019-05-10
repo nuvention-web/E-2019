@@ -222,7 +222,8 @@ class Home extends React.Component {
       switch: false,
       openAccount: false,
       userid: "",
-      username:""
+      username:"",
+      userphotourl:""
     };
   }
 
@@ -280,7 +281,7 @@ class Home extends React.Component {
     myFirebase.auth().onAuthStateChanged(user => {
       if (user) {
         this.getJourneys(user);
-        this.setState({username: user.displayName})
+        this.setState({username: user.displayName,userphotourl: user.photoURL})
       } else {
         this.props.history.push("/app/signin");
       }
@@ -330,7 +331,7 @@ class Home extends React.Component {
                 >
                   <Avatar
                     alt="Remy Sharp"
-                    src="https://bootdey.com/img/Content/avatar/avatar7.png"
+                    src={this.state.userphotourl? this.state.userphotourl:"https://bootdey.com/img/Content/avatar/avatar7.png"}
                     className={classes.avatar}
                   />
                 </IconButton>

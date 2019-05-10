@@ -85,12 +85,13 @@ class SignUp extends React.Component {
         user = firebase.auth().currentUser;
         user.updateProfile({
           displayName: firstname + " " + lastname,
+          photoURL: "https://www.bootdey.com/img/Content/avatar/avatar"+ Math.floor(Math.random() * 8+1) +".png"
         }).then(function () {
           // Profile updated successfully!
           //console.log(user)
           const newuser = {
             id: user.uid,
-            photourl: "",
+            photourl: user.photoURL,
             name: user.displayName
           };
           

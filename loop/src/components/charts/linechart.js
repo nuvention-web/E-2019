@@ -71,7 +71,7 @@ class LineChart extends React.Component {
         }
       )
       .then(res => {
-        dataSource["data"] = res.data.monthly;
+        dataSource["data"] = res.data.monthly.reverse();
         this.avgResponseRate(res.data.monthly)
         this.setState({ loadedChart: false });
       });
