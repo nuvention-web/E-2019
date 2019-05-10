@@ -381,6 +381,7 @@ class Connection extends Component {
                     if (v.name === "Stranger") return null;
                     return (
                       <Chip
+                        key={i}
                         label={v.name}
                         className={classes.chip}
                         onClick={() => this.handleChipClick(v.id)}

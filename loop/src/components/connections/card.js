@@ -244,7 +244,7 @@ class Card extends Component {
     return (
       <Grid container spacing={24}>
         {this.props.data.map(contact => (
-          <Grid item xs={4}>
+          <Grid item xs={4} key={contact.id}>
             <div
               onClick={() => {
                 this.props.history.push({

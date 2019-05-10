@@ -20,10 +20,10 @@ const dataSource = {
     yaxisname: "",
     anchorradius: "5",
     plottooltext:
-      "<card><b>Response rate is <b>$value</b></card>",
+      "<card><b>Touchpoints are <b>$value</b></card>",
     showhovereffect: "1",
     showvalues: "0",
-    numbersuffix: "%",
+    numbersuffix: "",
     theme: "fusion",
     anchorbgcolor: "#A3A0FB",
     palettecolors: "#A3A0FB",
@@ -63,7 +63,7 @@ class LineChart extends React.Component {
     if(this.props.friendid&&id){
       await axios
       .post(
-        `https://loop-backend-server.herokuapp.com/api/loops/users/oneOneResponseRate`,
+        `https://loop-backend-server.herokuapp.com/api/loops/users/oneOneMonthlyTouchPoints`,
         {
           senderid: id,
           monthsAgo: 10,
