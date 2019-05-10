@@ -343,11 +343,11 @@ class ConnectionDetails extends Component {
     this.setState({ date: timestamp.toString() });
   }
 
-  handleClickButton(type){
-    if(type==="timeline"){
-      this.setState({showTimeline: true, showTable: false})
-    }else{
-      this.setState({showTable: true,showTimeline: false })
+  handleClickButton(type) {
+    if (type === "timeline") {
+      this.setState({ showTimeline: true, showTable: false });
+    } else {
+      this.setState({ showTable: true, showTimeline: false });
     }
   }
 
@@ -435,7 +435,11 @@ class ConnectionDetails extends Component {
                   <div className={classes.connectioncontent}>
                     <Avatar
                       alt="Tony Stark"
-                      src="https://bootdey.com/img/Content/avatar/avatar6.png"
+                      src={
+                        this.props.location.state.photourl
+                          ? this.props.location.state.photourl
+                          : "https://bootdey.com/img/Content/avatar/avatar6.png"
+                      }
                       className={classes.bigAvatar}
                     />
                     <div className={classes.connectioncaption}>
@@ -586,18 +590,19 @@ class ConnectionDetails extends Component {
             <Paper className={classes.paper}>
               <div className={classes.timelineheader}>
                 <div>
-                <Button
-                    color={this.state.showTimeline? "secondary": "primary"}
-                    onClick={(event)=>this.handleClickButton("timeline")}
+                  <Button
+                    color={this.state.showTimeline ? "secondary" : "primary"}
+                    onClick={event => this.handleClickButton("timeline")}
                   >
-                  TimeLine
+                    TimeLine
                   </Button>
                   <Button
-                    color={this.state.showTable? "secondary": "primary"}
-                    onClick={(event)=>this.handleClickButton("table")}
+                    color={this.state.showTable ? "secondary" : "primary"}
+                    onClick={event => this.handleClickButton("table")}
                   >
-                  Table
-                  </Button></div>
+                    Table
+                  </Button>
+                </div>
                 <form autoComplete="off">
                   <FormControl className={classes.margin2}>
                     <NativeSelect
@@ -619,7 +624,11 @@ class ConnectionDetails extends Component {
                 </form>
               </div>
               <div style={{ padding: 20 }}>
-              {this.state.showTimeline? (<LineChart friendid={this.props.location.state.id} />) : (<EnhancedTable />)}
+                {this.state.showTimeline ? (
+                  <LineChart friendid={this.props.location.state.id} />
+                ) : (
+                  <EnhancedTable />
+                )}
               </div>
             </Paper>
           </div>

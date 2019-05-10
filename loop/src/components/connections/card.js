@@ -251,7 +251,8 @@ class Card extends Component {
                   pathname: "/home/connectiondetails",
                   state: {
                     username: contact.name,
-                    id: contact.id
+                    id: contact.id,
+                    photourl: contact.photourl
                   }
                 });
               }}
