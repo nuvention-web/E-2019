@@ -357,6 +357,7 @@ class ConnectionDetails extends Component {
 
   handleSubmit() {
     var user = myFirebase.auth().currentUser;
+    let index = 0;
     if (
       user &&
       this.state.type !== "" &&
@@ -374,7 +375,8 @@ class ConnectionDetails extends Component {
           }
         }
       });
-      axios
+      if (index<1){
+        axios
         .post(
           `https://loop-backend-server.herokuapp.com/api/loops/users/data-upload-with-type`,
           {
@@ -387,6 +389,9 @@ class ConnectionDetails extends Component {
         .then(res => {
           console.log(res);
         });
+        index+=1;
+      }
+
       this.setState({
         notes: "",
         type: "",
@@ -664,7 +669,7 @@ class ConnectionDetails extends Component {
                   <div className={classes.papercontent}>
                     <div className={classes.papercaption} />
                   </div>
-                  <PieExample />
+                  <PieChart friendid={this.props.location.state.id} />
 
                   <div className={classes.papercontent}>
                     <div className={classes.papercaption} />

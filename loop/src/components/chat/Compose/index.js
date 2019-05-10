@@ -59,18 +59,18 @@ class Compose extends Component {
       .set(itemMessage)
       .then(() => {
         axios
-          .post(
-            `https://loop-backend-server.herokuapp.com/api/loops/users/data-upload`,
-            {
-              senderid: user.uid,
-              timestamp: timestamp,
-              receiverid: [this.props.data.id]
-            }
-          )
-          .then(res => {
-            console.log(res);
-            console.log(res.data);
-          });
+        .post(
+          `https://loop-backend-server.herokuapp.com/api/loops/users/data-upload-with-type`,
+          {
+            senderid: user.uid,
+            receiverid: [this.props.data.id],
+            timestamp: timestamp,
+            datatype: "chat"
+          }
+        )
+        .then(res => {
+          console.log(res);
+        });
         this.setState({
           inputValue: ""
         });
