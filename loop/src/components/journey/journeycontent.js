@@ -168,7 +168,7 @@ class JourneyContent extends Component {
             <IconButton
               color="primary"
               className={classes.backbutton}
-              onClick={() => this.props.history.push("/home/Journey")}
+              onClick={() => this.props.history.push("/home/group")}
             >
               <LeftArrowIcon style={{ fontSize: 20 }} />
             </IconButton>

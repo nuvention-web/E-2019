@@ -177,7 +177,7 @@ class JourneyOverview extends Component {
     if (contacts.docs.length > 0) {
       this.setState({ contactsEmpty: false });
       this.props.history.push({
-        pathname: "/home/journeycontent",
+        pathname: "/home/groupcontent",
         state: { journeyname: journeyname, journeyid: journeyid, userid: user.uid, journeytotalContacts: journeytotalContacts}
       });
     } else {
@@ -233,7 +233,7 @@ class JourneyOverview extends Component {
         <MuiThemeProvider theme={mytheme}>
           <div className={classes.section2}>
             <Typography gutterBottom variant="h5">
-              Journey
+              Group
             </Typography>
             <div className={classes.skillset}>
               <Grid container spacing={24}>

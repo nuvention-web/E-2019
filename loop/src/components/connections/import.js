@@ -236,7 +236,7 @@ class ImportContact extends Component {
           });
       });
       this.props.history.push({
-        pathname: "/home/journeycontent",
+        pathname: "/home/groupcontent",
         state: {
           journeyid: journeyid,
           journeyname: this.props.location.state.journeyname,

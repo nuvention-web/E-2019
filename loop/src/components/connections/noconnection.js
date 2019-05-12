@@ -185,7 +185,7 @@ class NoConnection extends Component {
               journeyname: this.props.location.state.name
             }})}
           >
-            Import Contacts
+            Add Contacts
           </FormButton>
         </div>
       </MuiThemeProvider>

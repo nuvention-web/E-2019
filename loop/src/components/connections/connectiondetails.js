@@ -567,8 +567,12 @@ class ConnectionDetails extends Component {
                       Notes
                     </Typography>
                     <FormControl className={classes.margin}>
-                      <InputBase
-                        id="bootstrap-input"
+                      <TextField
+                        multiline
+                        rowsMax="4"
+                        id="outlined-multiline-flexible"
+                        margin="normal"
+                        variant="outlined"
                         defaultValue=""
                         value={this.state.notes}
                         onChange={ev => this.handleNotes(ev)}

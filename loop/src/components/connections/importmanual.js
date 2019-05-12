@@ -14,6 +14,8 @@ import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Checkbox from "@material-ui/core/Checkbox";
 import gql from "graphql-tag";
 import { graphql } from "react-apollo";
+import Input from 'react-validation/build/input';
+//import * as EmailValidator from 'email-validator';
 const styles = theme => ({
   section_center: {
     height: "80vh",
@@ -100,13 +102,18 @@ const mytheme = createMuiTheme({
     }
   }
 });
-
+const email = (value) => {
+  if (!validator.isEmail(value)) {
+    return `${value} is not a valid email.`
+  }
+};
 class ImportManual extends Component {
   constructor(props) {
     super(props);
     this.state = {
       name: "",
       email: "",
+      company:"",
       success: false
     };
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -121,6 +128,8 @@ class ImportManual extends Component {
       user &&
       this.state.name !== "" &&
       this.state.email !== "" &&
+      this.company!==""&&
+      //EmailValidator.validate( this.state.email)&&
       this.props.location.state.journeyid
     ) {
       this.props.mutate({
@@ -129,13 +138,15 @@ class ImportManual extends Component {
             userid: user.uid,
             journeyid: this.props.location.state.journeyid,
             name: this.state.name,
-            email: this.state.email
+            email: this.state.email,
+            company:this.state.company
           }
         }
       });
       this.setState({
         name: "",
         email: "",
+        company:"",
         success: true
       });
     }
@@ -164,6 +175,16 @@ class ImportManual extends Component {
                 "aria-label": "Description"
               }}
               onChange={event => this.setState({ email: event.target.value })}
+              validations={email}
+            />
+            <Input
+              placeholder="Company"
+              className={classes.input}
+              value={this.state.company}
+              inputProps={{
+                "aria-label": "Description"
+              }}
+              onChange={event => this.setState({ company: event.target.value })}
             />
             <FormControlLabel
               control={

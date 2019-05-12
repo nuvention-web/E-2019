@@ -224,7 +224,7 @@ class Overview extends Component {
         .collection("journeys")
         .get();
       if (result.docs.length == 0) {
-        this.props.history.push("/home/nojourney");
+        this.props.history.push("/home/nogroup");
       } else {
         if(result.docs[0].data().journeyname!=="Stranger"){
           this.setState({ journeyid: result.docs[0].data().id });

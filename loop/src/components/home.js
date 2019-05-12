@@ -248,15 +248,15 @@ class Home extends React.Component {
 
   checkUserJourney = () => {
     if (this.props.empty) {
-      this.props.history.push("/home/nojourney");
+      this.props.history.push("/home/nogroup");
     } else {
-      this.props.history.push("/home/journey");
+      this.props.history.push("/home/group");
     }
   };
 
   checkUserJourneyOverview = () => {
     if (this.props.empty) {
-      this.props.history.push("/home/nojourney");
+      this.props.history.push("/home/nogroup");
     } else {
       this.props.history.push("/home/overview");
     }
@@ -413,7 +413,7 @@ class Home extends React.Component {
                   <ListItemIcon>
                     <BarChartIcon />
                   </ListItemIcon>
-                  <ListItemText primary={"Journey"} />
+                  <ListItemText primary={"Group"} />
                 </ListItem>
               </List>
               <Divider />
@@ -457,11 +457,11 @@ class Home extends React.Component {
           <Switch>
             <Redirect exact from={`/home`} to={`/home/overview`} />
             <Route path="/home/overview" component={Overview} />
-            <Route path="/home/nojourney" component={nojourney} />
+            <Route path="/home/nogroup" component={nojourney} />
             <Route path="/home/addconnection" component={importcontact} />
             <Route path="/home/importmanually" component={importmanual} />
-            <Route path="/home/journey" component={Journeyoverview} />
-            <Route path="/home/journeycontent" component={Journeycontent} />
+            <Route path="/home/group" component={Journeyoverview} />
+            <Route path="/home/groupcontent" component={Journeycontent} />
             <Route path="/home/noconnection" component={noconnection} />
             <Route path="/home/connection" component={Connection} />
             <Route
