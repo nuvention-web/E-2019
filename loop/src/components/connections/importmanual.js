@@ -14,8 +14,7 @@ import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Checkbox from "@material-ui/core/Checkbox";
 import gql from "graphql-tag";
 import { graphql } from "react-apollo";
-// import Input from 'react-validation/build/input';
-//import * as EmailValidator from 'email-validator';
+import { FormErrors } from "../formErrors";
 const styles = theme => ({
   section_center: {
     height: "80vh",
@@ -102,11 +101,6 @@ const mytheme = createMuiTheme({
     }
   }
 });
-const email = (value) => {
-  // if (!validator.isEmail(value)) {
-  //   return `${value} is not a valid email.`
-  // }
-};
 class ImportManual extends Component {
   constructor(props) {
     super(props);
@@ -114,13 +108,27 @@ class ImportManual extends Component {
       name: "",
       email: "",
       company:"",
-      success: false
+      success: false,
+      formErrors: {email: ''},
+      emailValid: false,
+      formValid: false
+
+  
     };
     this.handleSubmit = this.handleSubmit.bind(this);
   }
   componentDidMount(){
       console.log(this.props.location.state)
   }
+  validateField(value) {
+    let fieldValidationErrors = this.state.formErrors;
+    let emailValid = this.state.emailValid;
+    emailValid = value.match(/^([\w.%+-]+)@([\w-]+\.)+([\w]{2,})$/i);
+    fieldValidationErrors.email = emailValid ? '' : ' is invalid';
+    this.setState({formErrors: fieldValidationErrors,
+      emailValid: emailValid,formValid: this.state.emailValid});
+  }
+
   handleSubmit() {
     var user = myFirebase.auth().currentUser;
 
@@ -129,8 +137,8 @@ class ImportManual extends Component {
       this.state.name !== "" &&
       this.state.email !== "" &&
       this.company!==""&&
-      //EmailValidator.validate( this.state.email)&&
-      this.props.location.state.journeyid
+      this.state.emailValid&&
+           this.props.location.state.journeyid
     ) {
       this.props.mutate({
         variables: {
@@ -174,7 +182,11 @@ class ImportManual extends Component {
               inputProps={{
                 "aria-label": "Description"
               }}
-              onChange={event => this.setState({ email: event.target.value })}
+              onChange={event =>{
+                 this.setState({ email: event.target.value });
+                 if(event.target.value!="")
+                  this.validateField(event.target.value);
+                }}
             />
             <Input
               placeholder="Company"
@@ -185,6 +197,9 @@ class ImportManual extends Component {
               }}
               onChange={event => this.setState({ company: event.target.value })}
             />
+            <div className="panel panel-default">
+            <FormErrors formErrors={this.state.formErrors} />
+            </div>
             <FormControlLabel
               control={
                 <Checkbox
@@ -238,7 +253,6 @@ export default withStyles(styles)(
           email
           photourl
           type
-          company
         }
       }
     `
