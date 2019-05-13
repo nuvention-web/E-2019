@@ -14,7 +14,7 @@ import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Checkbox from "@material-ui/core/Checkbox";
 import gql from "graphql-tag";
 import { graphql } from "react-apollo";
-import Input from 'react-validation/build/input';
+
 //import * as EmailValidator from 'email-validator';
 const styles = theme => ({
   section_center: {
@@ -102,11 +102,7 @@ const mytheme = createMuiTheme({
     }
   }
 });
-const email = (value) => {
-  if (!validator.isEmail(value)) {
-    return `${value} is not a valid email.`
-  }
-};
+
 class ImportManual extends Component {
   constructor(props) {
     super(props);
@@ -175,7 +171,6 @@ class ImportManual extends Component {
                 "aria-label": "Description"
               }}
               onChange={event => this.setState({ email: event.target.value })}
-              validations={email}
             />
             <Input
               placeholder="Company"
