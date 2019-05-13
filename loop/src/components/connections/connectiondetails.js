@@ -685,7 +685,7 @@ class ConnectionDetails extends Component {
                   <Typography variant="body1" color="primary">
                     Reminder
                   </Typography>
-                  <div className={classes.papercontent_reminder}>
+                  {/* <div className={classes.papercontent_reminder}>
                     <div className={classes.remindercontent}>
                       <Avatar
                         alt="Tony Stark"
@@ -699,7 +699,7 @@ class ConnectionDetails extends Component {
                         </Typography>
                       </div>
                     </div>
-                  </div>
+                  </div> */}
                 </Paper>
               </Grid>
             </Grid>
