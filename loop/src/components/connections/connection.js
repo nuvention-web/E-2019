@@ -73,6 +73,14 @@ const mytheme = createMuiTheme({
     },
     MuiChip: {
       root: {},
+      colorPrimary:{
+        backgroundColor:"#fff",
+        color:"#000"
+      },
+      colorSecondary:{
+        color:"#fff",
+        backgroundColor:"#3B86FF",
+      },
       outlinedPrimary: {
         color: "#3B86FF",
         borderColor: "#3B86FF"
@@ -393,8 +401,7 @@ class Connection extends Component {
                         label={v.name}
                         className={classes.chip}
                         onClick={() => this.handleChipClick(v.id)}
-                        variant="outlined"
-                        color={i === 0 ? "secondary" : "primary"}
+                        color={v.id===this.state.journeyId? "secondary": "primary"}
                       />
                     );
                   })}

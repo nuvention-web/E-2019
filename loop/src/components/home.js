@@ -413,7 +413,7 @@ class Home extends React.Component {
                   <ListItemIcon>
                     <BarChartIcon />
                   </ListItemIcon>
-                  <ListItemText primary={"Group"} />
+                  <ListItemText primary={"Groups"} />
                 </ListItem>
               </List>
               <Divider />
