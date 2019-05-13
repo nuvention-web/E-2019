@@ -7,7 +7,10 @@ query findUser($email: String) {
     findUser(email: $email) {
       id,
       name,
-      photourl
+      email,
+      photourl,
+      type,
+      company
     }
   }
 `

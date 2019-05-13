@@ -198,7 +198,10 @@ export default
           findContacts(journeyid: $journey_id, userid: $user_id) {
             id
             name
+            email
             photourl
+            type
+            company
           }
         }
       `,

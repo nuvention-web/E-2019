@@ -22,7 +22,8 @@ module.exports = {
             photourl: userRecord.toJSON().photoURL
               ? userRecord.toJSON().photoURL
               : "",
-            type: "loop"
+            type: "loop",
+            company: ""
           };
           // See the UserRecord reference doc for the contents of userRecord.
           return user;
@@ -70,7 +71,8 @@ module.exports = {
               name: c.data().name,
               email: c.data().email,
               photourl: c.data().photourl,
-              type: c.data().type ? c.data().type : "loop"
+              type: c.data().type ? c.data().type : "loop",
+              company: c.data().company? c.data().company: ""
             });
             return a;
           }, []);
@@ -140,7 +142,7 @@ module.exports = {
     },
     createFriend(obj, args, context, info){
       let input = args.input;
-      let friend = {name: input.name, email: input.email, photourl: "", type:"manual"}
+      let friend = {name: input.name, email: input.email, photourl: "", type:"manual", company: input.company}
       let journeyref = store
         .collection("user")
         .doc(input.userid)
@@ -162,7 +164,7 @@ module.exports = {
         .collection("contacts")
         .doc();
         friend["id"] = ref.id
-        return ref.set({ id: ref.id, name: input.name, email: input.email, photourl: "", type:"manual"})
+        return ref.set({ id: ref.id, name: input.name, email: input.email, photourl: "", type:"manual", company: input.company})
           .then(() => {
             console.log("Document created!");
             return friend

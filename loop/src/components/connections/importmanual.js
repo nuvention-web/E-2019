@@ -238,6 +238,7 @@ export default withStyles(styles)(
           email
           photourl
           type
+          company
         }
       }
     `

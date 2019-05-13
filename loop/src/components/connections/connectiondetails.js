@@ -375,21 +375,21 @@ class ConnectionDetails extends Component {
           }
         }
       });
-      if (index<1){
+      if (index < 1) {
         axios
-        .post(
-          `https://loop-backend-server.herokuapp.com/api/loops/users/data-upload-with-type`,
-          {
-            senderid: user.uid,
-            receiverid: [this.props.location.state.id],
-            timestamp: this.state.date,
-            datatype: this.state.type
-          }
-        )
-        .then(res => {
-          console.log(res);
-        });
-        index+=1;
+          .post(
+            `https://loop-backend-server.herokuapp.com/api/loops/users/data-upload-with-type`,
+            {
+              senderid: user.uid,
+              receiverid: [this.props.location.state.id],
+              timestamp: this.state.date,
+              datatype: this.state.type
+            }
+          )
+          .then(res => {
+            console.log(res);
+          });
+        index += 1;
       }
 
       this.setState({
@@ -454,6 +454,22 @@ class ConnectionDetails extends Component {
                         </Typography>
                         <div className={classes.connectionicon} />
                       </div>
+                      {this.props.location.state.email ? (
+                        <Typography
+                          variant="caption"
+                          className={classes.connectiondes}
+                        >
+                          Email: {this.props.location.state.email}
+                        </Typography>
+                      ) : null}
+                      {this.props.location.state.company ? (
+                        <Typography
+                          variant="caption"
+                          className={classes.connectiondes}
+                        >
+                          Company: {this.props.location.state.company}
+                        </Typography>
+                      ) : null}
                     </div>
                   </div>
                 </Paper>

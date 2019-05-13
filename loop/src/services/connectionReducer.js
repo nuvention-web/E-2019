@@ -3,11 +3,14 @@ import gql from "graphql-tag";
 import React from "react";
 import Card from "../components/connections/card";
 const get_contacts= gql`
-query findContactsfindContacts($journeyid:String, $userid:String) {
+query findContacts($journeyid:String, $userid:String) {
     findContacts(journeyid:$journeyid, userid:$userid) {
-      id,
-      name,
+      id
+      name
+      email
       photourl
+      type
+      company
     }
   }
 `

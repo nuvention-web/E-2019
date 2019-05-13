@@ -9,6 +9,7 @@ type User {
   email: String
   photourl: String
   type: String
+  company: String
 }
 type Journey {
   id: String
@@ -25,6 +26,7 @@ input Friend {
   journeyid: String
   name: String
   email: String
+  company: String
 }
 input Log {
   id: String

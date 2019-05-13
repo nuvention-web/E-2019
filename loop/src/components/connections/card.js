@@ -167,8 +167,7 @@ const styles = theme => ({
     flexDirection: "row",
     justifyContent: "space-around"
   },
-  connectionfooter: {
-  },
+  connectionfooter: {},
   button: {
     marginRight: theme.spacing.unit * 1
   },
@@ -252,7 +251,9 @@ class Card extends Component {
                   state: {
                     username: contact.name,
                     id: contact.id,
-                    photourl: contact.photourl
+                    photourl: contact.photourl,
+                    email:contact.email,
+                    company:contact.company
                   }
                 });
               }}
@@ -261,7 +262,11 @@ class Card extends Component {
                 <div className={classes.connectioncontent}>
                   <Avatar
                     alt="Tony Stark"
-                    src={contact.photourl? contact.photourl:"https://bootdey.com/img/Content/avatar/avatar6.png"}
+                    src={
+                      contact.photourl
+                        ? contact.photourl
+                        : "https://bootdey.com/img/Content/avatar/avatar6.png"
+                    }
                     className={classes.bigAvatar}
                   />
                   <div className={classes.connectioncaption}>
@@ -282,6 +287,21 @@ class Card extends Component {
                         </IconButton>
                       </div>
                     </div>
+                    {contact.email? (<Typography
+                      variant="caption"
+                      className={classes.connectiondes}
+                    >
+                      Email: {contact.email}
+                    </Typography>): null}
+                    
+
+                    {contact.company?(<Typography
+                      variant="caption"
+                      className={classes.connectiondes}
+                    >
+                      Company: {contact.company}
+                    </Typography>):null}
+                    
                   </div>
                 </div>
                 <Divider />
