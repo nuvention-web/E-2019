@@ -430,14 +430,14 @@ class Connection extends Component {
               : null}
           </div>
           <CssBaseline />
-          <div className={classes.pagination}>
+          {/* <div className={classes.pagination}>
             <Pagination
               limit={10}
               offset={this.state.offset}
               total={100}
               onClick={(e, offset) => this.handleClick(offset)}
             />
-          </div>
+          </div> */}
         </div>
       </MuiThemeProvider>
     );

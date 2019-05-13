@@ -334,7 +334,7 @@ class MessageListItem extends Component {
         >
           <div className={classes.paper}>
             <div className={classes.dialogh}>
-              <Typography variant="body1">Add this person to journey:</Typography>
+              <Typography variant="body1">Add this person to group:</Typography>
             </div>
             <MuiThemeProvider theme={mytheme}>
               <div className={classes.chips}>
