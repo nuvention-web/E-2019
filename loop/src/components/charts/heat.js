@@ -43,28 +43,28 @@ let dataSource = {
       {
         code: "#69A2FF",
         minvalue: "0",
-        maxvalue: "10"
+        maxvalue: "6"
       },
       {
         code: "#DCE8F4",
-        minvalue: "10",
-        maxvalue: "20"
+        minvalue: "6",
+        maxvalue: "12"
       },
       {
         code: "#FCD32A",
-        minvalue: "20",
-        maxvalue: "30",
+        minvalue: "12",
+        maxvalue: "18",
         displayValue: "Warm"
       },
       {
         code: "#FEB0BA",
-        minvalue: "30",
-        maxvalue: "40"
+        minvalue: "18",
+        maxvalue: "24"
       },
       {
         code: "#E57E7E",
-        minvalue: "40",
-        maxvalue: "50"
+        minvalue: "24",
+        maxvalue: "30"
       }
     ]
   }
