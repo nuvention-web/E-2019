@@ -48,6 +48,9 @@ const mytheme = createMuiTheme({
       },
       h6: {
         fontWeight: "bold"
+      },
+      caption:{
+        color: "#757475"
       }
     }
   }
@@ -102,8 +105,12 @@ const styles = theme => ({
   papercaption: {
     marginTop: theme.spacing.unit * 1.5,
     marginBottom: theme.spacing.unit * 1.7,
-    display: "flex",
-    flexDirection: "column"
+    // display: "flex",
+    // flexDirection: "row"
+  },
+  paper_j_typo:{
+    display:"inline-block",
+    marginRight: theme.spacing.unit * 1
   },
   remindercontent: {
     display: "flex",
@@ -202,9 +209,10 @@ class JourneyOverview extends Component {
                 </Typography>
                 <div className={classes.papercontent_bar}>
                   <div className={classes.papercaption}>
-                    <Typography variant="h6">{item.data().totalContacts}</Typography>
+                    <Typography variant="h6" className={classes.paper_j_typo}>{item.data().totalContacts}</Typography>
+                    <Typography variant="caption" className={classes.paper_j_typo}>connection(s)</Typography>
                   </div>
-                  <div className={classes.progressbar}>
+                  {/* <div className={classes.progressbar}>
                     <SemiCircleProgressBar
                       percentage={0}
                       stroke="#FF8373"
@@ -213,7 +221,7 @@ class JourneyOverview extends Component {
                       background="#F0F2F8"
                       showPercentValue
                     />
-                  </div>
+                  </div> */}
                 </div>
               </Paper>
             </div>
@@ -233,7 +241,7 @@ class JourneyOverview extends Component {
         <MuiThemeProvider theme={mytheme}>
           <div className={classes.section2}>
             <Typography gutterBottom variant="h5">
-              Group
+              Groups
             </Typography>
             <div className={classes.skillset}>
               <Grid container spacing={24}>

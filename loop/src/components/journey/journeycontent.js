@@ -183,26 +183,6 @@ class JourneyContent extends Component {
               <Grid item xs={4}>
                 <Paper className={classes.paper}>
                   <Typography variant="body1" color="primary">
-                    Overall Avg. Response Rate
-                  </Typography>
-                  <div className={classes.papercontent_bar}>
-                    <div className={classes.papercaption} />
-                    <div className={classes.progressbar}>
-                      <SemiCircleProgressBar
-                        percentage={0}
-                        stroke="#FFDA83"
-                        diameter={135}
-                        strokeWidth="20"
-                        background="#F0F2F8"
-                        showPercentValue
-                      />
-                    </div>
-                  </div>
-                </Paper>
-              </Grid>
-              <Grid item xs={4}>
-                <Paper className={classes.paper}>
-                  <Typography variant="body1" color="primary">
                     Total Touchpoint
                   </Typography>
                   <div className={classes.papercontent}>
@@ -220,6 +200,26 @@ class JourneyContent extends Component {
                   <div className={classes.papercontent}>
                     <div className={classes.papercaption}>
                       <Typography variant="h6">{this.props.location.state.journeytotalContacts}</Typography>
+                    </div>
+                  </div>
+                </Paper>
+              </Grid>
+              <Grid item xs={4}>
+                <Paper className={classes.paper}>
+                  <Typography variant="body1" color="primary">
+                    Overall Avg. Response Rate
+                  </Typography>
+                  <div className={classes.papercontent_bar}>
+                    <div className={classes.papercaption} />
+                    <div className={classes.progressbar}>
+                      <SemiCircleProgressBar
+                        percentage={0}
+                        stroke="#FFDA83"
+                        diameter={135}
+                        strokeWidth="20"
+                        background="#F0F2F8"
+                        showPercentValue
+                      />
                     </div>
                   </div>
                 </Paper>

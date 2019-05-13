@@ -78,6 +78,8 @@ class HeatMap extends React.Component {
       loading: true
     };
     this.contacts = [];
+
+    this.dataPlotClick = this.dataPlotClick.bind(this);
   }
   componentDidMount() {
     myFirebase.auth().onAuthStateChanged(user => {
@@ -149,6 +151,13 @@ class HeatMap extends React.Component {
     this.props.updateTouchPoints(tp)
   }
 
+
+  // Event callback handler for 'dataplotRollOut'.
+  // Resets to the original message.
+  dataPlotClick(eventObj, dataObj) {
+    // console.log(eventObj, dataObj)
+  }
+
   renderMap() {
     let viewMap = [];
     if (!this.state.loading) {
@@ -159,6 +168,7 @@ class HeatMap extends React.Component {
           width="100%"
           dataFormat="JSON"
           dataSource={dataSource}
+          fcEvent-dataPlotClick={this.dataPlotClick}
         />
       );
       return viewMap;

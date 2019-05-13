@@ -291,26 +291,6 @@ class Overview extends Component {
                 <Grid item xs={4}>
                   <Paper className={classes.paper}>
                     <Typography component="p" color="primary">
-                      Overall Avg. Response Rate
-                    </Typography>
-                    <div className={classes.papercontent_bar}>
-                      <div className={classes.papercaption} />
-                      <div className={classes.progressbar}>
-                        <SemiCircleProgressBar
-                          percentage={this.state.avgrsr}
-                          stroke="#FF8373"
-                          diameter={135}
-                          strokeWidth={20}
-                          background="#F0F2F8"
-                          showPercentValue
-                        />
-                      </div>
-                    </div>
-                  </Paper>
-                </Grid>
-                <Grid item xs={4}>
-                  <Paper className={classes.paper}>
-                    <Typography component="p" color="primary">
                       Touchpoints
                     </Typography>
 
@@ -327,6 +307,26 @@ class Overview extends Component {
                   {this.props.user.id ? (
                     <TotalConnection userid={this.props.user.id} />
                   ) : null}
+                </Grid>
+                <Grid item xs={4}>
+                  <Paper className={classes.paper}>
+                    <Typography component="p" color="primary">
+                      Overall Avg. Response Rate
+                    </Typography>
+                    <div className={classes.papercontent_bar}>
+                      <div className={classes.papercaption} />
+                      <div className={classes.progressbar}>
+                        <SemiCircleProgressBar
+                          percentage={this.state.avgrsr}
+                          stroke="#FF8373"
+                          diameter={135}
+                          strokeWidth={20}
+                          background="#F0F2F8"
+                          showPercentValue
+                        />
+                      </div>
+                    </div>
+                  </Paper>
                 </Grid>
               </Grid>
             </div>

@@ -26,6 +26,14 @@ const mytheme = createMuiTheme({
   overrides: {
     MuiChip: {
       root: {},
+      colorPrimary:{
+        backgroundColor:"#f4f4f8",
+        color:"#000"
+      },
+      colorSecondary:{
+        color:"#fff",
+        backgroundColor:"#3B86FF",
+      },
       outlinedPrimary: {
         color: "#3B86FF",
         borderColor: "#3B86FF"
@@ -58,6 +66,7 @@ class ConversationListItem extends Component {
       selectedUser: {},
       isLoading: true,
       messages: [],
+      jid: "",
       contactsEmpty : [],
       clickedstra:false,
       alert: false
@@ -79,6 +88,7 @@ class ConversationListItem extends Component {
 
 
   handleChipClick(id,journeyname) {
+    this.setState({jid: id})
     this.getListUser(id, journeyname);
   }
 
@@ -104,7 +114,7 @@ class ConversationListItem extends Component {
     if (journeys.docs.length > 0) {
       this.listjourneys = [...journeys.docs];
       this.getListUser(this.listjourneys[0].data().id, this.listjourneys[0].data().journeyname);
-      
+      this.setState({jid: this.listjourneys[0].data().id})
     }
   };
 
@@ -177,8 +187,7 @@ class ConversationListItem extends Component {
             label={item.data().journeyname}
             className={classes.chip}
             onClick={()=>this.handleChipClick(item.data().id,item.data().journeyname)}
-            variant="outlined"
-            color="primary"
+            color={item.data().id===this.state.jid? "secondary":"primary"}
           />
         );
       });
