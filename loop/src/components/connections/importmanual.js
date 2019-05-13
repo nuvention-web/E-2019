@@ -14,7 +14,11 @@ import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Checkbox from "@material-ui/core/Checkbox";
 import gql from "graphql-tag";
 import { graphql } from "react-apollo";
+<<<<<<< HEAD
 
+=======
+// import Input from 'react-validation/build/input';
+>>>>>>> 164a91fd6e61cd88903ccd621f6339ac96e5d004
 //import * as EmailValidator from 'email-validator';
 const styles = theme => ({
   section_center: {
@@ -102,7 +106,15 @@ const mytheme = createMuiTheme({
     }
   }
 });
+<<<<<<< HEAD
 
+=======
+const email = (value) => {
+  // if (!validator.isEmail(value)) {
+  //   return `${value} is not a valid email.`
+  // }
+};
+>>>>>>> 164a91fd6e61cd88903ccd621f6339ac96e5d004
 class ImportManual extends Component {
   constructor(props) {
     super(props);

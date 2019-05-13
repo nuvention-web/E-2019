@@ -369,8 +369,7 @@ class Overview extends Component {
                           />
                         }
                       >
-                        <option value="Last 6 Months" />
-                        <option value={10}>Last Month</option>
+                        <option value={10}>Last 3 Months</option>
                         <option value={20}>Last 6 Months</option>
                         <option value={30}>Last Year</option>
                       </NativeSelect>
