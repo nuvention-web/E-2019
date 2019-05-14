@@ -92,6 +92,7 @@ class LineChart extends React.Component {
     if (!this.state.loadedChart) {
       viewChart.push(
         <ReactFC
+          key="1"
           type="spline"
           width="100%"
           dataFormat="JSON"

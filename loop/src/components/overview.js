@@ -379,7 +379,7 @@ class Overview extends Component {
 
                 <div style={{ padding: 20 }}>
                   {this.state.journeyid !== "" ? (
-                    <HeatMap journeyid={this.state.journeyid} />
+                    <HeatMap journeyid={this.state.journeyid} history={this.props.history}/>
                   ) : null}
                 </div>
               </Paper>

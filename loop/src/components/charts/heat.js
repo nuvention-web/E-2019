@@ -155,7 +155,21 @@ class HeatMap extends React.Component {
   // Event callback handler for 'dataplotRollOut'.
   // Resets to the original message.
   dataPlotClick(eventObj, dataObj) {
-    // console.log(eventObj, dataObj)
+    if(this.props.data.findContacts){
+      let contact = this.props.data.findContacts[dataObj["index"]]
+  
+      this.props.history.push({
+        pathname: "/home/connectiondetails",
+        state: {
+          username: contact.name,
+          id: contact.id,
+          photourl: contact.photourl,
+          email:contact.email,
+          company:contact.company
+        }
+      });
+    }
+    
   }
 
   renderMap() {
