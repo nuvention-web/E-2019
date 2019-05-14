@@ -237,6 +237,7 @@ class JourneyContent extends Component {
                   <HeatMap
                     journeyid={this.props.location.state.journeyid}
                     userid={this.props.location.state.userid}
+                    history={this.props.history}
                   />
                 ) : null}
               </div>
