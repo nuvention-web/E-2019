@@ -59,7 +59,7 @@ class Nojourney extends Component {
       <MuiThemeProvider theme={mytheme}>
         <div className={classes.section_center}>
           <Typography gutterBottom variant="h5">
-            Seems like you don’t have a journey yet…
+            Seems like you don’t have a group yet…
           </Typography>
           <FormButton
             className={classes.journeybutton}
@@ -68,7 +68,7 @@ class Nojourney extends Component {
             width="100"
             onClick={this.handleClick}
           >
-            Create Journey
+            Create  Group
           </FormButton>
           <JourneyModal history={history}/>
         </div>

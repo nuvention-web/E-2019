@@ -90,7 +90,7 @@ class journeyModal extends Component {
       >
         <div className={classes.paper}>
           <FormControl margin="normal" required fullWidth>
-            <InputLabel htmlFor="jname">Journey Name</InputLabel>
+            <InputLabel htmlFor="jname">Group Name</InputLabel>
             <Input
               id="jname"
               name="jname"
