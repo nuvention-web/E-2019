@@ -67,7 +67,7 @@ const styles = theme => ({
     color: theme.palette.text.secondary
   },
   paper_journey_add: {
-    padding: theme.spacing.unit * 4.3,
+    padding: theme.spacing.unit * 3.5,
     color: theme.palette.text.secondary,
     display: "flex",
     justifyContent: "center"
