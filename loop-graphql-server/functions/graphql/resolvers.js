@@ -72,7 +72,7 @@ module.exports = {
               email: c.data().email,
               photourl: c.data().photourl,
               type: c.data().type ? c.data().type : "loop",
-              company: c.data().company? c.data().company: ""
+              company: c.data().company ? c.data().company : ""
             });
             return a;
           }, []);
@@ -116,7 +116,7 @@ module.exports = {
           }, 0);
           return result;
         });
-    },
+    }
   },
   Mutation: {
     updateTPandARR(obj, args, context, info) {
@@ -140,57 +140,96 @@ module.exports = {
       });
       return tparr;
     },
-    createFriend(obj, args, context, info){
+    createFriend(obj, args, context, info) {
       let input = args.input;
-      let friend = {name: input.name, email: input.email, photourl: "", type:"manual", company: input.company}
+      let friend = {
+        name: input.name,
+        email: input.email,
+        photourl: "",
+        type: "manual",
+        company: input.company
+      };
       let journeyref = store
         .collection("user")
         .doc(input.userid)
         .collection("journeys")
-        .doc(input.journeyid)
-      journeyref.get().then((querySnapshot)=>{
-        let total = 0
-        total = querySnapshot.data().totalContacts?querySnapshot.data().totalContacts:0;
-        return total
-      }).then((total)=>{
-        return journeyref.update({totalContacts:total+1})
-      })
-      .catch(error => {
-        // The document probably doesn't exist.
-        console.error("Error creating document: ", error);
-      });
-      
-      let ref = journeyref
-        .collection("contacts")
-        .doc();
-        friend["id"] = ref.id
-        return ref.set({ id: ref.id, name: input.name, email: input.email, photourl: "", type:"manual", company: input.company})
-          .then(() => {
-            console.log("Document created!");
-            return friend
-          })
-          .catch(error => {
-            // The document probably doesn't exist.
-            console.error("Error creating document: ", error);
-          });
+        .doc(input.journeyid);
+      journeyref
+        .get()
+        .then(querySnapshot => {
+          let total = 0;
+          total = querySnapshot.data().totalContacts
+            ? querySnapshot.data().totalContacts
+            : 0;
+          return total;
+        })
+        .then(total => {
+          return journeyref.update({ totalContacts: total + 1 });
+        })
+        .catch(error => {
+          // The document probably doesn't exist.
+          console.error("Error creating document: ", error);
+        });
+
+      let ref = journeyref.collection("contacts").doc();
+      friend["id"] = ref.id;
+      return ref
+        .set({
+          id: ref.id,
+          name: input.name,
+          email: input.email,
+          photourl: "",
+          type: "manual",
+          company: input.company
+        })
+        .then(() => {
+          console.log("Document created!");
+          return friend;
+        })
+        .catch(error => {
+          // The document probably doesn't exist.
+          console.error("Error creating document: ", error);
+        });
     },
-    createLog(obj, args, context, info){
+    createLog(obj, args, context, info) {
       let input = args.input;
       let ref = store
         .collection("logs")
         .doc(input.id)
         .collection("touchpoints")
-        .doc()
-      return ref.set({id: ref.id, notes: input.notes, timestamp: input.timestamp, type: input.type})
-          .then(()=>{
-            console.log("Document created")
-            return true
-          })
-          .catch(error => {
-            // The document probably doesn't exist.
-            console.error("Error creating document: ", error);
-            return false
-          });  
+        .doc();
+      return ref
+        .set({
+          id: ref.id,
+          notes: input.notes,
+          timestamp: input.timestamp,
+          type: input.type
+        })
+        .then(() => {
+          console.log("Document created");
+          return true;
+        })
+        .catch(error => {
+          // The document probably doesn't exist.
+          console.error("Error creating document: ", error);
+          return false;
+        });
+    },
+    deleteFriend(obj, args, context, info){
+      let input = args.input;
+      return store
+        .collection("user")
+        .doc(input.userid)
+        .collection("journeys")
+        .doc(input.journeyid)
+        .collection("contacts")
+        .doc(input.friendid)
+        .delete()
+        .then(()=>{
+          return true
+        }).catch(()=>{
+          return false
+        })
     }
   }
 };

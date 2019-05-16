@@ -238,109 +238,125 @@ class Card extends Component {
     super(props);
     this.state = { offset: 0, clicked: false };
   }
+
+  onDeleteFriend = () => {
+    
+  };
   render() {
     const { classes } = this.props;
     return (
       <Grid container spacing={24}>
         {this.props.data.map(contact => (
           <Grid item xs={4} key={contact.id}>
-            <div
-              onClick={() => {
-                this.props.history.push({
-                  pathname: "/home/connectiondetails",
-                  state: {
-                    username: contact.name,
-                    id: contact.id,
-                    photourl: contact.photourl,
-                    email:contact.email,
-                    company:contact.company
+            <Paper className={classes.paper}>
+              <div className={classes.connectioncontent}>
+                <Avatar
+                  alt="Tony Stark"
+                  src={
+                    contact.photourl
+                      ? contact.photourl
+                      : "https://bootdey.com/img/Content/avatar/avatar6.png"
                   }
-                });
-              }}
-            >
-              <Paper className={classes.paper}>
-                <div className={classes.connectioncontent}>
-                  <Avatar
-                    alt="Tony Stark"
-                    src={
-                      contact.photourl
-                        ? contact.photourl
-                        : "https://bootdey.com/img/Content/avatar/avatar6.png"
-                    }
-                    className={classes.bigAvatar}
-                  />
-                  <div className={classes.connectioncaption}>
-                    <div className={classes.connectionheader}>
+                  className={classes.bigAvatar}
+                />
+                <div className={classes.connectioncaption}>
+                  <div className={classes.connectionheader}>
+                    <div
+                      onClick={() => {
+                        this.props.history.push({
+                          pathname: "/home/connectiondetails",
+                          state: {
+                            username: contact.name,
+                            id: contact.id,
+                            photourl: contact.photourl,
+                            email: contact.email,
+                            company: contact.company
+                          }
+                        });
+                      }}
+                      style={{ cursor:"pointer"}}
+                    >
                       <Typography variant="h6">{contact.name}</Typography>
-                      <div className={classes.connectionicon}>
-                        <IconButton
-                          className={classes.headerbutton}
-                          aria-label="edit"
-                        >
-                          <EditIcon className={classes.conicon} />
-                        </IconButton>
-                        <IconButton
-                          className={classes.headerbutton}
-                          aria-label="clear"
-                        >
-                          <ClearIcon className={classes.conicon} />
-                        </IconButton>
-                      </div>
                     </div>
-                    {contact.email? (<Typography
+                    <div className={classes.connectionicon}>
+                      <IconButton
+                        className={classes.headerbutton}
+                        aria-label="edit"
+                      >
+                        <EditIcon className={classes.conicon} />
+                      </IconButton>
+                      <IconButton
+                        className={classes.headerbutton}
+                        aria-label="clear"
+                        onClick={() => this.onDeleteFriend()}
+                      >
+                        <ClearIcon className={classes.conicon} />
+                      </IconButton>
+                    </div>
+                  </div>
+                  {contact.email ? (
+                    <Typography
                       variant="caption"
                       className={classes.connectiondes}
                     >
                       Email: {contact.email}
-                    </Typography>): null}
-                    
+                    </Typography>
+                  ) : null}
 
-                    {contact.company?(<Typography
+                  {contact.company ? (
+                    <Typography
                       variant="caption"
                       className={classes.connectiondes}
                     >
                       Company: {contact.company}
-                    </Typography>):null}
-                    
-                  </div>
+                    </Typography>
+                  ) : null}
                 </div>
-                <Divider />
-                <div className={classes.connectionfooter}>
-                  <IconButton
-                    className={classes.button}
-                    aria-label="instagram"
-                    color="primary"
-                  >
-                    <FontAwesomeIcon icon={["fab", "instagram"]} />
-                  </IconButton>
-                  <IconButton
-                    className={classes.button}
-                    aria-label="twitter"
-                    color="primary"
-                  >
-                    <FontAwesomeIcon icon={["fab", "twitter"]} />
-                  </IconButton>
-                  <IconButton
-                    className={classes.button}
-                    aria-label="facebook"
-                    color="primary"
-                  >
-                    <FontAwesomeIcon icon={["fab", "facebook"]} />
-                  </IconButton>
-                  <IconButton
-                    className={classes.button}
-                    aria-label="email"
-                    color="primary"
-                  >
-                    <EmailIcon />
-                  </IconButton>
-                </div>
-              </Paper>
-            </div>
+              </div>
+              <Divider />
+              <div className={classes.connectionfooter}>
+                <IconButton
+                  className={classes.button}
+                  aria-label="instagram"
+                  color="primary"
+                >
+                  <FontAwesomeIcon icon={["fab", "instagram"]} />
+                </IconButton>
+                <IconButton
+                  className={classes.button}
+                  aria-label="twitter"
+                  color="primary"
+                >
+                  <FontAwesomeIcon icon={["fab", "twitter"]} />
+                </IconButton>
+                <IconButton
+                  className={classes.button}
+                  aria-label="facebook"
+                  color="primary"
+                >
+                  <FontAwesomeIcon icon={["fab", "facebook"]} />
+                </IconButton>
+                <IconButton
+                  className={classes.button}
+                  aria-label="email"
+                  color="primary"
+                >
+                  <EmailIcon />
+                </IconButton>
+              </div>
+            </Paper>
           </Grid>
         ))}
       </Grid>
     );
   }
 }
-export default withStyles(styles)(Card);
+export default withStyles(styles)(
+  graphql(
+    gql`
+      mutation($input: Friend_del!) {
+        deleteFriend(input: $input)
+      }
+    `
+  )(Card)
+);

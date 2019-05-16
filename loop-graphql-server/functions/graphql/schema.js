@@ -28,6 +28,13 @@ input Friend {
   email: String
   company: String
 }
+
+input Friend_del {
+  userid: String
+  friendid: String
+  journeyid: String
+}
+
 input Log {
   id: String
   timestamp: String
@@ -50,7 +57,8 @@ type Query {
 type Mutation {
   updateTPandARR(input: Info!): returnInfo,
   createFriend(input: Friend!): User,
-  createLog(input: Log!): Boolean
+  createLog(input: Log!): Boolean,
+  deleteFriend(input: Friend_del!): Boolean
 }
 `;
 
