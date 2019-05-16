@@ -245,6 +245,10 @@ class Card extends Component {
   componentDidMount(){
     
   }
+
+  handleClose=(event)=>{
+    this.setState({open: false})
+  }
   onshowDelete = (id) => {
     this.setState({open: true, deleteid: id})
   };
