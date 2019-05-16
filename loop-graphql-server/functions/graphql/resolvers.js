@@ -217,11 +217,27 @@ module.exports = {
     },
     deleteFriend(obj, args, context, info){
       let input = args.input;
-      return store
+      let journeyref = store
         .collection("user")
         .doc(input.userid)
         .collection("journeys")
-        .doc(input.journeyid)
+        .doc(input.journeyid);
+      journeyref
+      .get()
+      .then(querySnapshot => {
+        let total = 0;
+        total = querySnapshot.data().totalContacts
+          ? querySnapshot.data().totalContacts
+          : 0;
+        return total;
+      }).then(total => {
+        return journeyref.update({ totalContacts: total - 1 });
+      })
+      .catch(error => {
+        // The document probably doesn't exist.
+        console.error("Error creating document: ", error);
+      });  
+      return journeyref
         .collection("contacts")
         .doc(input.friendid)
         .delete()
