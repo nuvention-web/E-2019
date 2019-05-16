@@ -55,6 +55,7 @@ import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import importmanual from "./connections/importmanual";
 import importcontact from "./connections/import";
+import profile from "./profile";
 const drawerWidth = 240;
 
 const mytheme = createMuiTheme({
@@ -281,7 +282,7 @@ class Home extends React.Component {
     myFirebase.auth().onAuthStateChanged(user => {
       if (user) {
         this.getJourneys(user);
-        this.setState({username: user.displayName,userphotourl: user.photoURL})
+        this.setState({userid: user.uid, username: user.displayName,userphotourl: user.photoURL})
       } else {
         this.props.history.push("/app/signin");
       }
@@ -331,7 +332,7 @@ class Home extends React.Component {
                 >
                   <Avatar
                     alt="Remy Sharp"
-                    src={this.state.userphotourl? this.state.userphotourl:"https://bootdey.com/img/Content/avatar/avatar7.png"}
+                    src={this.state.userphotourl? this.state.userphotourl:"https://i.ibb.co/DYgZrjC/loading.png"}
                     className={classes.avatar}
                   />
                 </IconButton>
@@ -357,7 +358,14 @@ class Home extends React.Component {
                           onClickAway={this.handleCloseAccount}
                         >
                           <MenuList>
-                            <MenuItem>Profile</MenuItem>
+                            <MenuItem onClick={() => this.props.history.push({
+                              pathname: "/home/profile",
+                              state:{
+                                id:this.state.userid,
+                                name: this.state.username,
+                                photourl: this.state.userphotourl
+                              }
+                            })} >Profile</MenuItem>
                             <MenuItem onClick={() => firebase.auth().signOut()}>
                               Logout
                             </MenuItem>
@@ -461,6 +469,7 @@ class Home extends React.Component {
             <Route path="/home/addconnection" component={importcontact} />
             <Route path="/home/importmanually" component={importmanual} />
             <Route path="/home/group" component={Journeyoverview} />
+            <Route path="/home/profile" component={profile} />
             <Route path="/home/groupcontent" component={Journeycontent} />
             <Route path="/home/noconnection" component={noconnection} />
             <Route path="/home/connection" component={Connection} />
