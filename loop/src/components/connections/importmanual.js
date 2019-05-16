@@ -118,7 +118,6 @@ class ImportManual extends Component {
     this.handleSubmit = this.handleSubmit.bind(this);
   }
   componentDidMount(){
-      console.log(this.props.location.state)
   }
   validateField(value) {
     let fieldValidationErrors = this.state.formErrors;

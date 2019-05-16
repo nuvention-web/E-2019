@@ -19,12 +19,15 @@ import Divider from "@material-ui/core/Divider";
 import InputBase from "@material-ui/core/InputBase";
 import SearchIcon from "@material-ui/icons/Search";
 import { fade } from "@material-ui/core/styles/colorManipulator";
-import CssBaseline from "@material-ui/core/CssBaseline";
+import Button from '@material-ui/core/Button';
+
 import Pagination from "material-ui-flat-pagination";
 import { myFirebase, myFirestore } from "../../firebase";
-import { updateJourneyStatus, getUserinfo } from "../../services/actions";
-import { connect } from "react-redux";
-import { bindActionCreators } from "redux";
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
 import gql from "graphql-tag";
 import { graphql } from "react-apollo";
 
@@ -236,17 +239,47 @@ const styles = theme => ({
 class Card extends Component {
   constructor(props) {
     super(props);
-    this.state = { offset: 0, clicked: false };
+    this.state = { open: false, offset: 0, clicked: false, deleteid:"" };
   }
 
-  onDeleteFriend = () => {
+  componentDidMount(){
     
+  }
+  onshowDelete = (id) => {
+    this.setState({open: true, deleteid: id})
   };
+
+  onDeleteFriend = () => {
+    var user = myFirebase.auth().currentUser;
+
+    if (
+      user &&
+      this.state.deleteid !== "" &&
+      this.props.journeyid !== ""
+    ) {
+      this.props.mutate({
+        variables: {
+          input: {
+            userid: user.uid,
+            journeyid: this.props.journeyid,
+            friendid: this.state.deleteid
+          }
+        }
+      });
+      this.props.onLoadMore();
+      this.setState({
+        deleteid: "",
+        open: false
+      });
+    }
+  };
+
   render() {
     const { classes } = this.props;
     return (
+      <div>
       <Grid container spacing={24}>
-        {this.props.data.map(contact => (
+        {this.props.data? this.props.data.map(contact => (
           <Grid item xs={4} key={contact.id}>
             <Paper className={classes.paper}>
               <div className={classes.connectioncontent}>
@@ -288,7 +321,7 @@ class Card extends Component {
                       <IconButton
                         className={classes.headerbutton}
                         aria-label="clear"
-                        onClick={() => this.onDeleteFriend()}
+                        onClick={() => this.onshowDelete(contact.id)}
                       >
                         <ClearIcon className={classes.conicon} />
                       </IconButton>
@@ -346,11 +379,43 @@ class Card extends Component {
               </div>
             </Paper>
           </Grid>
-        ))}
+        )): null}
       </Grid>
+      <Dialog
+          open={this.state.open}
+          onClose={this.handleClose}
+          aria-labelledby="alert-dialog-title"
+          aria-describedby="alert-dialog-description"
+        >
+          <DialogTitle id="alert-dialog-title">{"Are you sure to delete the user from this journey?"}</DialogTitle>
+          {/* <DialogContent>
+            <DialogContentText id="alert-dialog-description">
+              Let Google help apps determine location. This means sending anonymous location data to
+              Google, even when no apps are running.
+            </DialogContentText>
+          </DialogContent> */}
+          <DialogActions>
+            <Button onClick={this.handleClose} color="primary">
+              Cancel
+            </Button>
+            <Button onClick={() => this.onDeleteFriend()} color="primary" autoFocus>
+              Yes
+            </Button>
+          </DialogActions>
+        </Dialog>
+      </div>
     );
   }
 }
+
+
+Card.propTypes = {
+  classes: PropTypes.object.isRequired,
+  theme: PropTypes.object.isRequired,
+  onLoadMore: PropTypes.func.isRequired
+};
+
+
 export default withStyles(styles)(
   graphql(
     gql`

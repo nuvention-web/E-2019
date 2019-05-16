@@ -122,10 +122,15 @@ class ImportManual extends Component {
   }
 
   componentDidMount() {
-    this.setState({
-      photourl: this.props.location.state.photourl,
-      name: this.props.location.state.name
+    myFirebase.auth().onAuthStateChanged(user => {
+      if (user) {
+        this.setState({
+          photourl: user.photoURL,
+          name: user.displayName
+        })
+      } 
     });
+    
   }
 
   onChangeName = event => {

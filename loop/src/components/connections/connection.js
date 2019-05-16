@@ -494,7 +494,9 @@ export default withStyles(styles)(
         options: props => ({
           variables: {
             userid: props.user.id
-          }
+          },
+          fetchPolicy: "cache-and-network",
+          
         })
       }
     )(Connection)

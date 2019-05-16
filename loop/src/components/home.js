@@ -74,8 +74,8 @@ const mytheme = createMuiTheme({
     }
   },
   overrides: {
-    MuiTypography:{
-      body1:{
+    MuiTypography: {
+      body1: {
         color: "#4D4F5C"
       }
     },
@@ -128,14 +128,13 @@ const styles = theme => ({
     width: 45,
     height: 45
   },
-  username:{
-    display:"flex",
-    justifyContent:"center",
+  username: {
+    display: "flex",
+    justifyContent: "center",
     alignItems: "center",
     borderLeft: "1px solid #EBEBF2",
     paddingLeft: theme.spacing.unit * 2,
-    paddingRight: theme.spacing.unit * 1.2,
-    
+    paddingRight: theme.spacing.unit * 1.2
   },
   menuButton: {
     marginLeft: 12,
@@ -223,8 +222,8 @@ class Home extends React.Component {
       switch: false,
       openAccount: false,
       userid: "",
-      username:"",
-      userphotourl:""
+      username: "",
+      userphotourl: ""
     };
   }
 
@@ -282,12 +281,54 @@ class Home extends React.Component {
     myFirebase.auth().onAuthStateChanged(user => {
       if (user) {
         this.getJourneys(user);
-        this.setState({userid: user.uid, username: user.displayName,userphotourl: user.photoURL})
+        this.setState({
+          userid: user.uid,
+          username: user.displayName,
+          userphotourl: user.photoURL
+        });
       } else {
         this.props.history.push("/app/signin");
       }
     });
   };
+
+  renderName(){
+    let name = [];
+    var user = myFirebase.auth().currentUser;
+    if (user) {
+      name.push(
+        <Typography variant="body1">{user.displayName}</Typography>
+      );
+    } else {
+      return null
+    }
+    return name
+  }
+  renderAvatar(classes) {
+    let avatar = [];
+    var user = myFirebase.auth().currentUser;
+    if (user) {
+      avatar.push(
+        <Avatar
+          key="1"
+          alt="Remy Sharp"
+          src={
+            user.photoURL
+          }
+          className={classes.avatar}
+        />
+      );
+    } else {
+      avatar.push(
+        <Avatar
+          key="0"
+          alt="Remy Sharp"
+          src="https://i.ibb.co/DYgZrjC/loading.png"
+          className={classes.avatar}
+        />)
+    }
+    return avatar
+  }
 
   render() {
     const { classes, theme } = this.props;
@@ -315,11 +356,11 @@ class Home extends React.Component {
               <div className={classes.sectionDesktop}>
                 <IconButton className={classes.iconbtn}>
                   <Badge badgeContent={0} color="primary">
-                    <NotificationsIcon style={{fontSize: 20}}/>
+                    <NotificationsIcon style={{ fontSize: 20 }} />
                   </Badge>
                 </IconButton>
                 <div className={classes.username}>
-                  <Typography variant="body1">{this.state.username}</Typography>
+                 {this.renderName()}
                 </div>
                 <IconButton
                   buttonRef={node => {
@@ -330,11 +371,7 @@ class Home extends React.Component {
                   onClick={this.handleToggleAccount}
                   color="inherit"
                 >
-                  <Avatar
-                    alt="Remy Sharp"
-                    src={this.state.userphotourl? this.state.userphotourl:"https://i.ibb.co/DYgZrjC/loading.png"}
-                    className={classes.avatar}
-                  />
+                  {this.renderAvatar(classes)}
                 </IconButton>
                 <Popper
                   open={openAccount}
@@ -358,14 +395,20 @@ class Home extends React.Component {
                           onClickAway={this.handleCloseAccount}
                         >
                           <MenuList>
-                            <MenuItem onClick={() => this.props.history.push({
-                              pathname: "/home/profile",
-                              state:{
-                                id:this.state.userid,
-                                name: this.state.username,
-                                photourl: this.state.userphotourl
+                            <MenuItem
+                              onClick={() =>
+                                this.props.history.push({
+                                  pathname: "/home/profile",
+                                  state: {
+                                    id: this.state.userid,
+                                    name: this.state.username,
+                                    photourl: this.state.userphotourl
+                                  }
+                                })
                               }
-                            })} >Profile</MenuItem>
+                            >
+                              Profile
+                            </MenuItem>
                             <MenuItem onClick={() => firebase.auth().signOut()}>
                               Logout
                             </MenuItem>
