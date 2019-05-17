@@ -1,26 +1,21 @@
 {
-  "name": "basic_microservice_docker_kubernetes",
-  "version": "0.0.1",
-  "private": true,
+  "name": "loop-backend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
   "scripts": {
-    "start": "node app.js"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "engines": {
-    "node": "5.6.0"
-  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
   "dependencies": {
-    "body-parser": "^1.18.3",
-    "bunyan": "^1.8.12",
-    "bunyan-format": "^0.2.1",
+    "body-parser": "^1.19.0",
+    "cors": "^2.8.5",
     "express": "^4.16.4",
+    "morgan": "^1.9.1",
+    "node-fetch": "^2.5.0",
     "nodemon": "^1.19.0",
-    "q": "^1.5.1",
-    "querystring": "^0.2.0",
-    "redis": "^2.8.0",
-    "request": "^2.88.0",
-    "string-template": "0.2.0",
-    "superagent": "^5.0.5",
-    "underscore": "^1.9.1",
-    "uuid": "^3.3.2"
+    "superagent": "^5.0.5"
   }
 }
