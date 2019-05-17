@@ -246,6 +246,30 @@ module.exports = {
         }).catch(()=>{
           return false
         })
+    },
+    editFriend(obj, args, context, info){
+      let input = args.input;
+      let updated_info = {
+        name: input.name,
+        email: input.email,
+        company: input.company,
+        jobtitle: input.jobtitle,
+        phonenumber: input.phonenumber
+      }
+      return store
+        .collection("user")
+        .doc(input.userid)
+        .collection("journeys")
+        .doc(input.journeyid)
+        .collection("contacts")
+        .doc(input.friendid)
+        .update(updated_info)
+        .then(()=>{
+          return true
+        })
+        .catch(()=>{
+          return false
+        })
     }
   }
 };

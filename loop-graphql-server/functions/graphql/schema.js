@@ -29,6 +29,17 @@ input Friend {
   company: String
 }
 
+input Friend_new_Info{
+  userid: String
+  journeyid: String
+  friendid: String
+  name: String
+  email: String
+  company: String
+  jobtitle: String
+  phonenumber: String
+}
+
 input Friend_del {
   userid: String
   friendid: String
@@ -58,7 +69,8 @@ type Mutation {
   updateTPandARR(input: Info!): returnInfo,
   createFriend(input: Friend!): User,
   createLog(input: Log!): Boolean,
-  deleteFriend(input: Friend_del!): Boolean
+  deleteFriend(input: Friend_del!): Boolean,
+  editFriend(input: Friend_new_Info!): Boolean
 }
 `;
 
