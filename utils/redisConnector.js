@@ -1,9 +1,8 @@
 var Q = require('q');
 var redis = require('redis');
 
-function Connector(config, syslog, type) {
+function Connector(config, type) {
   this.config = config;
-  this.syslog = syslog;
   this.redisClient = null;
   var self = this;
   var host = self.config.host;
@@ -14,24 +13,24 @@ function Connector(config, syslog, type) {
     self.redisClient = redis.createClient(port, host);
     self.redisClient.auth(password, function (err) {
       if (err) {
-        self.syslog.error(err);
+        console.log(err);
       }
     });
     // REDIS Events
     self.redisClient.on('connect', function () {
-      self.syslog.info('Redis connect event for ' + type);
+      console.log('Redis connect event for ' + type);
       return deferred.resolve(self.redisClient);
     });
     self.redisClient.on('disconnected', function (err) {
-      self.syslog.error(err);
+      console.log(err);
       deferred.reject(err);
     });
     self.redisClient.on('error', function (err) {
-      self.syslog.error(err);
+      console.log(err);
       return deferred.reject(err);
     });
     self.redisClient.on('end', function (err) {
-      self.syslog.info(err, 'Redis end event ' + type);
+      console.log(err, 'Redis end event ' + type);
     });
     return deferred.promise;
   };

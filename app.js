@@ -6,6 +6,31 @@ const fetch = require("node-fetch");
 const superagent = require('superagent');
 var cors = require('cors');
 var bodyParser = require('body-parser');
+var redis = require('./utils').redisConnector;
+
+var redisClient;
+setupRedis();
+
+function setupRedis() {
+  var config = {
+    host: 'redis-10694.c17.us-east-1-4.ec2.cloud.redislabs.com',
+    port: 10694,
+    password: 'loop'
+  }
+  redis(config, 'data').getRedis()
+  .then(function(client) {
+    redisClient = client;
+    startServer();
+  })
+  .catch(function(err) {
+    console.log('Fatal Error in connecting to Redis. Killing Process!');
+    process.exit();
+  })
+  .done(function() {
+    console.log('Inside Redis Done')
+  });
+}
+
 
 app.use(cors())
 app.use(express.json())
@@ -116,12 +141,19 @@ function addTS(options, callback) {
 app.post('/api/loops/users/data-upload-with-type/', dataUploadwType);
 function dataUploadwType(req, res, next) {
   console.log('Inside dataUpload function.');
-  data_json = req.body
+  var data_json = req.body
   var senderids = data_json.senderid
   var timestamps = data_json.timestamp
   var receiverids = data_json.receiverid
   var datatype = data_json.datatype
   var dataObject = []
+  var redisKey = 'log:s:' + senderids + ':r:' + receiverids;
+  redisClient.zadd(redisKey, timestamps, JSON.stringify({
+    id: (Math.random() * 10000).toString(),
+    type: datatype,
+    notes: data_json.notes,
+    date: timestamps
+  }));
   var i = 0;
   for(i = 0; i < receiverids.length; i++){
     var eachItem ={}
@@ -1248,8 +1280,25 @@ app.get('/api/loops/users/oneyear', (req, res) =>{
     res.json(oneYearData)
 });
 
-const PORT = process.env.PORT || 3000
-// http://localhost:3000
-app.listen(PORT, () =>{
-    console.log("Loop server is listening on: " + PORT)
-});
+app.get('/api/loops/users/logs', (req, res) => {
+  console.log('Inside User Logs Function');
+  var redisKey = 'log:s:' + req.query.senderids + ':r:' + req.query.receiverids;
+  redisClient.zrevrange(redisKey, 0, 4, function(err, data) {
+    if(err) {
+      res.status(500).send(err);
+    } else {
+      for(var i in data) {
+        data[i] = JSON.parse(data[i]);
+      }
+      res.send({ entities: data });
+    }
+  });
+})
+
+function startServer() {
+  const PORT = process.env.PORT || 3000
+  // http://localhost:3000
+  app.listen(PORT, () =>{
+      console.log("Loop server is listening on: " + PORT)
+  });
+}
