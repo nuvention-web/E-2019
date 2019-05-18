@@ -549,7 +549,7 @@ class ConnectionDetails extends Component {
                             <em>None</em>
                           </MenuItem>
                           <MenuItem value="email">Email</MenuItem>
-                          <MenuItem value="phone">Email</MenuItem>
+                          <MenuItem value="phone">Phone</MenuItem>
                           <MenuItem value="inperson">In-Person</MenuItem>
                           <MenuItem value="socialmedia">Social-Media</MenuItem>
                         </Select>

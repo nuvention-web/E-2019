@@ -43,7 +43,6 @@ class SimpleTable extends Component {
   }
 
   componentDidMount(){
-    console.log(this.props.senderid, this.props.receiverid)
     this.getData()
   }
 
