@@ -1,10 +1,11 @@
-import React from "react";
+import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { withStyles } from "@material-ui/core/styles";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
 import TableHead from "@material-ui/core/TableHead";
+import axios from "axios";
 import TableRow from "@material-ui/core/TableRow";
 import FilterListIcon from "@material-ui/icons/FilterList";
 import Paper from "@material-ui/core/Paper";
@@ -31,20 +32,49 @@ function createData(type, notes, date) {
   return { id, type, notes, date };
 }
 
-const rows = [
-  createData(
-    "Email",
-    "Robert and I discussed how I should prepare for my internship this summer working at Cruise. Takeaways:\n-Take advantage of events for autonomous transportation in SF\n-Read up on relevant news",
-    "May 13, 2019"
-  ),
-  createData("Phone", "Discussed my upcoming interview for Cruise Automation", "April 25, 2019"),
-  createData("In-person", "Learned more about Robert’s background:\r\n-Has a family with 2 sons, lives in Palo Alto\n-Loves to travel - going to Ecuador in July (Add to reminder - talking points)", "April 11, 201"),
-  createData("Chat", "Sent quick note about my current progress", "April 6, 2019"),
-  createData("Email", "Reached out through a connection from Stanford MBA program - Robert discussed his current role as Product Director at Waymo and consulting at incubator", "March 15, 2019")
-];
+let rows = [];
 
-function SimpleTable(props) {
-  const { classes } = props;
+class SimpleTable extends Component {
+  constructor(props) { 
+    super(props);
+    this.state = {
+      loading: true
+    }
+  }
+
+  componentDidMount(){
+    console.log(this.props.senderid, this.props.receiverid)
+    this.getData()
+  }
+
+  getData(){
+    axios
+      .get(
+        `https://loop-backend-server.herokuapp.com/api/loops/users/logs`,{
+        params: {
+          senderids: this.props.senderid,
+          receiverids: this.props.receiverid
+        }
+      }
+      )
+      .then(res => {
+        let dataSource = res.data.entities.reduce((a,c) => {
+          let dt = new Date(Number(c["date"]));
+          const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+          let yr = dt.getFullYear();
+          let m = dt.getMonth();
+          let d = dt.getDate();
+          c["date"] = months[m] + " " + d + ", " + yr;
+          a.push(c)
+          return a;
+        }, [])
+        rows = dataSource
+        this.setState({loading: false})
+        console.log(dataSource)
+      });
+  }
+  render(){
+    const { classes } = this.props;
 
   return (
     <Paper className={classes.root}>
@@ -62,7 +92,7 @@ function SimpleTable(props) {
           </TableRow>
         </TableHead>
         <TableBody>
-          {rows.map(row => (
+          {!this.state.loading? rows.map(row => (
             <TableRow key={row.id}>
               <TableCell component="th" scope="row">
                 {row.type}
@@ -70,11 +100,13 @@ function SimpleTable(props) {
               <TableCell align="left" className={classes.wraptext}>{row.notes}</TableCell>
               <TableCell align="left" padding="dense">{row.date}</TableCell>
             </TableRow>
-          ))}
+          )): null}
         </TableBody>
       </Table>
     </Paper>
   );
+  }
+  
 }
 
 SimpleTable.propTypes = {

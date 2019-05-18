@@ -310,7 +310,8 @@ class ConnectionDetails extends Component {
       type: "",
       success: false,
       showTable: false,
-      showTimeline: true
+      showTimeline: true,
+      userid: ""
     };
     this.handleSubmit = this.handleSubmit.bind(this);
   }
@@ -330,6 +331,7 @@ class ConnectionDetails extends Component {
     myFirebase.auth().onAuthStateChanged(user => {
       if (user) {
         this.getTouchpoints(user);
+        this.setState({userid: user.uid})
       }
     });
   }
@@ -383,6 +385,7 @@ class ConnectionDetails extends Component {
               senderid: user.uid,
               receiverid: [this.props.location.state.id],
               timestamp: this.state.date,
+              notes: this.state.notes,
               datatype: this.state.type
             }
           )
@@ -546,6 +549,7 @@ class ConnectionDetails extends Component {
                             <em>None</em>
                           </MenuItem>
                           <MenuItem value="email">Email</MenuItem>
+                          <MenuItem value="phone">Email</MenuItem>
                           <MenuItem value="inperson">In-Person</MenuItem>
                           <MenuItem value="socialmedia">Social-Media</MenuItem>
                         </Select>
@@ -652,7 +656,7 @@ class ConnectionDetails extends Component {
                 {this.state.showTimeline ? (
                   <LineChart friendid={this.props.location.state.id} />
                 ) : (
-                  <EnhancedTable />
+                  <EnhancedTable senderid={this.state.userid} receiverid={this.props.location.state.id}/>
                 )}
               </div>
             </Paper>

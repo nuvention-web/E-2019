@@ -65,6 +65,7 @@ class Compose extends Component {
             senderid: user.uid,
             receiverid: [this.props.data.id],
             timestamp: timestamp,
+            notes: content.trim(),
             datatype: "chat"
           }
         )
