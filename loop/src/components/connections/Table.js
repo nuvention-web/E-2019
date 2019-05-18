@@ -12,6 +12,8 @@ import Paper from "@material-ui/core/Paper";
 import Tooltip from "@material-ui/core/Tooltip";
 import IconButton from "@material-ui/core/IconButton";
 import Typography from "@material-ui/core/Typography";
+import moment from "moment";
+
 const styles = theme => ({
   root: {
     width: "100%",
@@ -59,12 +61,7 @@ class SimpleTable extends Component {
       )
       .then(res => {
         let dataSource = res.data.entities.reduce((a,c) => {
-          let dt = new Date(Number(c["date"]));
-          const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-          let yr = dt.getFullYear();
-          let m = dt.getMonth();
-          let d = dt.getDate();
-          c["date"] = months[m] + " " + d + ", " + yr;
+          c["date"] = moment(Number(c["date"])).format('ll');
           a.push(c)
           return a;
         }, [])

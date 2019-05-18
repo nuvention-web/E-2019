@@ -251,6 +251,7 @@ module.exports = {
       let input = args.input;
       let updated_info = {
         name: input.name,
+        photourl : input.photourl,
         email: input.email,
         company: input.company,
         jobtitle: input.jobtitle,

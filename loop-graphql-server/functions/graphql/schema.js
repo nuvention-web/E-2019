@@ -34,6 +34,7 @@ input Friend_new_Info{
   journeyid: String
   friendid: String
   name: String
+  photourl: String
   email: String
   company: String
   jobtitle: String

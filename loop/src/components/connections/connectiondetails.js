@@ -34,6 +34,7 @@ import EnhancedTable from "./Table";
 import gql from "graphql-tag";
 import { graphql } from "react-apollo";
 import Button from "@material-ui/core/Button";
+import moment from "moment";
 
 const mytheme = createMuiTheme({
   typography: {
@@ -341,8 +342,8 @@ class ConnectionDetails extends Component {
   }
 
   handleChangeLogDate(ev) {
-    let timestamp = Date.parse(ev.target.value);
-    this.setState({ date: timestamp.toString() });
+    let timestamp = moment(ev.target.value).valueOf().toString();
+    this.setState({ date: timestamp });
   }
 
   handleClickButton(type) {
