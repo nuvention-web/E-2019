@@ -529,7 +529,7 @@ class Card extends Component {
           aria-describedby="alert-dialog-description"
         >
           <DialogTitle id="alert-dialog-title">
-            {"Are you sure to delete the user from this journey?"}
+            {"Are you sure to delete the user from this group?"}
           </DialogTitle>
           {/* <DialogContent>
             <DialogContentText id="alert-dialog-description">

@@ -64,6 +64,7 @@ type Query {
   findUser(email:String): User,
   findContactsId(journeyid:String, userid:String): [String],
   findContacts(journeyid:String, userid:String): [User],
+  findAllContacts(userid:String): [User],
   findUsersJourney(userid:String) : [Journey],
   totalAllContacts(userid:String): Int,
   helloword: String

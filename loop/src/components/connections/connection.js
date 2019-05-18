@@ -73,13 +73,13 @@ const mytheme = createMuiTheme({
     },
     MuiChip: {
       root: {},
-      colorPrimary:{
-        backgroundColor:"#fff",
-        color:"#000"
+      colorPrimary: {
+        backgroundColor: "#fff",
+        color: "#000"
       },
-      colorSecondary:{
-        color:"#fff",
-        backgroundColor:"#3B86FF",
+      colorSecondary: {
+        color: "#fff",
+        backgroundColor: "#3B86FF"
       },
       outlinedPrimary: {
         color: "#3B86FF",
@@ -361,8 +361,9 @@ class Connection extends Component {
   }
 
   handleChipClick = (id, name) => {
-    this.setState({ journeyId: id, journeyname: name, dontchange: true });
+    this.setState({ journeyId: id, journeyname: name, dontchange: true});
   };
+
   handleClose = () => {
     this.setState({
       open: false
@@ -400,8 +401,12 @@ class Connection extends Component {
                         key={i}
                         label={v.name}
                         className={classes.chip}
-                        onClick={() => this.handleChipClick(v.id)}
-                        color={v.id===this.state.journeyId? "secondary": "primary"}
+                        onClick={() => this.handleChipClick(v.id, v.name)}
+                        color={
+                          v.id === this.state.journeyId&&!this.state.all
+                            ? "secondary"
+                            : "primary"
+                        }
                       />
                     );
                   })}
@@ -495,8 +500,7 @@ export default withStyles(styles)(
           variables: {
             userid: props.user.id
           },
-          fetchPolicy: "cache-and-network",
-          
+          fetchPolicy: "cache-and-network"
         })
       }
     )(Connection)

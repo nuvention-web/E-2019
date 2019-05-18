@@ -53,6 +53,33 @@ module.exports = {
           return result;
         });
     },
+    findAllContacts(obj, args, context, info){
+      const userid = args.userid;
+      let result = [];
+      return store
+        .collection("user")
+        .doc(userid)
+        .collection("wholeContacts")
+        .get()
+        .then(querySnapshot => {
+          let docs = querySnapshot.docs;
+          result = [...docs];
+          result = result.reduce((a, c) => {
+            a.push({
+              id: c.data().id,
+              name: c.data().name,
+              email: c.data().email,
+              photourl: c.data().photourl,
+              type: c.data().type ? c.data().type : "loop",
+              company: c.data().company ? c.data().company : "",
+              jobtitle: c.data().jottitle  ? c.data().jobtitle: "",
+              phonenumber: c.data().phonenumber  ? c.data().phonenumber : "",
+            });
+            return a;
+          }, []);
+          return result;
+        });
+    },
     findContacts(obj, args, context, info) {
       const userid = args.userid;
       const journeyid = args.journeyid;
@@ -155,6 +182,10 @@ module.exports = {
         jobtitle: "",
         phonenumber: "",
       };
+      let wholeContactref = store
+      .collection("user")
+      .doc(input.userid)
+      .collection("wholeContacts");
       let journeyref = store
         .collection("user")
         .doc(input.userid)
@@ -189,6 +220,15 @@ module.exports = {
           company: input.company
         })
         .then(() => {
+          wholeContactref.doc(ref.id)
+            .set({
+              id: ref.id,
+              name: input.name,
+              email: input.email,
+              photourl: "",
+              type: "manual",
+              company: input.company
+            })
           console.log("Document created!");
           return friend;
         })

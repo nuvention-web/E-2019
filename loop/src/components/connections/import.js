@@ -185,6 +185,11 @@ class ImportContact extends Component {
     var user = myFirebase.auth().currentUser;
     let journeyid = this.props.location.state.journeyid;
     if (user && !this.state.loading_total) {
+      let wholeContactref = myFirestore
+      .collection("user")
+      .doc(user.uid)
+      .collection("wholeContacts");
+
       var ref = myFirestore
         .collection("user")
         .doc(user.uid)
@@ -212,6 +217,8 @@ class ImportContact extends Component {
             }
           })
           .then(() => {
+            wholeContactref.doc(f.id)
+            .set({id: f.id, name: f.name, photourl: f.photourl })
             ref
               .collection("contacts")
               .doc(f.id)
