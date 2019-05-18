@@ -56,6 +56,8 @@ import { bindActionCreators } from "redux";
 import importmanual from "./connections/importmanual";
 import importcontact from "./connections/import";
 import profile from "./profile";
+
+import Upload from "./upload"
 const drawerWidth = 240;
 
 const mytheme = createMuiTheme({
@@ -211,7 +213,13 @@ const styles = theme => ({
     [theme.breakpoints.up("md")]: {
       display: "flex"
     }
-  }
+  },
+  rightIcon: {
+    marginLeft: theme.spacing.unit,
+  },
+   button: {
+    margin: theme.spacing.unit,
+  },
 });
 
 class Home extends React.Component {
@@ -329,7 +337,7 @@ class Home extends React.Component {
     }
     return avatar
   }
-
+ 
   render() {
     const { classes, theme } = this.props;
     const { open, openAccount } = this.state;
@@ -354,6 +362,7 @@ class Home extends React.Component {
               </div>
               <div className={classes.grow} />
               <div className={classes.sectionDesktop}>
+             <Upload />
                 <IconButton className={classes.iconbtn}>
                   <Badge badgeContent={0} color="primary">
                     <NotificationsIcon style={{ fontSize: 20 }} />

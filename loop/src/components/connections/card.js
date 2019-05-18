@@ -22,14 +22,16 @@ import { fade } from "@material-ui/core/styles/colorManipulator";
 import Button from '@material-ui/core/Button';
 
 import Pagination from "material-ui-flat-pagination";
-import { myFirebase, myFirestore } from "../../firebase";
+import { myFirebase, myFirestore, myStorage } from "../../firebase";
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import gql from "graphql-tag";
-import { graphql } from "react-apollo";
+import { graphql,compose } from "react-apollo";
+import CameraIcon from "@material-ui/icons/CameraAlt";
+import TextField from "@material-ui/core/TextField";
 
 const mytheme = createMuiTheme({
   typography: {
@@ -233,25 +235,58 @@ const styles = theme => ({
     position: "fixed",
     bottom: 15,
     right: 15
-  }
+  },
+  UserName: {
+    marginTop: theme.spacing.unit * 3,
+    width: 200
+  },
+  update: {
+    margin: theme.spacing.unit * 3,
+  },
+  update1: {
+    marginTop: theme.spacing.unit * 1.5,
+    display: "flex",
+    flexDirection: "column",
+    width: "-webkit-fill-available", 
+  },
+  updateName: {
+    marginTop: theme.spacing.unit * 3,
+    marginLeft: theme.spacing.unit,
+    width: 200
+  },
+  
 });
 
 class Card extends Component {
   constructor(props) {
     super(props);
-    this.state = { open: false, offset: 0, clicked: false, deleteid:"" };
+    this.state = { 
+      open: false, offset: 0, clicked: false, deleteid:"",
+      open1: false, editid:"",
+      name:"",email:"",company:"",jobtitle:"",phonenumber:"",
+      photourl:"",isLoading: false,
+  };
+  this.newAvatar = null;
   }
 
-  componentDidMount(){
-    
-  }
+
 
   handleClose=(event)=>{
     this.setState({open: false})
   }
+  handleClose1=(event)=>{
+    this.setState({open1: false})
+  }
   onshowDelete = (id) => {
     this.setState({open: true, deleteid: id})
   };
+  onshowEdit = (contact) => {
+    this.setState({open1: true, editid: contact.id,
+    name:(contact.name===undefined?"":contact.name),email:(contact.email===undefined?"":contact.email),company:(contact.comany===undefined?"":contact.company),
+    jobtitle:(contact.jottitle===undefined?"":contact.jobtitle),phonenumber:(contact.phonenumber===undefined?"":contact.phonenumber),
+    photourl:(contact.photourl===undefined?"":contact.photourl )   })
+  };
+
 
   onDeleteFriend = () => {
     var user = myFirebase.auth().currentUser;
@@ -261,7 +296,7 @@ class Card extends Component {
       this.state.deleteid !== "" &&
       this.props.journeyid !== ""
     ) {
-      this.props.mutate({
+      this.props.mutation1({
         variables: {
           input: {
             userid: user.uid,
@@ -277,6 +312,95 @@ class Card extends Component {
       });
     }
   };
+  onEditFriend=()=>{
+    console.log(this.state.phonenumber);
+    var user = myFirebase.auth().currentUser;
+    if (
+      user &&
+      this.state.editid !== "" &&
+      this.props.journeyid !== ""
+    ) {
+      this.props.mutation2({
+        variables: {
+          input: {
+            userid: user.uid,
+            journeyid: this.props.journeyid,
+            friendid: this.state.editid,
+            name:this.state.name,
+            email:this.state.email,
+            company:this.state.company,
+            jobtitle: this.state.jobtitle,
+            phonenumber: this.state.phonenumber,
+            photourl:this.state.photourl,
+          }
+        }
+      });
+      this.props.onLoadMore();
+      this.setState({
+        editid: "",
+        open: false
+      });
+    }
+  }
+
+  onChangeName = event => {
+    this.setState({ name: event.target.value });
+  };
+  onChangeEmail = event => {
+    this.setState({ email: event.target.value });
+  };
+  onChangeCompany = event => {
+    this.setState({ company: event.target.value });
+  };
+  onChangeJobtitle = event => {
+    this.setState({ jobtitle: event.target.value });
+  };
+  onChangePhonenumber = event => {
+    this.setState({ phonenumber: event.target.value });
+  };
+
+  onChangeAvatar = event => {
+    if (event.target.files && event.target.files[0]) {
+      // Check this file is an image?
+      const prefixFiletype = event.target.files[0].type.toString();
+      if (prefixFiletype.indexOf("image/") !== 0) {
+        console.log("This file is not an image");
+        return;
+      }
+      this.newAvatar = event.target.files[0];
+      this.setState({ photourl: URL.createObjectURL(event.target.files[0]) });
+    } else {
+      console.log("Something wrong with input file");
+    }
+  };
+
+  uploadAvatar = () => {
+    this.setState({
+      isLoading: true
+    });
+    if (this.newAvatar && this.state.name !== "") {
+      const uploadTask = myStorage
+        .ref()
+        .child(this.props.location.state.id)
+        .put(this.newAvatar);
+      uploadTask.on(
+        "state_changed",
+        null,
+        err => {
+          console.log(err.message);
+        },
+        () => {
+          uploadTask.snapshot.ref.getDownloadURL().then(downloadURL => {
+            this.onEditFriend(true, downloadURL);
+          });
+        }
+      );
+    } else {
+      this.onEditFriend(false, null);
+    }
+  };
+
+  
 
   render() {
     const { classes } = this.props;
@@ -307,7 +431,7 @@ class Card extends Component {
                             id: contact.id,
                             photourl: contact.photourl,
                             email: contact.email,
-                            company: contact.company
+                            company: contact.company,
                           }
                         });
                       }}
@@ -319,6 +443,7 @@ class Card extends Component {
                       <IconButton
                         className={classes.headerbutton}
                         aria-label="edit"
+                        onClick={() => this.onshowEdit(contact)}
                       >
                         <EditIcon className={classes.conicon} />
                       </IconButton>
@@ -407,6 +532,96 @@ class Card extends Component {
             </Button>
           </DialogActions>
         </Dialog>
+        <Dialog
+          open={this.state.open1}
+          onClose={this.handleClose1}
+          aria-labelledby="alert-dialog-title"
+          aria-describedby="alert-dialog-description"
+        >
+          <DialogContent>
+              <div className={classes.connectioncontent}>
+              <Avatar
+              alt="Avatar"
+              src={
+                this.state.photourl
+                  ? this.state.photourl
+                  : "https://i.ibb.co/DYgZrjC/loading.png"
+              }
+              className={classes.bigAvatar}
+            />
+            <div className="viewWrapInputFile1">
+              <IconButton
+                className={classes.margin}
+                onClick={() => this.refInput.click()}
+              >
+                <CameraIcon style={{ fontSize: 20 }} />
+              </IconButton>
+              <input
+                ref={el => {
+                  this.refInput = el;
+                }}
+                accept="image/*"
+                className="viewInputFile1"
+                type="file"
+              />
+            </div>
+                <div className={classes.update1}>
+                  <div className={classes.update}>
+            <TextField
+              id="standard-read-only-input"
+              label="Name"
+              value={this.state.name}
+              className={classes.updateName}
+              margin="normal"
+              onChange={this.onChangeName}
+            />
+            <TextField
+              id="standard-read-only-input"
+              label="email"
+              value={this.state.email}
+              className={classes.updateName}
+              margin="normal"
+              onChange={this.onChangeEmail}
+            />
+            <TextField
+              id="standard-read-only-input"
+              label="company"
+              value={this.state.company}
+              className={classes.updateName}
+              margin="normal"
+              onChange={this.onChangeCompany}
+            />
+            <TextField
+              id="standard-read-only-input"
+              label="job title"
+              value={this.state.jobtitle}
+              className={classes.updateName}
+              margin="normal"
+              onChange={this.onChangeJobtitle}
+            />
+            <TextField
+              id="standard-read-only-input"
+              label="phone number"
+              value={this.state.phonenumber}
+              className={classes.updateName}
+              margin="normal"
+              onChange={this.onChangePhonenumber}
+            />
+   
+                  </div>
+                 
+                </div>
+              </div>
+              <DialogActions>
+            <Button onClick={this.handleClose1} color="primary">
+              Cancel
+            </Button>
+            <Button onClick={() => this.onEditFriend()} color="primary" autoFocus>
+              Done
+            </Button>
+          </DialogActions>
+              </DialogContent>
+              </Dialog>   
       </div>
     );
   }
@@ -419,13 +634,20 @@ Card.propTypes = {
   onLoadMore: PropTypes.func.isRequired
 };
 
+const mutation1=gql`
+mutation($input: Friend_del!) {
+  deleteFriend(input: $input)
+}
+`
+const mutation2=gql`
+mutation($input: Friend_new_Info!) {
+  editFriend(input: $input)
+}
+`
 
 export default withStyles(styles)(
-  graphql(
-    gql`
-      mutation($input: Friend_del!) {
-        deleteFriend(input: $input)
-      }
-    `
-  )(Card)
+  compose(
+  graphql(mutation1, { name: 'mutation1' }), 
+  graphql(mutation2, { name: 'mutation2' }))
+(Card)
 );
