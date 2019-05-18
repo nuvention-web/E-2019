@@ -10,6 +10,8 @@ type User {
   photourl: String
   type: String
   company: String
+  jobtitle: String
+  phonenumber: String
 }
 type Journey {
   id: String

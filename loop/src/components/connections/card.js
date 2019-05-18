@@ -19,17 +19,17 @@ import Divider from "@material-ui/core/Divider";
 import InputBase from "@material-ui/core/InputBase";
 import SearchIcon from "@material-ui/icons/Search";
 import { fade } from "@material-ui/core/styles/colorManipulator";
-import Button from '@material-ui/core/Button';
+import Button from "@material-ui/core/Button";
 
 import Pagination from "material-ui-flat-pagination";
 import { myFirebase, myFirestore, myStorage } from "../../firebase";
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
-import DialogTitle from '@material-ui/core/DialogTitle';
+import Dialog from "@material-ui/core/Dialog";
+import DialogActions from "@material-ui/core/DialogActions";
+import DialogContent from "@material-ui/core/DialogContent";
+import DialogContentText from "@material-ui/core/DialogContentText";
+import DialogTitle from "@material-ui/core/DialogTitle";
 import gql from "graphql-tag";
-import { graphql,compose } from "react-apollo";
+import { graphql, compose } from "react-apollo";
 import CameraIcon from "@material-ui/icons/CameraAlt";
 import TextField from "@material-ui/core/TextField";
 
@@ -241,62 +241,69 @@ const styles = theme => ({
     width: 200
   },
   update: {
-    margin: theme.spacing.unit * 3,
+    margin: theme.spacing.unit * 3
   },
   update1: {
     marginTop: theme.spacing.unit * 1.5,
     display: "flex",
     flexDirection: "column",
-    width: "-webkit-fill-available", 
+    width: "-webkit-fill-available"
   },
   updateName: {
     marginTop: theme.spacing.unit * 3,
     marginLeft: theme.spacing.unit,
     width: 200
-  },
-  
+  }
 });
 
 class Card extends Component {
   constructor(props) {
     super(props);
-    this.state = { 
-      open: false, offset: 0, clicked: false, deleteid:"",
-      open1: false, editid:"",
-      name:"",email:"",company:"",jobtitle:"",phonenumber:"",
-      photourl:"",isLoading: false,
-  };
-  this.newAvatar = null;
+    this.state = {
+      open: false,
+      offset: 0,
+      clicked: false,
+      deleteid: "",
+      open1: false,
+      editid: "",
+      name: "",
+      email: "",
+      company: "",
+      jobtitle: "",
+      phonenumber: "",
+      photourl: "",
+      isLoading: false
+    };
+    this.newAvatar = null;
   }
 
-
-
-  handleClose=(event)=>{
-    this.setState({open: false})
-  }
-  handleClose1=(event)=>{
-    this.setState({open1: false})
-  }
-  onshowDelete = (id) => {
-    this.setState({open: true, deleteid: id})
+  handleClose = event => {
+    this.setState({ open: false });
   };
-  onshowEdit = (contact) => {
-    this.setState({open1: true, editid: contact.id,
-    name:(contact.name===undefined?"":contact.name),email:(contact.email===undefined?"":contact.email),company:(contact.comany===undefined?"":contact.company),
-    jobtitle:(contact.jottitle===undefined?"":contact.jobtitle),phonenumber:(contact.phonenumber===undefined?"":contact.phonenumber),
-    photourl:(contact.photourl===undefined?"":contact.photourl )   })
+  handleClose1 = event => {
+    this.setState({ open1: false });
+  };
+  onshowDelete = id => {
+    this.setState({ open: true, deleteid: id });
+  };
+  onshowEdit = contact => {
+    this.setState({
+      open1: true,
+      editid: contact.id,
+      name: contact.name,
+      email: contact.email,
+      company: contact.company? contact.company : "",
+      jobtitle: contact.jottitle? contact.jobtitle : "",
+      phonenumber: contact.phonenumber? contact.phonenumber : "",
+      photourl: contact.photourl? contact.photourl : ""
+    });
   };
 
-
-  onDeleteFriend = () => {
+  onDeleteFriend = async () => {
     var user = myFirebase.auth().currentUser;
 
-    if (
-      user &&
-      this.state.deleteid !== "" &&
-      this.props.journeyid !== ""
-    ) {
-      this.props.mutation1({
+    if (user && this.state.deleteid !== "" && this.props.journeyid !== "") {
+      let d = await this.props.mutation1({
         variables: {
           input: {
             userid: user.uid,
@@ -305,43 +312,45 @@ class Card extends Component {
           }
         }
       });
-      this.props.onLoadMore();
-      this.setState({
-        deleteid: "",
-        open: false
-      });
+      if (d.data.deleteFriend){
+        this.setState({
+          deleteid: "",
+          open: false
+        });
+        this.props.onLoadMore();
+      }
+      
     }
   };
-  onEditFriend=()=>{
-    console.log(this.state.phonenumber);
+  onEditFriend = async (isUpdatePhotoUrl, downloadURL) => {
     var user = myFirebase.auth().currentUser;
-    if (
-      user &&
-      this.state.editid !== "" &&
-      this.props.journeyid !== ""
-    ) {
-      this.props.mutation2({
+    if (user && this.state.editid !== "" && this.props.journeyid !== "") {
+      
+      let d = await this.props.mutation2({
         variables: {
           input: {
             userid: user.uid,
             journeyid: this.props.journeyid,
             friendid: this.state.editid,
-            name:this.state.name,
-            email:this.state.email,
-            company:this.state.company,
+            name: this.state.name,
+            email: this.state.email,
+            company: this.state.company,
             jobtitle: this.state.jobtitle,
             phonenumber: this.state.phonenumber,
-            photourl:this.state.photourl,
+            photourl: isUpdatePhotoUrl? downloadURL : this.state.photourl
           }
         }
       });
-      this.props.onLoadMore();
-      this.setState({
-        editid: "",
-        open: false
-      });
+
+      if (d.data.editFriend){
+        this.setState({
+          editid: "",
+          open: false
+        });
+        this.props.onLoadMore();
+      }
     }
-  }
+  };
 
   onChangeName = event => {
     this.setState({ name: event.target.value });
@@ -375,13 +384,16 @@ class Card extends Component {
   };
 
   uploadAvatar = () => {
+    var user = myFirebase.auth().currentUser;
     this.setState({
       isLoading: true
     });
     if (this.newAvatar && this.state.name !== "") {
       const uploadTask = myStorage
         .ref()
-        .child(this.props.location.state.id)
+        .child('user-connection')
+        .child(user.uid)
+        .child(this.state.editid)
         .put(this.newAvatar);
       uploadTask.on(
         "state_changed",
@@ -400,123 +412,125 @@ class Card extends Component {
     }
   };
 
-  
-
   render() {
     const { classes } = this.props;
     return (
       <div>
-      <Grid container spacing={24}>
-        {this.props.data? this.props.data.map(contact => (
-          <Grid item xs={4} key={contact.id}>
-            <Paper className={classes.paper}>
-              <div className={classes.connectioncontent}>
-                <Avatar
-                  alt="Tony Stark"
-                  src={
-                    contact.photourl
-                      ? contact.photourl
-                      : "https://bootdey.com/img/Content/avatar/avatar6.png"
-                  }
-                  className={classes.bigAvatar}
-                />
-                <div className={classes.connectioncaption}>
-                  <div className={classes.connectionheader}>
-                    <div
-                      onClick={() => {
-                        this.props.history.push({
-                          pathname: "/home/connectiondetails",
-                          state: {
-                            username: contact.name,
-                            id: contact.id,
-                            photourl: contact.photourl,
-                            email: contact.email,
-                            company: contact.company,
-                          }
-                        });
-                      }}
-                      style={{ cursor:"pointer"}}
-                    >
-                      <Typography variant="h6">{contact.name}</Typography>
-                    </div>
-                    <div className={classes.connectionicon}>
-                      <IconButton
-                        className={classes.headerbutton}
-                        aria-label="edit"
-                        onClick={() => this.onshowEdit(contact)}
-                      >
-                        <EditIcon className={classes.conicon} />
-                      </IconButton>
-                      <IconButton
-                        className={classes.headerbutton}
-                        aria-label="clear"
-                        onClick={() => this.onshowDelete(contact.id)}
-                      >
-                        <ClearIcon className={classes.conicon} />
-                      </IconButton>
-                    </div>
-                  </div>
-                  {contact.email ? (
-                    <Typography
-                      variant="caption"
-                      className={classes.connectiondes}
-                    >
-                      Email: {contact.email}
-                    </Typography>
-                  ) : null}
+        <Grid container spacing={24}>
+          {this.props.data
+            ? this.props.data.map(contact => (
+                <Grid item xs={4} key={contact.id}>
+                  <Paper className={classes.paper}>
+                    <div className={classes.connectioncontent}>
+                      <Avatar
+                        alt="Tony Stark"
+                        src={
+                          contact.photourl
+                            ? contact.photourl
+                            : "https://bootdey.com/img/Content/avatar/avatar6.png"
+                        }
+                        className={classes.bigAvatar}
+                      />
+                      <div className={classes.connectioncaption}>
+                        <div className={classes.connectionheader}>
+                          <div
+                            onClick={() => {
+                              this.props.history.push({
+                                pathname: "/home/connectiondetails",
+                                state: {
+                                  username: contact.name,
+                                  id: contact.id,
+                                  photourl: contact.photourl,
+                                  email: contact.email,
+                                  company: contact.company
+                                }
+                              });
+                            }}
+                            style={{ cursor: "pointer" }}
+                          >
+                            <Typography variant="h6">{contact.name}</Typography>
+                          </div>
+                          <div className={classes.connectionicon}>
+                            <IconButton
+                              className={classes.headerbutton}
+                              aria-label="edit"
+                              onClick={() => this.onshowEdit(contact)}
+                            >
+                              <EditIcon className={classes.conicon} />
+                            </IconButton>
+                            <IconButton
+                              className={classes.headerbutton}
+                              aria-label="clear"
+                              onClick={() => this.onshowDelete(contact.id)}
+                            >
+                              <ClearIcon className={classes.conicon} />
+                            </IconButton>
+                          </div>
+                        </div>
+                        {contact.email ? (
+                          <Typography
+                            variant="caption"
+                            className={classes.connectiondes}
+                          >
+                            Email: {contact.email}
+                          </Typography>
+                        ) : null}
 
-                  {contact.company ? (
-                    <Typography
-                      variant="caption"
-                      className={classes.connectiondes}
-                    >
-                      Company: {contact.company}
-                    </Typography>
-                  ) : null}
-                </div>
-              </div>
-              <Divider />
-              <div className={classes.connectionfooter}>
-                <IconButton
-                  className={classes.button}
-                  aria-label="instagram"
-                  color="primary"
-                >
-                  <FontAwesomeIcon icon={["fab", "instagram"]} />
-                </IconButton>
-                <IconButton
-                  className={classes.button}
-                  aria-label="twitter"
-                  color="primary"
-                >
-                  <FontAwesomeIcon icon={["fab", "twitter"]} />
-                </IconButton>
-                <IconButton
-                  className={classes.button}
-                  aria-label="facebook"
-                  color="primary"
-                >
-                  <FontAwesomeIcon icon={["fab", "facebook"]} />
-                </IconButton>
-                <IconButton
-                  className={classes.button}
-                  aria-label="email"
-                  color="primary"
-                >
-                  <EmailIcon />
-                </IconButton>
-              </div>
-            </Paper>
-          </Grid>
-        )): null}
-      </Grid>
-      <Dialog
+                        {contact.company ? (
+                          <Typography
+                            variant="caption"
+                            className={classes.connectiondes}
+                          >
+                            Company: {contact.company}
+                          </Typography>
+                        ) : null}
+                      </div>
+                    </div>
+                    <Divider />
+                    <div className={classes.connectionfooter}>
+                      <IconButton
+                        className={classes.button}
+                        aria-label="instagram"
+                        color="primary"
+                      >
+                        <FontAwesomeIcon icon={["fab", "instagram"]} />
+                      </IconButton>
+                      <IconButton
+                        className={classes.button}
+                        aria-label="twitter"
+                        color="primary"
+                      >
+                        <FontAwesomeIcon icon={["fab", "twitter"]} />
+                      </IconButton>
+                      <IconButton
+                        className={classes.button}
+                        aria-label="facebook"
+                        color="primary"
+                      >
+                        <FontAwesomeIcon icon={["fab", "facebook"]} />
+                      </IconButton>
+                      <IconButton
+                        className={classes.button}
+                        aria-label="email"
+                        color="primary"
+                      >
+                        <EmailIcon />
+                      </IconButton>
+                    </div>
+                  </Paper>
+                </Grid>
+              ))
+            : null}
+        </Grid>
+        <Dialog
           open={this.state.open}
           onClose={this.handleClose}
           aria-labelledby="alert-dialog-title"
           aria-describedby="alert-dialog-description"
         >
-          <DialogTitle id="alert-dialog-title">{"Are you sure to delete the user from this journey?"}</DialogTitle>
+          <DialogTitle id="alert-dialog-title">
+            {"Are you sure to delete the user from this journey?"}
+          </DialogTitle>
           {/* <DialogContent>
             <DialogContentText id="alert-dialog-description">
               Let Google help apps determine location. This means sending anonymous location data to
@@ -527,7 +541,11 @@ class Card extends Component {
             <Button onClick={this.handleClose} color="primary">
               Cancel
             </Button>
-            <Button onClick={() => this.onDeleteFriend()} color="primary" autoFocus>
+            <Button
+              onClick={() => this.onDeleteFriend()}
+              color="primary"
+              autoFocus
+            >
               Yes
             </Button>
           </DialogActions>
@@ -539,94 +557,96 @@ class Card extends Component {
           aria-describedby="alert-dialog-description"
         >
           <DialogContent>
-              <div className={classes.connectioncontent}>
+            <div className={classes.connectioncontent}>
               <Avatar
-              alt="Avatar"
-              src={
-                this.state.photourl
-                  ? this.state.photourl
-                  : "https://i.ibb.co/DYgZrjC/loading.png"
-              }
-              className={classes.bigAvatar}
-            />
-            <div className="viewWrapInputFile1">
-              <IconButton
-                className={classes.margin}
-                onClick={() => this.refInput.click()}
-              >
-                <CameraIcon style={{ fontSize: 20 }} />
-              </IconButton>
-              <input
-                ref={el => {
-                  this.refInput = el;
-                }}
-                accept="image/*"
-                className="viewInputFile1"
-                type="file"
+                alt="Avatar"
+                src={
+                  this.state.photourl
+                    ? this.state.photourl
+                    : "https://i.ibb.co/DYgZrjC/loading.png"
+                }
+                className={classes.bigAvatar}
               />
-            </div>
-                <div className={classes.update1}>
-                  <div className={classes.update}>
-            <TextField
-              id="standard-read-only-input"
-              label="Name"
-              value={this.state.name}
-              className={classes.updateName}
-              margin="normal"
-              onChange={this.onChangeName}
-            />
-            <TextField
-              id="standard-read-only-input"
-              label="email"
-              value={this.state.email}
-              className={classes.updateName}
-              margin="normal"
-              onChange={this.onChangeEmail}
-            />
-            <TextField
-              id="standard-read-only-input"
-              label="company"
-              value={this.state.company}
-              className={classes.updateName}
-              margin="normal"
-              onChange={this.onChangeCompany}
-            />
-            <TextField
-              id="standard-read-only-input"
-              label="job title"
-              value={this.state.jobtitle}
-              className={classes.updateName}
-              margin="normal"
-              onChange={this.onChangeJobtitle}
-            />
-            <TextField
-              id="standard-read-only-input"
-              label="phone number"
-              value={this.state.phonenumber}
-              className={classes.updateName}
-              margin="normal"
-              onChange={this.onChangePhonenumber}
-            />
-   
-                  </div>
-                 
+              <div className="viewWrapInputFile1">
+                <IconButton
+                  className={classes.margin}
+                  onClick={() => this.refInput.click()}
+                >
+                  <CameraIcon style={{ fontSize: 20 }} />
+                </IconButton>
+                <input
+                  ref={el => {
+                    this.refInput = el;
+                  }}
+                  accept="image/*"
+                  className="viewInputFile1"
+                  type="file"
+                  onChange={this.onChangeAvatar}
+                />
+              </div>
+              <div className={classes.update1}>
+                <div className={classes.update}>
+                  <TextField
+                    id="standard-read-only-input"
+                    label="Name"
+                    value={this.state.name}
+                    className={classes.updateName}
+                    margin="normal"
+                    onChange={this.onChangeName}
+                  />
+                  <TextField
+                    id="standard-read-only-input"
+                    label="Email"
+                    value={this.state.email}
+                    className={classes.updateName}
+                    margin="normal"
+                    onChange={this.onChangeEmail}
+                  />
+                  <TextField
+                    id="standard-read-only-input"
+                    label="Company"
+                    value={this.state.company}
+                    className={classes.updateName}
+                    margin="normal"
+                    onChange={this.onChangeCompany}
+                  />
+                  <TextField
+                    id="standard-read-only-input"
+                    label="Job Title"
+                    value={this.state.jobtitle}
+                    className={classes.updateName}
+                    margin="normal"
+                    onChange={this.onChangeJobtitle}
+                  />
+                  <TextField
+                    id="standard-read-only-input"
+                    label="Phone Number"
+                    value={this.state.phonenumber}
+                    className={classes.updateName}
+                    margin="normal"
+                    onChange={this.onChangePhonenumber}
+                  />
                 </div>
               </div>
-              <DialogActions>
-            <Button onClick={this.handleClose1} color="primary">
-              Cancel
-            </Button>
-            <Button onClick={() => this.onEditFriend()} color="primary" autoFocus>
-              Done
-            </Button>
-          </DialogActions>
-              </DialogContent>
-              </Dialog>   
+            </div>
+            <DialogActions>
+              <Button onClick={this.handleClose1} color="primary">
+                Cancel
+              </Button>
+              <Button
+                onClick={event => this.uploadAvatar()}
+                color="primary"
+                autoFocus
+              >
+                Done
+              </Button>
+            </DialogActions>
+          </DialogContent>
+        </Dialog>
       </div>
     );
   }
 }
-
 
 Card.propTypes = {
   classes: PropTypes.object.isRequired,
@@ -634,20 +654,20 @@ Card.propTypes = {
   onLoadMore: PropTypes.func.isRequired
 };
 
-const mutation1=gql`
-mutation($input: Friend_del!) {
-  deleteFriend(input: $input)
-}
-`
-const mutation2=gql`
-mutation($input: Friend_new_Info!) {
-  editFriend(input: $input)
-}
-`
+const mutation1 = gql`
+  mutation($input: Friend_del!) {
+    deleteFriend(input: $input)
+  }
+`;
+const mutation2 = gql`
+  mutation($input: Friend_new_Info!) {
+    editFriend(input: $input)
+  }
+`;
 
 export default withStyles(styles)(
   compose(
-  graphql(mutation1, { name: 'mutation1' }), 
-  graphql(mutation2, { name: 'mutation2' }))
-(Card)
+    graphql(mutation1, { name: "mutation1" }),
+    graphql(mutation2, { name: "mutation2" })
+  )(Card)
 );

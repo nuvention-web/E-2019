@@ -23,7 +23,9 @@ module.exports = {
               ? userRecord.toJSON().photoURL
               : "",
             type: "loop",
-            company: ""
+            company: "",
+            jobtitle: "",
+            phonenumber: userRecord.toJSON().phoneNumber  ? userRecord.toJSON().phoneNumber : "",
           };
           // See the UserRecord reference doc for the contents of userRecord.
           return user;
@@ -72,7 +74,9 @@ module.exports = {
               email: c.data().email,
               photourl: c.data().photourl,
               type: c.data().type ? c.data().type : "loop",
-              company: c.data().company ? c.data().company : ""
+              company: c.data().company ? c.data().company : "",
+              jobtitle: c.data().jottitle  ? c.data().jobtitle: "",
+              phonenumber: c.data().phonenumber  ? c.data().phonenumber : "",
             });
             return a;
           }, []);
@@ -147,7 +151,9 @@ module.exports = {
         email: input.email,
         photourl: "",
         type: "manual",
-        company: input.company
+        company: input.company,
+        jobtitle: "",
+        phonenumber: "",
       };
       let journeyref = store
         .collection("user")
@@ -268,7 +274,8 @@ module.exports = {
         .then(()=>{
           return true
         })
-        .catch(()=>{
+        .catch((err)=>{
+          console.log(err)
           return false
         })
     }

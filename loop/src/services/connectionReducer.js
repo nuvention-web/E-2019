@@ -11,6 +11,8 @@ const get_contacts = gql`
       photourl
       type
       company
+      jobtitle
+      phonenumber
     }
   }
 `;
@@ -39,6 +41,7 @@ export const get_userByJourney = (journeyid, userid, history) => (
                     userid: userid
                   }
                 }).then(res => {
+                  
                   return res.data.findContacts;
                 });
               }}
