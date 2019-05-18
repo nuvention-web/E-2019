@@ -46,6 +46,7 @@ class SimpleTable extends Component {
     this.getData()
   }
 
+
   getData(){
     axios
       .get(
@@ -72,6 +73,27 @@ class SimpleTable extends Component {
         console.log(dataSource)
       });
   }
+
+  renderTable(classes){
+    let viewTable = []
+    if(this.props.reload){
+      this.getData();
+    }
+    if(!this.state.loading){
+      rows.map(row => viewTable.push(
+        <TableRow key={row.id}>
+          <TableCell component="th" scope="row">
+            {row.type}
+          </TableCell>
+          <TableCell align="left" className={classes.wraptext}>{row.notes}</TableCell>
+          <TableCell align="left" padding="dense">{row.date}</TableCell>
+        </TableRow>
+      ))
+    }
+    return viewTable
+  }
+
+
   render(){
     const { classes } = this.props;
 
@@ -91,15 +113,7 @@ class SimpleTable extends Component {
           </TableRow>
         </TableHead>
         <TableBody>
-          {!this.state.loading? rows.map(row => (
-            <TableRow key={row.id}>
-              <TableCell component="th" scope="row">
-                {row.type}
-              </TableCell>
-              <TableCell align="left" className={classes.wraptext}>{row.notes}</TableCell>
-              <TableCell align="left" padding="dense">{row.date}</TableCell>
-            </TableRow>
-          )): null}
+          {this.renderTable(classes)}
         </TableBody>
       </Table>
     </Paper>

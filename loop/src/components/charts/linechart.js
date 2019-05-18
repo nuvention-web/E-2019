@@ -42,7 +42,8 @@ const dataSource = {
 
 class LineChart extends React.Component {
   state = {
-    loadedChart: true
+    loadedChart: true,
+    userid: ""
   };
 
   componentDidMount() {
@@ -53,6 +54,7 @@ class LineChart extends React.Component {
           name: user.displayName,
           photourl: user.photoURL ? user.photoURL : ""
         });
+        this.setState({userid: user.uid})
         this.getChartData(user.uid);
       }
     });
@@ -89,6 +91,9 @@ class LineChart extends React.Component {
 
   renderChart() {
     let viewChart = [];
+    if(this.props.reload){
+      this.getChartData(this.state.userid);
+    }
     if (!this.state.loadedChart) {
       viewChart.push(
         <ReactFC

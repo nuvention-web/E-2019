@@ -654,9 +654,9 @@ class ConnectionDetails extends Component {
               </div>
               <div style={{ padding: 20 }}>
                 {this.state.showTimeline ? (
-                  <LineChart friendid={this.props.location.state.id} />
+                  <LineChart reload={this.state.success} friendid={this.props.location.state.id} />
                 ) : (
-                  <EnhancedTable senderid={this.state.userid} receiverid={this.props.location.state.id}/>
+                  <EnhancedTable reload={this.state.success} senderid={this.state.userid} receiverid={this.props.location.state.id}/>
                 )}
               </div>
             </Paper>
@@ -693,7 +693,7 @@ class ConnectionDetails extends Component {
                   <div className={classes.papercontent}>
                     <div className={classes.papercaption} />
                   </div>
-                  <PieChart friendid={this.props.location.state.id} />
+                  <PieChart reload={this.state.success}  friendid={this.props.location.state.id} />
 
                   <div className={classes.papercontent}>
                     <div className={classes.papercaption} />

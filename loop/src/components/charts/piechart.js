@@ -46,13 +46,16 @@ const dataSource = {
 
 export default class PieChart extends React.Component {
   state = {
-    loadedChart: true
+    loadedChart: true,
+    userid: "",
+    reloadSuccess: false
   };
 
   componentDidMount() {
     myFirebase.auth().onAuthStateChanged(user => {
       if (user) {
         this.getChartData(user.uid);
+        this.setState({userid: user.uid})
       }
     });
     
@@ -79,6 +82,9 @@ export default class PieChart extends React.Component {
 
   renderChart(){
     let viewChart = [];
+    if(this.props.reload){
+      this.getChartData(this.state.userid);
+    }
     if (!this.state.loadedChart) {
       viewChart.push(
         <ReactFC
