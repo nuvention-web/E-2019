@@ -857,8 +857,8 @@ function pieChart(req, res, next) {
   var senderids = data_json_pie.senderid
   var receiverids = data_json_pie.receiverid
   var start_rels = data_json_pie.start_rel
-  const typelist = ['email', 'chat', 'inperson', 'socialmedia']
-  const typeDisplay = ['E-mail', 'Chat', 'In-Person', 'Social Media']
+  const typelist = ['email', 'chat', 'inperson', 'socialmedia', 'phone']
+  const typeDisplay = ['E-mail', 'Chat', 'In-Person', 'Social Media', 'Phone']
   var optionList = []
   var optionOppList = []
   var pie = [] //crete the final json format
