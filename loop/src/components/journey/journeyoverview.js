@@ -16,10 +16,12 @@ import { updateModalStatus } from "../../services/actions";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import JourneyModal from "./createjourney";
+import EditIcon from "@material-ui/icons/Edit";
+import ClearIcon from "@material-ui/icons/Clear";
 
 const mytheme = createMuiTheme({
   typography: {
-    useNextVariants: true,
+    useNextVariants: true
   },
   palette: {
     primary: {
@@ -49,7 +51,7 @@ const mytheme = createMuiTheme({
       h6: {
         fontWeight: "bold"
       },
-      caption:{
+      caption: {
         color: "#757475"
       }
     }
@@ -67,6 +69,7 @@ const styles = theme => ({
     color: theme.palette.text.secondary
   },
   paper_journey_add: {
+    marginRight: 48,
     padding: theme.spacing.unit * 3.5,
     color: theme.palette.text.secondary,
     display: "flex",
@@ -104,12 +107,12 @@ const styles = theme => ({
   },
   papercaption: {
     marginTop: theme.spacing.unit * 1.5,
-    marginBottom: theme.spacing.unit * 1.7,
+    marginBottom: theme.spacing.unit * 1.7
     // display: "flex",
     // flexDirection: "row"
   },
-  paper_j_typo:{
-    display:"inline-block",
+  paper_j_typo: {
+    display: "inline-block",
     marginRight: theme.spacing.unit * 1
   },
   remindercontent: {
@@ -126,6 +129,21 @@ const styles = theme => ({
     margin: 10,
     width: 65,
     height: 65
+  },
+  groupfield:{
+    display: "flex",
+    flexDirection: "row",
+  },
+  groupcard:{
+    width:"100%",
+    cursor:"pointer"
+  },
+  controlbtns:{
+    display: "flex",
+    flexDirection: "column",
+  },
+  conicon:{
+    color:"#BCBCCB"
   }
 });
 
@@ -172,7 +190,7 @@ class JourneyOverview extends Component {
     }
   };
 
-  checkConnection = async(journeyid, journeyname, journeytotalContacts) => {
+  checkConnection = async (journeyid, journeyname, journeytotalContacts) => {
     var user = myFirebase.auth().currentUser;
     const contacts = await myFirestore
       .collection("user")
@@ -185,32 +203,55 @@ class JourneyOverview extends Component {
       this.setState({ contactsEmpty: false });
       this.props.history.push({
         pathname: "/home/groupcontent",
-        state: { journeyname: journeyname, journeyid: journeyid, userid: user.uid, journeytotalContacts: journeytotalContacts}
+        state: {
+          journeyname: journeyname,
+          journeyid: journeyid,
+          userid: user.uid,
+          journeytotalContacts: journeytotalContacts
+        }
       });
     } else {
       this.props.history.push({
         pathname: "/home/noconnection",
-        state: { name: journeyname, id: journeyid}
+        state: { name: journeyname, id: journeyid }
       });
     }
-  }
+  };
 
   renderJourney = classes => {
     if (this.listjourney.length > 0) {
       let viewlistjourney = [];
-      this.listjourney = this.listjourney.filter(l=>l.data().journeyname !== "Stranger")
+      this.listjourney = this.listjourney.filter(
+        l => l.data().journeyname !== "Stranger"
+      );
       this.listjourney.forEach((item, index) => {
         viewlistjourney.push(
-          <Grid item xs={4} key={item.data().id}>
-            <div onClick={()=>this.checkConnection(item.data().id, item.data().journeyname, item.data().totalContacts)}>
+          <Grid className={classes.groupfield} item xs={4} key={item.data().id}>
+            <div
+            className={classes.groupcard}
+              onClick={() =>
+                this.checkConnection(
+                  item.data().id,
+                  item.data().journeyname,
+                  item.data().totalContacts
+                )
+              }
+            >
               <Paper className={classes.paper}>
                 <Typography component="p" color="primary">
                   {item.data().journeyname}
                 </Typography>
                 <div className={classes.papercontent_bar}>
                   <div className={classes.papercaption}>
-                    <Typography variant="h6" className={classes.paper_j_typo}>{item.data().totalContacts}</Typography>
-                    <Typography variant="caption" className={classes.paper_j_typo}>connection(s)</Typography>
+                    <Typography variant="h6" className={classes.paper_j_typo}>
+                      {item.data().totalContacts}
+                    </Typography>
+                    <Typography
+                      variant="caption"
+                      className={classes.paper_j_typo}
+                    >
+                      connection(s)
+                    </Typography>
                   </div>
                   {/* <div className={classes.progressbar}>
                     <SemiCircleProgressBar
@@ -224,6 +265,14 @@ class JourneyOverview extends Component {
                   </div> */}
                 </div>
               </Paper>
+            </div>
+            <div className={classes.controlbtns}>
+              <IconButton className={classes.headerbutton} aria-label="edit">
+                <EditIcon className={classes.conicon} />
+              </IconButton>
+              <IconButton className={classes.headerbutton} aria-label="clear">
+                <ClearIcon className={classes.conicon} />
+              </IconButton>
             </div>
           </Grid>
         );
