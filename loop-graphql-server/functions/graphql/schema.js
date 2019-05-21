@@ -49,6 +49,14 @@ input Friend_del {
   journeyid: String
 }
 
+input LinkedinCon {
+  uid: String
+  name: String
+  email: String
+  company: String
+  position: String
+}
+
 input Log {
   id: String
   timestamp: String
@@ -74,7 +82,8 @@ type Mutation {
   createFriend(input: Friend!): User,
   createLog(input: Log!): Boolean,
   deleteFriend(input: Friend_del!): Boolean,
-  editFriend(input: Friend_new_Info!): Boolean
+  editFriend(input: Friend_new_Info!): Boolean,
+  importLinkedinConnection(userid: String!, input: [LinkedinCon!], journey: [String!]): Boolean
 }
 `;
 

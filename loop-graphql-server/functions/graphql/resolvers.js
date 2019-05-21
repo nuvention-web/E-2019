@@ -318,6 +318,55 @@ module.exports = {
           console.log(err)
           return false
         })
+    },
+    importLinkedinConnection(obj, args, context, info){
+      let userid = args.userid
+      let input = args.input
+      let journey = args.journey
+      let userref = store
+      .collection("user")
+      .doc(userid)
+      let wholeContactref = userref
+      .collection("wholeContacts");
+      return new Promise(resolve => {
+      journey.forEach(jid=>{
+        let cref = userref.collection("journeys").doc(jid)
+        input.forEach(doc=>{
+          wholeContactref.doc(doc.uid).set({id:doc.uid, name: doc.name, email: doc.email, company: doc.company, jobtitle: doc.position})
+          cref.collection("contacts").doc(doc.uid).get()
+          .then(docSnapshot=>{
+            if(!docSnapshot.exists){
+              cref.collection("contacts").doc(doc.uid).set({id:doc.uid, name: doc.name, email: doc.email, company: doc.company, jobtitle: doc.position})
+              cref
+              .get()
+              .then(querySnapshot => {
+                let total = 0;
+                total = querySnapshot.data().totalContacts
+                  ? querySnapshot.data().totalContacts
+                  : 0;
+                return total;
+              })
+              .then(total => {
+                return cref.update({ totalContacts: total + 1 });
+              })
+              .catch(error => {
+                // The document probably doesn't exist.
+                console.error("Error creating document: ", error);
+              });
+            }
+            return true
+          }).catch(()=>{
+            return false
+          }
+          )
+        })
+      })
+      return resolve(Object.assign({}, input));
+    }).then(()=>{
+      return true
+    })
+    .catch(()=>{
+    return false})
     }
   }
 };
