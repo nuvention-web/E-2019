@@ -56,7 +56,7 @@ import { bindActionCreators } from "redux";
 import importmanual from "./connections/importmanual";
 import importcontact from "./connections/import";
 import profile from "./profile";
-
+import CloudUploadIcon from "@material-ui/icons/CloudUpload";
 import Upload from "./upload"
 const drawerWidth = 240;
 
@@ -362,7 +362,6 @@ class Home extends React.Component {
               </div>
               <div className={classes.grow} />
               <div className={classes.sectionDesktop}>
-             <Upload />
                 <IconButton className={classes.iconbtn}>
                   <Badge badgeContent={0} color="primary">
                     <NotificationsIcon style={{ fontSize: 20 }} />
@@ -490,6 +489,17 @@ class Home extends React.Component {
                 </ListItem>
               </List>
               <List>
+                <ListItem button key={"Upload File"}
+                onClick={() => this.props.history.push({pathname:"/home/upload", state:{
+                  uid: this.state.userid
+                }})}>
+                  <ListItemIcon>
+                    <CloudUploadIcon style={{ fontSize: 22 }} />
+                  </ListItemIcon>
+                  <ListItemText primary={"Upload File"} />
+                </ListItem>
+              </List>
+              <List>
                 <ListItem
                   button
                   key={"Chat Rooms"}
@@ -501,14 +511,7 @@ class Home extends React.Component {
                   <ListItemText primary={"Chat Rooms"} />
                 </ListItem>
               </List>
-              {/* <List>
-                <ListItem button key={"Calendar"}>
-                  <ListItemIcon>
-                    <CalendarTodayIcon style={{ fontSize: 22 }} />
-                  </ListItemIcon>
-                  <ListItemText primary={"Calendar"} />
-                </ListItem>
-              </List> */}
+              
             </Drawer>
           </MuiThemeProvider>
         </nav>
@@ -522,6 +525,7 @@ class Home extends React.Component {
             <Route path="/home/importmanually" component={importmanual} />
             <Route path="/home/group" component={Journeyoverview} />
             <Route path="/home/profile" component={profile} />
+            <Route path="/home/upload" component={Upload} />
             <Route path="/home/groupcontent" component={Journeycontent} />
             <Route path="/home/noconnection" component={noconnection} />
             <Route path="/home/connection" component={Connection} />
