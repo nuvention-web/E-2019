@@ -23,7 +23,8 @@ import axios from "axios";
 import Button from "@material-ui/core/Button";
 import Dialog from "@material-ui/core/Dialog";
 import Chip from "@material-ui/core/Chip";
-
+import gql from "graphql-tag";
+import { graphql, compose } from "react-apollo";
 let counter = 0;
 function createData(name, email) {
   counter += 1;
@@ -64,6 +65,7 @@ const rows = [
 ];
 
 class EnhancedTableHead extends React.Component {
+  
   createSortHandler = property => event => {
     this.props.onRequestSort(event, property);
   };
@@ -231,7 +233,30 @@ class EnhancedTableToolbar extends React.Component {
       a.push(this.props.data.filter(d=>d.uid===c))
       return a
     },[])
-    console.log(dataselect,this.state.selected)
+    console.log(dataselect,this.state.selected);
+    var user = myFirebase.auth().currentUser;
+    if (user &&this.state.selected&&dataselect) {
+      dataselect.map(i=>
+     {
+       this.props.mutate({
+        variables: {
+          userid:user.uid,
+          input: {
+            uid: i['0'].uid,
+            name: i['0'].name,
+            email: i['0'].email,
+            company:i['0'].company,
+            position:i['0'].position
+          },
+          journey:this.state.selected,
+        }
+      });})}
+
+      this.setState({
+        open:false
+      });
+    
+
   }
   render(){
   const { numSelected, classes } = this.props;
@@ -295,6 +320,15 @@ class EnhancedTableToolbar extends React.Component {
               >
                 OK
               </Button>
+              <Button
+                className={classes.fbutton}
+                size="small"
+                color="secondary"
+                width="80%"
+                onClick={this.handleDialogClose}
+              >
+                Cancel
+              </Button>
             </div>
           </div>
         </Dialog>
@@ -308,7 +342,14 @@ EnhancedTableToolbar.propTypes = {
   numSelected: PropTypes.number.isRequired,
 };
 
-EnhancedTableToolbar = withStyles(toolbarStyles)(EnhancedTableToolbar);
+EnhancedTableToolbar = withStyles(toolbarStyles)(
+  graphql(
+    gql`
+      mutation($userid: String!, $input: [LinkedinCon!], $journey: [String!]) {
+        importLinkedinConnection(userid:$userid,input:$input,journey:$journey) 
+      }
+    `
+  )(EnhancedTableToolbar));
 
 const styles = theme => ({
   root: {
