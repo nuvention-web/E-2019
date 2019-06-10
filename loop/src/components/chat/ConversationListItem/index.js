@@ -9,9 +9,9 @@ import firebase from "firebase";
 import { myFirestore, myFirebase } from "../../../firebase";
 import Chip from "@material-ui/core/Chip";
 import PropTypes from "prop-types";
-import Snackbar from '@material-ui/core/Snackbar';
-import IconButton from '@material-ui/core/IconButton';
-import CloseIcon from '@material-ui/icons/Close';
+import Snackbar from "@material-ui/core/Snackbar";
+import IconButton from "@material-ui/core/IconButton";
+import CloseIcon from "@material-ui/icons/Close";
 import {
   withStyles,
   MuiThemeProvider,
@@ -21,18 +21,18 @@ import { Typography } from "@material-ui/core";
 
 const mytheme = createMuiTheme({
   typography: {
-    useNextVariants: true,
+    useNextVariants: true
   },
   overrides: {
     MuiChip: {
       root: {},
-      colorPrimary:{
-        backgroundColor:"#f4f4f8",
-        color:"#000"
+      colorPrimary: {
+        backgroundColor: "#f4f4f8",
+        color: "#000"
       },
-      colorSecondary:{
-        color:"#fff",
-        backgroundColor:"#3B86FF",
+      colorSecondary: {
+        color: "#fff",
+        backgroundColor: "#3B86FF"
       },
       outlinedPrimary: {
         color: "#3B86FF",
@@ -67,8 +67,8 @@ class ConversationListItem extends Component {
       isLoading: true,
       messages: [],
       jid: "",
-      contactsEmpty : [],
-      clickedstra:false,
+      contactsEmpty: [],
+      clickedstra: false,
       alert: false
     };
     this.listUser = [];
@@ -86,18 +86,17 @@ class ConversationListItem extends Component {
     });
   }
 
-
-  handleChipClick(id,journeyname) {
-    this.setState({jid: id})
+  handleChipClick(id, journeyname) {
+    this.setState({ jid: id });
     this.getListUser(id, journeyname);
   }
 
-  handleUserChange = (id) => {
-    this.getMessage(id)
+  handleUserChange = id => {
+    this.getMessage(id);
   };
 
   handleClose = (event, reason) => {
-    if (reason === 'clickaway') {
+    if (reason === "clickaway") {
       return;
     }
 
@@ -113,8 +112,11 @@ class ConversationListItem extends Component {
       .get();
     if (journeys.docs.length > 0) {
       this.listjourneys = [...journeys.docs];
-      this.getListUser(this.listjourneys[0].data().id, this.listjourneys[0].data().journeyname);
-      this.setState({jid: this.listjourneys[0].data().id})
+      this.getListUser(
+        this.listjourneys[0].data().id,
+        this.listjourneys[0].data().journeyname
+      );
+      this.setState({ jid: this.listjourneys[0].data().id });
     }
   };
 
@@ -128,21 +130,21 @@ class ConversationListItem extends Component {
       .collection("contacts")
       .get();
     if (listuser.docs.length === 0) {
-      if (journeyname === "Stranger"){
-        this.setState({clickedstra: false})
+      if (journeyname === "Stranger") {
+        this.setState({ clickedstra: false });
       }
       this.setState({
         alert: true
-      })
+      });
     }
     if (listuser.docs.length > 0) {
       this.listUser = [...listuser.docs];
-      this.getMessage(this.listUser[0].data().id)
+      this.getMessage(this.listUser[0].data().id);
       this.setState({ isLoading: false, alert: "" });
-      if (journeyname === "Stranger"){
-        this.setState({clickedstra: true})
-      }else{
-        this.setState({clickedstra: false})
+      if (journeyname === "Stranger") {
+        this.setState({ clickedstra: true });
+      } else {
+        this.setState({ clickedstra: false });
       }
     }
   };
@@ -151,7 +153,7 @@ class ConversationListItem extends Component {
     if (this.listUser.length > 0) {
       let viewListUser = [];
       this.listUser.forEach((item, index) => {
-        if(item.data().type!=="manual"){
+        if (item.data().type !== "manual") {
           viewListUser.push(
             <div
               className="conversation-list-item"
@@ -160,7 +162,11 @@ class ConversationListItem extends Component {
             >
               <img
                 className="conversation-photo"
-                src={item.data().photourl === ""? "https://bootdey.com/img/Content/avatar/avatar4.png": item.data().photourl}
+                src={
+                  item.data().photourl || item.data().photourl !== ""
+                    ? item.data().photourl
+                    : "https://bootdey.com/img/Content/avatar/avatar4.png"
+                }
                 alt="conversation"
               />
               <div className="conversation-info">
@@ -170,7 +176,6 @@ class ConversationListItem extends Component {
             </div>
           );
         }
-        
       });
       return viewListUser;
     } else {
@@ -186,8 +191,10 @@ class ConversationListItem extends Component {
           <Chip
             label={item.data().journeyname}
             className={classes.chip}
-            onClick={()=>this.handleChipClick(item.data().id,item.data().journeyname)}
-            color={item.data().id===this.state.jid? "secondary":"primary"}
+            onClick={() =>
+              this.handleChipClick(item.data().id, item.data().journeyname)
+            }
+            color={item.data().id === this.state.jid ? "secondary" : "primary"}
           />
         );
       });
@@ -197,23 +204,30 @@ class ConversationListItem extends Component {
     }
   };
 
-  getMessage = (id) => {
+  getMessage = id => {
     this.setState({
-      messages: this.listUser.filter(l => l.data().id===id&&l.data().type!=="manual")
-    })
-  }
+      messages: this.listUser.filter(
+        l => l.data().id === id && l.data().type !== "manual"
+      )
+    });
+  };
   renderFirstMessaging = () => {
     if (this.state.messages.length > 0) {
       let firstone = [];
-        firstone.push(
-          <MessageListItem data={this.state.messages[0].data()} clickedstra={this.state.clickedstra} journeys={this.listjourneys.filter(i=>i.data().journeyname!=="Stranger")}/>
-        );
+      firstone.push(
+        <MessageListItem
+          data={this.state.messages[0].data()}
+          clickedstra={this.state.clickedstra}
+          journeys={this.listjourneys.filter(
+            i => i.data().journeyname !== "Stranger"
+          )}
+        />
+      );
       return firstone;
     } else {
       return null;
     }
   };
-
 
   render() {
     const { classes } = this.props;
@@ -237,14 +251,14 @@ class ConversationListItem extends Component {
         <div className="content">{this.renderFirstMessaging()}</div>
         <Snackbar
           anchorOrigin={{
-            vertical: 'bottom',
-            horizontal: 'right',
+            vertical: "bottom",
+            horizontal: "right"
           }}
           open={this.state.alert}
           autoHideDuration={6000}
           onClose={this.handleClose}
           ContentProps={{
-            'aria-describedby': 'message-id',
+            "aria-describedby": "message-id"
           }}
           message={<span id="message-id">Empty journey!</span>}
           action={[
@@ -256,7 +270,7 @@ class ConversationListItem extends Component {
               onClick={this.handleClose}
             >
               <CloseIcon />
-            </IconButton>,
+            </IconButton>
           ]}
         />
       </div>

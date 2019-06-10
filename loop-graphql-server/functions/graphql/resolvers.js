@@ -336,7 +336,7 @@ module.exports = {
           cref.collection("contacts").doc(doc.uid).get()
           .then(docSnapshot=>{
             if(!docSnapshot.exists){
-              cref.collection("contacts").doc(doc.uid).set({id:doc.uid, name: doc.name, email: doc.email, company: doc.company, jobtitle: doc.position})
+              cref.collection("contacts").doc(doc.uid).set({id:doc.uid, name: doc.name, email: doc.email, company: doc.company, jobtitle: doc.position, type: "manual"})
               cref
               .get()
               .then(querySnapshot => {
